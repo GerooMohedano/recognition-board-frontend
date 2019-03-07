@@ -96,9 +96,7 @@ class AppLayout extends React.Component {
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <IconButton className={classes.menuButton} color="inherit" aria-label="Open drawer">
-              <SideMenu />
-            </IconButton>
+            <SideMenu />
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               OnBoard
             </Typography>

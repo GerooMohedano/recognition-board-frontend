@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
+import AppLayout from './layouts/AppLayout';
 import registerServiceWorker from './registerServiceWorker';
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<AppLayout />, document.getElementById('root'));
 registerServiceWorker();
 
 // If you want your app to work offline and load faster, you can change
