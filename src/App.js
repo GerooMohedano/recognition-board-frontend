@@ -1,26 +1,31 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import { HashRouter as Router, Route, Link, NavLink } from 'react-router-dom';
+import SignInForm from './pages/SignInForm';
+import NewEnterpriseForm from './pages/NewEnterpriseForm';
+import NewTeamForm from './pages/NewTeamForm';
+import NewUserForm from './pages/NewUserForm';
+import RememberPasswordForm from './pages/RememberPasswordForm';
+
 import './App.css';
 
 class App extends Component {
   render() {
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
+      <Router basename="/react-auth-ui/">
+        <div className="App">
+          <div className="App__Aside"></div>
+          <div className="App__Form">
+
+              <div className="FormTitle">
+                  <NavLink to="/sign-in" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Ingresar</NavLink>
+              </div>
+
+              <Route path="/sign-in" component={SignInForm}>
+              </Route>
+          </div>
+
+        </div>
+      </Router>
     );
   }
 }

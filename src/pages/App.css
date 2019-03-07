@@ -10,5 +10,6 @@ body {
 }
 
 .mr-20 {
+  margin-top: 70px !important;
   margin-right: 20px !important;
 }
