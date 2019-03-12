@@ -1,0 +1,24 @@
+.search {
+    position: relative;
+    background-color: #2E4158;
+    border-radius: 5px;
+    margin-right: 0;
+    margin-left: 5%;
+    width: 50%;
+    align-items: left;
+  }
+
+  .menuButton {
+    margin-left: -12;
+    margin-right: 20;
+  },
+
+.searchIcon {
+    width: 24px;
+    height: 24px;
+    position: absolute;
+    pointer-events: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
