@@ -18,7 +18,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 
-require('./App.css');
+require('./Perfil.css');
 
 const styles = theme => ({
   root: {
