@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -38,19 +39,23 @@ class SideMenu extends React.Component {
       const sideMenuSubList = [];
       empresa.equipos.forEach((equipo) => {
         sideMenuSubList.push(
-          <ListItem button>
-            <ListItemText primary={equipo} />
-          </ListItem>
+          <NavLink to="/NewTeamForm">
+            <ListItem key={`ListItem${equipo}`} button>
+              <ListItemText key={`ListItemText${equipo}`} primary={equipo} />
+            </ListItem>
+          </NavLink>
         );
       });
       sideMenuList.push(
-        <ListItem button>
-          <ListItemText primary={empresa.name} />
-        </ListItem>
+        <NavLink to="/Empresa">
+          <ListItem key={`ListItem${empresa.name}`} button>
+            <ListItemText key={`ListItemText${empresa.name}`} primary={empresa.name} />
+          </ListItem>
+        </NavLink>
       );
       sideMenuList.push(
-        <ListItem>
-          <List>
+        <ListItem key={`FatherListItem${empresa.name}`}>
+          <List key={`List${empresa.name}`}>
             { sideMenuSubList }
           </List>
         </ListItem>

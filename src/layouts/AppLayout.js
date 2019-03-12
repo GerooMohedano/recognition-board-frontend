@@ -7,12 +7,15 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
+import { NavLink } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SideMenu from './SideMenu'
+
+require('./AppLayout.css');
 
 const styles = theme => ({
   root: {
@@ -114,13 +117,15 @@ class AppLayout extends React.Component {
             </div>
             <div className={classes.grow} />
             <div>
-              <IconButton
-                aria-owns="material-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+              <NavLink to="/Perfil" className="linkPerfil">
+                <IconButton
+                  aria-owns="material-appbar"
+                  aria-haspopup="true"
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </NavLink>
             </div>
           </Toolbar>
         </AppBar>

@@ -8,6 +8,10 @@
     align-items: left;
   }
 
+  .linkPerfil {
+    color: #fff;
+  }
+
   .menuButton {
     margin-left: -12;
     margin-right: 20;
