@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Route, Link, NavLink } from 'react-router-dom';
-import SignInForm from './pages/SignInForm';
+import SignInForm from './pages/SignInForm/SignInForm';
 import AppLayout from './layouts/AppLayout';
-import RememberPasswordForm from './pages/RememberPasswordForm';
+import NewEnterpriseForm from './pages/NewEnterpriseForm/NewEnterpriseForm';
+import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 
 import './App.css';
 
@@ -13,7 +14,10 @@ class App extends Component {
       <Router>
         { (isLoggedIn) ?
         (
-          <Route path="/" component={AppLayout} />
+          <div>
+            <Route path="/" component={AppLayout} />
+            <Route path="/Empresa" component={NewEnterpriseForm} />
+          </div>
         )
         :
         (
