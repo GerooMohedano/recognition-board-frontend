@@ -8,7 +8,7 @@ import NewTeamForm from './pages/NewTeamForm/NewTeamForm';
 import NewUserForm from './pages/NewUserForm/NewUserForm';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 
-import './App.css';
+require('./App.css');
 
 class App extends Component {
   render() {
