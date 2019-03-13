@@ -39,7 +39,7 @@ class SideMenu extends React.Component {
       const sideMenuSubList = [];
       empresa.equipos.forEach((equipo) => {
         sideMenuSubList.push(
-          <NavLink to="/NewTeamForm">
+          <NavLink key={`NavLink${equipo}`} to="/NewTeamForm">
             <ListItem key={`ListItem${equipo}`} button>
               <ListItemText key={`ListItemText${equipo}`} primary={equipo} />
             </ListItem>
@@ -47,7 +47,7 @@ class SideMenu extends React.Component {
         );
       });
       sideMenuList.push(
-        <NavLink to="/Empresa">
+        <NavLink key={`NavLink${empresa.name}`} to="/NewEnterpriseForm">
           <ListItem key={`ListItem${empresa.name}`} button>
             <ListItemText key={`ListItemText${empresa.name}`} primary={empresa.name} />
           </ListItem>
