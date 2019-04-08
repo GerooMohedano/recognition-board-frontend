@@ -6,30 +6,43 @@ import Perfil from './pages/Perfil/Perfil';
 import NewEnterpriseForm from './pages/NewEnterpriseForm/NewEnterpriseForm';
 import NewTeamForm from './pages/NewTeamForm/NewTeamForm';
 import NewUserForm from './pages/NewUserForm/NewUserForm';
-import Team from './pages/Team/Team';
 import Enterprise from './pages/Enterprise/Enterprise';
+import Team from './pages/Team/Team';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
 
 require('./App.css');
 
 class App extends Component {
+  state = {
+    teamClicked: ''
+  }
+
+  updateTeamClicked = newTeamClicked => {
+    this.setState({teamClicked: newTeamClicked});
+  }
+
   render() {
     const isLoggedIn = true;
+    const {teamClicked} = this.state;
     return (
       <Router>
         { (isLoggedIn) ?
         (
           <div>
-            <Route path="/" component={AppLayout} />
+            <Route path="/" render={() => {
+              return <AppLayout updateTeamClicked={this.updateTeamClicked} />
+            }} />
             <Switch>
               <Route path="/NewEnterpriseForm" component={NewEnterpriseForm} />
               <Route path="/Signin" component={SignInForm} />
               <Route path="/Perfil" component={Perfil} />
               <Route path="/NewTeamForm" component={NewTeamForm} />
               <Route path="/NewUserForm" component={NewUserForm} />
-              <Route path="/Team" component={Team} />
               <Route path="/Enterprise" component={Enterprise} />
+              <Route path="/Team" render={() => {
+                return <Team team={teamClicked} />
+              }} />
               <Route component={PageNotFound} />
             </Switch>
           </div>

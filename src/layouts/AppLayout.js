@@ -94,12 +94,11 @@ class AppLayout extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <SideMenu />
+            <SideMenu updateTeamClicked={this.props.updateTeamClicked} />
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               OnBoard
             </Typography>
@@ -136,6 +135,7 @@ class AppLayout extends React.Component {
 
 AppLayout.propTypes = {
   classes: PropTypes.object.isRequired,
+  updateTeamClicked: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(AppLayout);

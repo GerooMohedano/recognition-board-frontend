@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
+import Team from '../pages/Team/Team';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -24,6 +25,10 @@ class SideMenu extends React.Component {
     left: false,
   };
 
+  onNavLinkClick = equipo => {
+    this.props.updateTeamClicked(equipo);
+  }
+
   toggleDrawer = (side, open) => () => {
     this.setState({
       [side]: open,
@@ -39,7 +44,7 @@ class SideMenu extends React.Component {
       const sideMenuSubList = [];
       empresa.equipos.forEach((equipo) => {
         sideMenuSubList.push(
-          <NavLink key={`NavLink${equipo}`} to="/Team">
+          <NavLink key={`NavLink${equipo}`} to="/Team" onClick={() => this.onNavLinkClick(equipo)}>
             <ListItem key={`ListItem${equipo}`} button>
               <ListItemText key={`ListItemText${equipo}`} primary={equipo} />
             </ListItem>
@@ -96,6 +101,7 @@ class SideMenu extends React.Component {
 
 SideMenu.propTypes = {
   classes: PropTypes.object.isRequired,
+  updateTeamClicked: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SideMenu);
