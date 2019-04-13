@@ -4,6 +4,8 @@ import SignInForm from './pages/SignInForm/SignInForm';
 import AppLayout from './layouts/AppLayout';
 import Perfil from  './pages/Perfil/Perfil';
 import NewEnterpriseForm from './pages/NewEnterpriseForm/NewEnterpriseForm';
+import NewTeamForm from './pages/NewTeamForm/NewTeamForm';
+import NewUserForm from './pages/NewUserForm/NewUserForm';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 
 import './App.css';
@@ -18,6 +20,8 @@ class App extends Component {
           <div>
             <Route path="/" component={AppLayout} />
             <Route path="/Empresa" component={NewEnterpriseForm} />
+            <Route path="/Equipo" component={NewTeamForm} />
+            <Route path="/Crearusuario" component={NewUserForm} />
             <Route path="/Signin" component={SignInForm} />
             <Route path="/Perfil" component={Perfil} />
           </div>

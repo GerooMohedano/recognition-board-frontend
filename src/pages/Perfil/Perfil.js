@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import Radar from 'react-d3-radar';
+
 import RadarChart from 'react-svg-radar-chart';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
@@ -23,8 +23,10 @@ import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 
+import Radar from 'react-d3-radar';
 import Avatar from '@material-ui/core/Avatar';
-import Grid from '@material-ui/core/Grid';
+
+import Gero from '../../images/gero.jpg';
 
 require('./Perfil.css');
 
@@ -39,6 +41,11 @@ const styles = theme => ({
   control: {
     padding: theme.spacing.unit * 2,
   },
+bigAvatar: {
+  margin: 10,
+  width: 80,
+  height: 80,
+},
 });
 const stylesLogros = theme => ({
   root: {
@@ -103,8 +110,14 @@ class GuttersGrid extends React.Component {
 
         return (
           <div class="app-layout">
-            <div class="box tweets">Perfil</div>
-            <div class="box replies">
+            <div class="box perfil">
+              <label className="FormField__Label" htmlFor="name">GERO MOHEDANO</label>
+              <Grid container justify="center" alignItems="center">
+                   <Avatar alt="Remy Sharp" src={Gero} className={classes.bigAvatar} />
+                 </Grid>
+              <input className="FormField__Input mr-20" type="file" onChange={this.fileSelectedHandler}/>
+            </div>
+            <div class="box pizarras">
                 <label className="FormField__Label" htmlFor="name">Mis pizarras</label>
                 <List component="nav">
                   <ListItemLink href="#pizarraactiva">
@@ -115,7 +128,7 @@ class GuttersGrid extends React.Component {
                   </ListItemLink>
                 </List>
             </div>
-            <div class="box search">
+            <div class="box logros">
                 <label className="FormField__Label" htmlFor="name">Mis Logros</label>
 
                   <div className={classes.root}>
@@ -152,7 +165,7 @@ class GuttersGrid extends React.Component {
                  </div>
 
             </div>
-            <div class="box messages">
+            <div class="box chart">
                                     <RadarChart
                                       captions={{
                                         // columns

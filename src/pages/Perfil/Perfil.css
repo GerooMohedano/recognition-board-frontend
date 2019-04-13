@@ -13,10 +13,10 @@ body {
   height:110%;
 }
 
-.tweets   { background-color: #A2DED0; }
-.replies  { background-color: #F4D03F; }
-.search   { background-color: #6C7A89; }
-.messages { background-color: #59ABE3; }
+.perfil   { background-color: #A2DED0; }
+.pizarras  { background-color: #F4D03F; }
+.logros   { background-color: #6C7A89; }
+.chart { background-color: #59ABE3; }
 
 /* Our Grid Code */
 .app-layout {
