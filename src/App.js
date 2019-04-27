@@ -15,35 +15,45 @@ require('./App.css');
 
 class App extends Component {
   state = {
-    teamClicked: ''
+    teamClicked: '',
+    enterpriseClicked: ''
   }
 
   updateTeamClicked = newTeamClicked => {
-    this.setState({teamClicked: newTeamClicked});
+    this.setState({ teamClicked: newTeamClicked });
+  }
+
+  updateEnterpriseClicked = newEnterpriseClicked => {
+    this.setState({ enterpriseClicked: newEnterpriseClicked });
   }
 
   render() {
     const isLoggedIn = true;
-    const {teamClicked} = this.state;
+    const { teamClicked, enterpriseClicked } = this.state;
     return (
       <Router>
         { (isLoggedIn) ?
         (
           <div>
             <Route path="/" render={() => {
-              return <AppLayout updateTeamClicked={this.updateTeamClicked} />
+              return <AppLayout
+                updateTeamClicked={ this.updateTeamClicked }
+                updateEnterpriseClicked={ this.updateEnterpriseClicked }
+              />
             }} />
             <Switch>
-              <Route path="/NewEnterpriseForm" component={NewEnterpriseForm} />
-              <Route path="/Signin" component={SignInForm} />
-              <Route path="/Perfil" component={Perfil} />
-              <Route path="/NewTeamForm" component={NewTeamForm} />
-              <Route path="/NewUserForm" component={NewUserForm} />
-              <Route path="/Enterprise" component={Enterprise} />
-              <Route path="/Team" render={() => {
-                return <Team team={teamClicked} />
+              <Route path="/NewEnterpriseForm" component={ NewEnterpriseForm } />
+              <Route path="/Signin" component={ SignInForm } />
+              <Route path="/Perfil" component={ Perfil } />
+              <Route path="/NewTeamForm" component={ NewTeamForm } />
+              <Route path="/NewUserForm" component={ NewUserForm } />
+              <Route path="/Enterprise" render={() => {
+                return <Enterprise enterprise={ enterpriseClicked } />
               }} />
-              <Route component={PageNotFound} />
+              <Route path="/Team" render={() => {
+                return <Team team={ teamClicked } />
+              }} />
+              <Route component={ PageNotFound } />
             </Switch>
           </div>
         )
@@ -55,7 +65,7 @@ class App extends Component {
               <div className="FormTitle">
                 <NavLink to="/sign-in" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Ingresar</NavLink>
               </div>
-              <Route path="/sign-in" component={SignInForm} />
+              <Route path="/sign-in" component={ SignInForm } />
             </div>
           </div>
         )
