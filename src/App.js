@@ -10,6 +10,7 @@ import Enterprise from './pages/Enterprise/Enterprise';
 import Team from './pages/Team/Team';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
+import Achievement from './pages/Achievement/Achievement';
 
 require('./App.css');
 
@@ -44,6 +45,7 @@ class App extends Component {
             <Switch>
               <Route path="/NewEnterpriseForm" component={ NewEnterpriseForm } />
               <Route path="/Signin" component={ SignInForm } />
+              <Route path="/Logros" component={ Achievement } />
               <Route path="/Perfil" component={ Perfil } />
               <Route path="/NewTeamForm" component={ NewTeamForm } />
               <Route path="/NewUserForm" component={ NewUserForm } />
