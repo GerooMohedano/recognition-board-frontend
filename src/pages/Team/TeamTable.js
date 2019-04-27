@@ -8,8 +8,8 @@ import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
 import Button from '@material-ui/core/Button';
-import Dialog from '@material-ui/core/Dialog';
 import ThumbsUpDown from '@material-ui/icons/ThumbsUpDown';
+import ViewNotes from './ViewNotes';
 
 const styles = theme => ({
   root: {
@@ -67,13 +67,12 @@ class TeamTable extends React.Component {
             >
               <ThumbsUpDown />
             </Button>
-            <Dialog
-              key={"dialog" + value + persona}
-              open={openCreateNote[value][persona]}
-              onClose={() => this.handleCreateNoteButton(value, persona, false)}
-            >
-              <h1>{value + ' ' + persona}</h1>
-            </Dialog>
+            <ViewNotes
+              value={value}
+              persona={persona}
+              openCreateNote={openCreateNote}
+              handleCreateNoteButton={this.handleCreateNoteButton}
+            />
           </TableCell>
         ))}
       </TableRow>);
