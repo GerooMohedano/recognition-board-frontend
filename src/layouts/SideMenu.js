@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
+import { NavLink } from 'react-router-dom';
+import Team from '../pages/Team/Team';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
@@ -23,6 +25,14 @@ class SideMenu extends React.Component {
     left: false,
   };
 
+  onTeamNavLinkClick = team => {
+    this.props.updateTeamClicked(team);
+  }
+
+  onEnterpriseNavLinkClick = enterprise => {
+    this.props.updateEnterpriseClicked(enterprise);
+  }
+
   toggleDrawer = (side, open) => () => {
     this.setState({
       [side]: open,
@@ -31,26 +41,29 @@ class SideMenu extends React.Component {
 
   render() {
     const { classes } = this.props;
-
     const empresas = [{name: 'SOVOS', equipos: ['Octopus', 'Elephants']}, {name: 'SCANIA', equipos: ['Managers']}];
     const sideMenuList = [];
     empresas.forEach((empresa) => {
       const sideMenuSubList = [];
       empresa.equipos.forEach((equipo) => {
         sideMenuSubList.push(
-          <ListItem button>
-            <ListItemText primary={equipo} />
-          </ListItem>
+          <NavLink key={ `NavLink${equipo}` } to="/Team" onClick={() => this.onTeamNavLinkClick(equipo)}>
+            <ListItem key={ `ListItem${equipo}` } button>
+              <ListItemText key={ `ListItemText${equipo}` } primary={ equipo } />
+            </ListItem>
+          </NavLink>
         );
       });
       sideMenuList.push(
-        <ListItem button>
-          <ListItemText primary={empresa.name} />
-        </ListItem>
+        <NavLink key={ `NavLink${empresa.name}` } to="/Enterprise" onClick={() => this.onEnterpriseNavLinkClick(empresa.name)}>
+          <ListItem key={ `ListItem${empresa.name}` } button>
+            <ListItemText key={ `ListItemText${empresa.name}` } primary={ empresa.name } />
+          </ListItem>
+        </NavLink>
       );
       sideMenuList.push(
-        <ListItem>
-          <List>
+        <ListItem key={ `FatherListItem${empresa.name}` }>
+          <List key={ `List${empresa.name}` }>
             { sideMenuSubList }
           </List>
         </ListItem>
@@ -67,21 +80,21 @@ class SideMenu extends React.Component {
 
     return (
       <div>
-        <Button onClick={this.toggleDrawer('left', true)}>
-          <MenuIcon style={{color: 'white'}} />
+        <Button onClick={ this.toggleDrawer('left', true) }>
+          <MenuIcon style={{ color: 'white' }} />
         </Button>
         <SwipeableDrawer
-          open={this.state.left}
-          onClose={this.toggleDrawer('left', false)}
-          onOpen={this.toggleDrawer('left', true)}
+          open={ this.state.left }
+          onClose={ this.toggleDrawer('left', false) }
+          onOpen={ this.toggleDrawer('left', true) }
         >
           <div
             tabIndex={0}
             role="button"
-            onClick={this.toggleDrawer('left', false)}
-            onKeyDown={this.toggleDrawer('left', false)}
+            onClick={ this.toggleDrawer('left', false) }
+            onKeyDown={ this.toggleDrawer('left', false) }
           >
-            {sideList}
+            { sideList }
           </div>
         </SwipeableDrawer>
       </div>
@@ -91,6 +104,8 @@ class SideMenu extends React.Component {
 
 SideMenu.propTypes = {
   classes: PropTypes.object.isRequired,
+  updateTeamClicked: PropTypes.func.isRequired,
+  updateEnterpriseClicked: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SideMenu);

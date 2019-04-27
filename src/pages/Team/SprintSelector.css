@@ -1,0 +1,17 @@
+.navigationButton {
+  display: inline;
+  margin: 2%;
+  width: 11%;
+}
+
+.sprintTitle {
+  margin: 2%;
+  width: 66%;
+}
+
+.sprintNavigation {
+  align-items: center;
+  width: 100%;
+  padding-left: 35%;
+  padding-right: 35%;
+}

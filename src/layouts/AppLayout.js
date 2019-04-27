@@ -7,12 +7,15 @@ import Typography from '@material-ui/core/Typography';
 import InputBase from '@material-ui/core/InputBase';
 import Badge from '@material-ui/core/Badge';
 import MenuItem from '@material-ui/core/MenuItem';
+import { NavLink } from 'react-router-dom';
 import Menu from '@material-ui/core/Menu';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import { withStyles } from '@material-ui/core/styles';
 import SearchIcon from '@material-ui/icons/Search';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 import SideMenu from './SideMenu'
+
+require('./AppLayout.css');
 
 const styles = theme => ({
   root: {
@@ -90,13 +93,15 @@ class AppLayout extends React.Component {
   };
 
   render() {
-    const { classes } = this.props;
-
+    const { classes, updateTeamClicked, updateEnterpriseClicked } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar>
-            <SideMenu />
+            <SideMenu
+              updateTeamClicked={ updateTeamClicked }
+              updateEnterpriseClicked={ updateEnterpriseClicked }
+            />
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               OnBoard
             </Typography>
@@ -114,13 +119,15 @@ class AppLayout extends React.Component {
             </div>
             <div className={classes.grow} />
             <div>
-              <IconButton
-                aria-owns="material-appbar"
-                aria-haspopup="true"
-                color="inherit"
-              >
-                <AccountCircle />
-              </IconButton>
+              <NavLink to="/Perfil" className="linkPerfil">
+                <IconButton
+                  aria-owns="material-appbar"
+                  aria-haspopup="true"
+                  color="inherit"
+                >
+                  <AccountCircle />
+                </IconButton>
+              </NavLink>
             </div>
           </Toolbar>
         </AppBar>
@@ -131,6 +138,8 @@ class AppLayout extends React.Component {
 
 AppLayout.propTypes = {
   classes: PropTypes.object.isRequired,
+  updateTeamClicked: PropTypes.func.isRequired,
+  updateEnterpriseClicked: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(AppLayout);
