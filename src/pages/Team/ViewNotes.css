@@ -1,0 +1,11 @@
+.addNewCard {
+  text-align: center !important;
+}
+
+.cardContainer {
+  overflow-y: auto;
+}
+
+.cardParagraph {
+  color: white !important;
+}
