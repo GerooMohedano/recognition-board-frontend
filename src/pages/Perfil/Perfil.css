@@ -5,13 +5,14 @@ body {
   background-color: #f2f2f2;
 }
 
-.box {
+.boxes {
   color: #fff;
   padding: 1em;
   text-align: center;
   background-color: #efefef;
   height:110%;
 }
+
 
 .perfil   { background-color: #A2DED0; }
 .pizarras  { background-color: #F4D03F; }
@@ -23,4 +24,5 @@ body {
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-rows: 50vh 50vh;
+  grid-template-rows: 100vh 100vh;
 }
