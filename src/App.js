@@ -43,12 +43,12 @@ class App extends Component {
               />
             }} />
             <Switch>
-              <Route path="/NewEnterpriseForm" component={ NewEnterpriseForm } />
+              <Route path="/NuevaEmpresa" component={ NewEnterpriseForm } />
               <Route path="/Signin" component={ SignInForm } />
               <Route path="/Logros" component={ Achievement } />
               <Route path="/Perfil" component={ Perfil } />
-              <Route path="/NewTeamForm" component={ NewTeamForm } />
-              <Route path="/NewUserForm" component={ NewUserForm } />
+              <Route path="/NuevoEquipo" component={ NewTeamForm } />
+              <Route path="/NuevoUsuario" component={ NewUserForm } />
               <Route path="/Enterprise" render={() => {
                 return <Enterprise enterprise={ enterpriseClicked } />
               }} />
