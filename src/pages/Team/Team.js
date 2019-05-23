@@ -8,6 +8,7 @@ class Team extends Component {
     return (
       <div>
         <h1> IM IN Team {this.props.team}</h1>
+        <div>Imagen de equipo</div>
         <SprintSelector />
         <TeamTable />
       </div>

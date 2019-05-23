@@ -9,9 +9,22 @@
   width: 66%;
 }
 
-.sprintNavigation {
-  align-items: center;
+.sprintSelectorContainer {
+  display: inline-flex;
   width: 100%;
-  padding-left: 35%;
-  padding-right: 35%;
+}
+
+.sprintNavigation {
+  text-align: center;
+  width: 40%;
+}
+
+.barraParaBuscar {
+  width: 30%;
+  display: grid;
+}
+
+.sprintEditor {
+  width: 30%;
+  display: flex;
 }
