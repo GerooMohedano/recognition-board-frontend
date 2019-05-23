@@ -15,7 +15,7 @@ import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-require('../SignInForm/SignInForm.css');
+require('./NewEnterpriseForm.css');
 
 class NewEnterpriseForm extends Component {
     constructor() {
@@ -80,15 +80,13 @@ class NewEnterpriseForm extends Component {
                 <label className="FormField__Label" htmlFor="telefono">Teléfono</label>
                 <input type="telefono" id="telefono" className="FormField__Input" placeholder="Ingrese el telefono de la empresa" telephone="telefono" value={this.state.telefono} onChange={this.handleChange} />
               </div>
-
-              <input type="file" onChange={this.fileSelectedHandler}/>
-              <button onClick={this.fileUploadHandler}>Subir</button>
-
               <div className="FormField">
-                  <button className="FormField__Button mr-20">Guardar</button>
+                <input type="file" onChange={this.fileSelectedHandler}/>
+                <button onClick={this.fileUploadHandler}>Subir</button>
               </div>
               <div className="FormField">
-                  <button className="FormField__Button mr-20">Cancelar</button>
+                  <button className="FormField__Button mr-20">Guardar</button>
+                    <button className="FormField__Button mr-20">Cancelar</button>
               </div>
 
             </form>
