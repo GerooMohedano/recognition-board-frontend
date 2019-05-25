@@ -2,12 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Fab from '@material-ui/core/Fab';
-import InputBase from '@material-ui/core/InputBase';
+import TextField from '@material-ui/core/TextField';
 import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import SprintEditor from './SprintEditor';
+import SearchSprints from './SearchSprints';
 
 require('./SprintSelector.css');
 
@@ -65,8 +66,20 @@ class SprintSelector extends React.Component {
     this.state = {
       sprint: 'Sprint 190301',
       beginDate: '2017-08-20',
-      endDate: '2019-08-13'
+      endDate: '2019-08-13',
+      olderSprints: [
+        { label: 'Sprint 190202' },
+        { label: 'Sprint 190201' },
+        { label: 'Sprint 190102' },
+        { label: 'Sprint 190101' },
+        { label: 'Sprint 181202' },
+        { label: 'Sprint 181201' }
+      ]
     }
+  }
+
+  selectOlderSprint = (label) => {
+    console.log('go to', label);
   }
 
   editSprintInformation = (value, definition) => {
@@ -75,7 +88,7 @@ class SprintSelector extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { sprint, beginDate, endDate } = this.state;
+    const { sprint, beginDate, endDate, olderSprints } = this.state;
     return (
       <div className="sprintSelectorContainer">
         <div className="sprintEditor">
@@ -100,12 +113,9 @@ class SprintSelector extends React.Component {
             <div className={classes.searchIcon}>
               <SearchIcon />
             </div>
-            <InputBase
-              placeholder="Search for other sprints..."
-              classes={{
-                root: classes.inputRoot,
-                input: classes.inputInput,
-              }}
+            <SearchSprints
+              data={olderSprints}
+              selectOlderSprint={this.selectOlderSprint}
             />
           </div>
         </div>
