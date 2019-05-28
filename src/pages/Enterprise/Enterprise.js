@@ -1,11 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import Chart from '../../commons/LinearChart';
 
 class Enterprise extends Component {
   render() {
     const { enterprise } = this.props;
     return (
-      <h1>IM IN { enterprise }</h1>
+      <div>
+        <h1>IM IN { enterprise }</h1>
+      </div>
     );
   }
 }
