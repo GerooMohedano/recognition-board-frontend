@@ -33,11 +33,11 @@ const styles = theme => ({
       marginLeft: theme.spacing.unit * 3,
       width: 'auto',
     },
+    display: 'inline-flex',
   },
   searchIcon: {
     width: theme.spacing.unit * 9,
     height: '100%',
-    position: 'absolute',
     pointerEvents: 'none',
     display: 'flex',
     alignItems: 'center',

@@ -11,7 +11,6 @@ import Button from '@material-ui/core/Button';
 
 function renderInput(inputProps) {
   const { InputProps, classes, ref, ...other } = inputProps;
-
   return (
     <TextField
       InputProps={{
@@ -30,7 +29,6 @@ function renderInput(inputProps) {
 function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem, selectOlderSprint }) {
   const isHighlighted = highlightedIndex === index;
   const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
-
   return (
     <MenuItem
       {...itemProps}
@@ -63,7 +61,6 @@ function getSuggestions(value, suggestions) {
   const inputValue = deburr(value.trim()).toLowerCase();
   const inputLength = inputValue.length;
   let count = 0;
-
   return inputLength === 0
     ? []
     : suggestions.filter(suggestion => {
@@ -79,7 +76,7 @@ function getSuggestions(value, suggestions) {
 const styles = theme => ({
   root: {
     flexGrow: 1,
-    height: 250,
+    display: 'inlineFlex'
   },
   container: {
     flexGrow: 1,
@@ -95,9 +92,8 @@ const styles = theme => ({
   inputRoot: {
     flexWrap: 'wrap',
   },
-  inputInput: {
-    width: 'auto',
-    flexGrow: 1,
+  inputIcon: {
+    position: 'relative'
   },
   divider: {
     height: theme.spacing.unit * 2,
@@ -125,7 +121,7 @@ class SearchSprints extends React.Component {
                 fullWidth: true,
                 classes,
                 InputProps: getInputProps({
-                  placeholder: 'Search a country (start with a)',
+                  placeholder: 'Search for other sprints',
                 }),
               })}
               <div {...getMenuProps()}>
