@@ -11,6 +11,7 @@ import Team from './pages/Team/Team';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
 import Achievement from './pages/Achievement/Achievement';
+import LinearChart from './commons/LinearChart';
 
 require('./App.css');
 
@@ -49,6 +50,7 @@ class App extends Component {
               <Route path="/Perfil" component={ Perfil } />
               <Route path="/NuevoEquipo" component={ NewTeamForm } />
               <Route path="/NuevoUsuario" component={ NewUserForm } />
+              <Route path="/LinearChart" component={ LinearChart } />
               <Route path="/Enterprise" render={() => {
                 return <Enterprise enterprise={ enterpriseClicked } />
               }} />
