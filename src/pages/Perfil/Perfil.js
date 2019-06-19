@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import Paper from '@material-ui/core/Paper';
 import Typography from '@material-ui/core/Typography';
 import withStyles from '@material-ui/core/styles/withStyles';
-import RadarChart from 'react-svg-radar-chart';
+//import RadarChart from 'react-svg-radar-chart';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import Radio from '@material-ui/core/Radio';
 import Grid from '@material-ui/core/Grid';
@@ -20,6 +20,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Radar from 'react-d3-radar';
 import Avatar from '@material-ui/core/Avatar';
 import Gero from '../../images/gero.jpg';
+import ChartPolygon from '../../commons/ChartPolygon';
 
 require('./Perfil.css');
 
@@ -91,6 +92,26 @@ class GuttersGrid extends React.Component {
          }
       ];
 
+      const datachart = [
+        {
+          subject: 'BeProfessional', A: 120, B: 110, fullMark: 150,
+        },
+        {
+          subject: 'BeCollaborative', A: 98, B: 130, fullMark: 150,
+        },
+        {
+          subject: 'MissSympathy', A: 86, B: 130, fullMark: 150,
+        },
+        {
+          subject: 'Behardito', A: 99, B: 100, fullMark: 150,
+        },
+        {
+          subject: 'BeProblematic', A: 85, B: 90, fullMark: 150,
+        },
+        {
+          subject: 'BePerfect', A: 65, B: 85, fullMark: 150,
+        },
+      ];
  const captions = {
    // columns
    friendly: 'Friendly',
@@ -160,34 +181,8 @@ class GuttersGrid extends React.Component {
             </div>
             <div class="boxes chart">
               <label className="FormField__Label" htmlFor="name">Histórico</label>
-                                    <RadarChart
-                                      captions={{
-                                        // columns
-                                        friendly: 'Friendly',
-                                        collaborative:'Collaborative',
-                                        adaptability: 'Adaptability',
-                                        creativity: 'Creativity',
-                                        punctual: 'Punctual',
-                                        intelligent: 'intelligent'
-                                      }}
-                                      data={[
-                                        // data
-                                        {
-                                          data: {
-                                            friendly: 0.7,
-                                            collaborative: .8,
-                                            adaptability: 0.9,
-                                            creativity: 0.67,
-                                            punctual: 0.8,
-                                            intelligent:0.8
-                                          },
-                                          meta: { color: '#58FCEC' }
-                                        },
-                                      ]}
-                                      size={250}
-                                    >
 
-                                    </RadarChart>
+                <ChartPolygon data = {datachart}/>
 
             </div>
           </div>
