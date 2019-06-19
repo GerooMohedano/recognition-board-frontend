@@ -51,7 +51,7 @@ class SprintDialog extends React.Component {
           :
           (
             <InputBase
-              placeholder='Sprint name'
+              placeholder="Sprint name"
               defaultValue={(sprintName !== undefined) ? sprintName : ''}
               onChange={ dialogType === 'newDialog'
                 ? (event => this.editNewSprintInformation(event.target.value, 'newSprintName'))

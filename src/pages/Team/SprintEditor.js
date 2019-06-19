@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
-import AddIcon from '@material-ui/icons/Add';
-import CreateIcon from '@material-ui/icons/Create';
-import ClearIcon from '@material-ui/icons/Clear';
+import CreateIcon from '@material-ui/icons/Add';
+import EditIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Clear';
 import SprintDialog from './SprintDialog';
 
 require('./SprintEditor.css');
@@ -32,7 +32,7 @@ class SprintEditor extends React.Component {
     return (
       <div className="sprintToolBar">
         <IconButton onClick={() => this.handleDialogOpen('newDialog')}>
-          <AddIcon />
+          <CreateIcon />
         </IconButton>
         <SprintDialog
           handleClose={() => this.hanldleDialogClose('newDialog')}
@@ -43,7 +43,7 @@ class SprintEditor extends React.Component {
           endDate={endDate}
         />
         <IconButton onClick={() => this.handleDialogOpen('editDialog')}>
-          <CreateIcon />
+          <EditIcon />
         </IconButton>
         <SprintDialog
           handleClose={() => this.hanldleDialogClose('editDialog')}
@@ -55,7 +55,7 @@ class SprintEditor extends React.Component {
           endDate={endDate}
         />
         <IconButton onClick={() => this.handleDialogOpen('deleteDialog')}>
-          <ClearIcon />
+          <DeleteIcon />
         </IconButton>
         <SprintDialog
           handleClose={() => this.hanldleDialogClose('deleteDialog')}

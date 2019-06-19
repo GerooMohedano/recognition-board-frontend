@@ -8,7 +8,7 @@ import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
 import SprintEditor from './SprintEditor';
-import SearchSprints from './SearchSprints';
+import SearchSprints from '../../commons/CustomAutocomplete';
 
 require('./SprintSelector.css');
 
@@ -115,7 +115,8 @@ class SprintSelector extends React.Component {
             </div>
             <SearchSprints
               data={olderSprints}
-              selectOlderSprint={this.selectOlderSprint}
+              upperFunction={this.selectOlderSprint}
+              placeholder="Select another Sprint..."
             />
           </div>
         </div>

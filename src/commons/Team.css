@@ -1,0 +1,70 @@
+.title {
+  width: 50%;
+  display: inline-block;
+}
+
+.teamName {
+  font-size: 2.0em;
+  font-weight: bold;
+  float: left;
+  width: 100%;
+}
+
+.editableTeamName {
+  margin-left: 11px;
+  width: 65%;
+}
+
+.editableTeamName input {
+  font-size: 2.0em;
+  font-weight: bold;
+}
+
+.imageAndStats {
+  height: 100px;
+}
+
+.teamAvatar {
+  margin: 10px;
+  width: 100px !important;
+  height: 100px !important;
+}
+
+.buttonContainers{
+  text-align: center;
+}
+
+.teamPhoto {
+  width: 50%;
+  display: inline-block;
+}
+
+.autocompleteTitle {
+  text-align: center;
+  font-weight: bold;
+  width: 100%;
+}
+
+.autocompleteContainer {
+  width: 90%;
+  padding-left: 5%;
+  padding-right: 5%;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.selectTeamLeader {
+  width: 100%;
+}
+
+.cardsContainer {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.cardContainer {
+  width: 46%;
+  margin-left: 2%;
+  margin-right: 2%;
+  display: inline-block;
+}

@@ -11,6 +11,7 @@ import Team from './pages/Team/Team';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
 import Achievement from './pages/Achievement/Achievement';
+import TeamConfig from './pages/TeamConfig/TeamConfig';
 
 require('./App.css');
 
@@ -49,6 +50,13 @@ class App extends Component {
               <Route path="/Perfil" component={ Perfil } />
               <Route path="/NuevoEquipo" component={ NewTeamForm } />
               <Route path="/NuevoUsuario" component={ NewUserForm } />
+              <Route path="/TeamConfig" render={() => {
+                return <TeamConfig
+                  team={ teamClicked }
+                  changeTeamName={ this.updateTeamClicked }
+                  teamLeader="1"
+                />
+              }} />
               <Route path="/Enterprise" render={() => {
                 return <Enterprise enterprise={ enterpriseClicked } />
               }} />

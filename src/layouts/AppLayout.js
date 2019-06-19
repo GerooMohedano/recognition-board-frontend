@@ -88,10 +88,6 @@ const styles = theme => ({
 });
 
 class AppLayout extends React.Component {
-  state = {
-
-  };
-
   render() {
     const { classes, updateTeamClicked, updateEnterpriseClicked } = this.props;
     return (
