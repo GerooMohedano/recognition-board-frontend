@@ -2,8 +2,9 @@
   text-align: center !important;
 }
 
-.cardContainer {
+.notesContainer {
   overflow-y: auto;
+  width: 80% !important;
 }
 
 .cardParagraph {

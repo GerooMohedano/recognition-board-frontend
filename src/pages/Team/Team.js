@@ -5,6 +5,7 @@ import TeamTable from './TeamTable';
 import SprintSelector from './SprintSelector';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
+import Tooltip from '@material-ui/core/Tooltip';
 import Build from '@material-ui/icons/Build';
 import Yella from '../../images/yella.jpg';
 
@@ -17,9 +18,11 @@ class Team extends Component {
         <div className="title">
           <div className="teamName"> IM IN Team {this.props.team}</div>
           <NavLink to="/TeamConfig">
-            <Button>
-              <Build />
-            </Button>
+            <Tooltip title="Edit this team configuration">
+              <Button>
+                <Build />
+              </Button>
+            </Tooltip>
           </NavLink>
         </div>
         <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />

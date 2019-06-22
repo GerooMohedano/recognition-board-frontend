@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@material-ui/core/IconButton';
+import Tooltip from '@material-ui/core/Tooltip';
 import CreateIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Clear';
@@ -31,9 +32,11 @@ class SprintEditor extends React.Component {
     const { sprintName, editSprintInformation, beginDate, endDate } = this.props;
     return (
       <div className="sprintToolBar">
-        <IconButton onClick={() => this.handleDialogOpen('newDialog')}>
-          <CreateIcon />
-        </IconButton>
+        <Tooltip title="Create a new Sprint">
+          <IconButton onClick={() => this.handleDialogOpen('newDialog')}>
+            <CreateIcon />
+          </IconButton>
+        </Tooltip>
         <SprintDialog
           handleClose={() => this.hanldleDialogClose('newDialog')}
           open={newDialog}
@@ -42,9 +45,11 @@ class SprintEditor extends React.Component {
           beginDate={beginDate}
           endDate={endDate}
         />
-        <IconButton onClick={() => this.handleDialogOpen('editDialog')}>
-          <EditIcon />
-        </IconButton>
+        <Tooltip title="Edit current Sprint">
+          <IconButton onClick={() => this.handleDialogOpen('editDialog')}>
+            <EditIcon />
+          </IconButton>
+        </Tooltip>
         <SprintDialog
           handleClose={() => this.hanldleDialogClose('editDialog')}
           open={editDialog}
@@ -54,9 +59,11 @@ class SprintEditor extends React.Component {
           beginDate={beginDate}
           endDate={endDate}
         />
-        <IconButton onClick={() => this.handleDialogOpen('deleteDialog')}>
-          <DeleteIcon />
-        </IconButton>
+        <Tooltip title="Delete current Sprint">
+          <IconButton onClick={() => this.handleDialogOpen('deleteDialog')}>
+            <DeleteIcon />
+          </IconButton>
+        </Tooltip>
         <SprintDialog
           handleClose={() => this.hanldleDialogClose('deleteDialog')}
           open={deleteDialog}

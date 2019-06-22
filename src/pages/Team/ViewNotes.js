@@ -111,7 +111,7 @@ class ViewNotes extends React.Component {
         onClose={() => handleCreateNoteButton(value, persona, false)}
       >
         <DialogTitle id="form-dialog-title">{value + ' ' + persona}</DialogTitle>
-          <DialogContent className="cardContainer">
+          <DialogContent className="notesContainer">
             {this.createCardsWithNotes()}
             {(creatingNote)
             ? (

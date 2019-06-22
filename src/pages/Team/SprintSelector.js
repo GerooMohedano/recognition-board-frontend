@@ -7,6 +7,7 @@ import KeyboardArrowLeft from '@material-ui/icons/KeyboardArrowLeft';
 import KeyboardArrowRight from '@material-ui/icons/KeyboardArrowRight';
 import SearchIcon from '@material-ui/icons/Search';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import Tooltip from '@material-ui/core/Tooltip';
 import SprintEditor from './SprintEditor';
 import SearchSprints from '../../commons/CustomAutocomplete';
 
@@ -100,13 +101,17 @@ class SprintSelector extends React.Component {
             />
         </div>
         <div className="sprintNavigation">
-          <Fab aria-label="Delete" className="navigationButton">
-            <KeyboardArrowLeft />
-          </Fab>
+          <Tooltip title="Go to the previous Sprint">
+            <Fab aria-label="Delete" className="navigationButton">
+              <KeyboardArrowLeft />
+            </Fab>
+          </Tooltip>
           <h2 className="navigationButton">{ sprint }</h2>
-          <Fab aria-label="Delete" className="navigationButton">
-            <KeyboardArrowRight />
-          </Fab>
+          <Tooltip title="Go to the next Sprint">
+            <Fab aria-label="Delete" className="navigationButton">
+              <KeyboardArrowRight />
+            </Fab>
+          </Tooltip>
         </div>
         <div className="barraParaBuscar">
           <div className={classes.search}>

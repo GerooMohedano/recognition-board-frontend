@@ -16,18 +16,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
 import Yella from '../../images/yella.jpg';
 import ValuesList from './ValuesList';
+import TeamMembersList from './TeamMembersList';
 
 require('../../commons/Team.css');
-
-const data = [
-  { id: 1, name: 'Magui' },
-  { id: 2, name: 'Romy' },
-  { id: 3, name: 'Gero' },
-  { id: 4, name: 'Pame' },
-  { id: 5, name: 'Marcio' },
-  { id: 6, name: 'LuisMi' },
-  { id: 7, name: 'Tony' }
-]
 
 class TeamConfig extends Component {
   constructor(props) {
@@ -41,6 +32,15 @@ class TeamConfig extends Component {
         { id: 3, name: 'Be Collaborative', active: true },
         { id: 4, name: 'Be Accountable', active: true },
         { id: 5, name: 'Be Adaptable', active: true }
+      ],
+      members: [
+        { id: 1, name: 'Magui' },
+        { id: 2, name: 'Romy' },
+        { id: 3, name: 'Gero' },
+        { id: 4, name: 'Pame' },
+        { id: 5, name: 'Marcio' },
+        { id: 6, name: 'LuisMi' },
+        { id: 7, name: 'Tony' }
       ]
     }
   }
@@ -86,21 +86,30 @@ class TeamConfig extends Component {
 
   deleteValue = valueId => {
     this.setState(state => {
-      const valueList = state.values.filter(value => value.id !== valueId);
+      const valuesList = state.values.filter(value => value.id !== valueId);
       return {
-        values: valueList
+        values: valuesList
+      };
+    });
+  }
+
+  deleteMember = memberId => {
+    this.setState(state => {
+      const membersList = state.members.filter(member => member.id !== memberId);
+      return {
+        members: membersList
       };
     });
   }
 
   render() {
     const { classes, team, changeTeamName } = this.props;
-    const { newTeamName, newTeamLeader, values } = this.state;
+    const { newTeamName, newTeamLeader, values, members } = this.state;
     return (
       <div>
         <div>
-          <div className="title">
-            <div className="teamName">
+          <div className="configTitle">
+            <div className="configTeamName">
               IM IN Team
               <InputBase
                 className="editableTeamName"
@@ -117,7 +126,7 @@ class TeamConfig extends Component {
                 onChange={event => this.selectTeamLeader(event.target.value)}
                 className="selectTeamLeader"
               >
-                { data.map(teamMember => (<MenuItem value={teamMember.id}>{teamMember.name}</MenuItem>)) }
+                { members.map(teamMember => (<MenuItem value={teamMember.id}>{teamMember.name}</MenuItem>)) }
               </Select>
             </div>
           </div>
@@ -133,15 +142,10 @@ class TeamConfig extends Component {
             changeValueActive={this.changeValueActive}
             deleteValue={this.deleteValue}
           />
-          <div className="cardContainer">
-            <Card className="eachCard">
-              <CardContent>
-                <Typography gutterBottom variant="h5" component="h2">
-                  Team Members
-                </Typography>
-              </CardContent>
-            </Card>
-          </div>
+          <TeamMembersList
+            members={members}
+            deleteMember={this.deleteMember}
+          />
         </div>
         <div className="buttonContainers">
           <NavLink to="/Team">

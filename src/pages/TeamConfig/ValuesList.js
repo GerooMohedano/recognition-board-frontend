@@ -24,16 +24,18 @@ class ValuesList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openDialog: false,
+      openDialogEdit: false,
+      openDialogDelete: false,
       nameToChange: '',
       idToChange: -1,
+      idToDelete: -1,
       newName: ''
     };
   }
 
-  toggleDialogState = (id, name, state) => {
+  toggleEditDialogState = (id, name, state) => {
     this.setState({
-      openDialog: state,
+      openDialogEdit: state,
       nameToChange: name,
       idToChange: id,
       newName: ''
@@ -47,11 +49,15 @@ class ValuesList extends Component {
   saveNewValueName = () => {
     const { idToChange, newName } = this.state
     this.props.changeValueName(idToChange, newName);
-    this.toggleDialogState(-1, '', false);
+    this.toggleEditDialogState(-1, '', false);
+  }
+
+  toggleDeleteDialogState = (valueId, state) => {
+    this.setState({ idToDelete: valueId, openDialogDelete: state });
   }
 
   render() {
-    const { openDialog, nameToChange } = this.state;
+    const { openDialogEdit, openDialogDelete, nameToChange, idToDelete } = this.state;
     const { values, changeValueActive, deleteValue } = this.props;
     return (
       <div className="cardContainer">
@@ -63,12 +69,12 @@ class ValuesList extends Component {
             <List component="nav">
               {values.map(value => (
                 <ListItem>
-                  <ListItemText inset primary={value.name} />
+                  <ListItemText inset primary={value.name} className="textOfList" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
                       disabled={!value.active}
-                      onClick={() => this.toggleDialogState(value.id, value.name, true)}
+                      onClick={() => this.toggleEditDialogState(value.id, value.name, true)}
                     >
                       <EditIcon />
                     </IconButton>
@@ -85,7 +91,7 @@ class ValuesList extends Component {
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => deleteValue(value.id)}
+                      onClick={() => this.toggleDeleteDialogState(value.id, true)}
                     >
                       <DeleteIcon />
                     </IconButton>
@@ -96,8 +102,8 @@ class ValuesList extends Component {
           </CardContent>
         </Card>
         <Dialog
-          open={openDialog}
-          onClose={() => this.toggleDialogState(-1, '', false)}
+          open={openDialogEdit}
+          onClose={() => this.toggleEditDialogState(-1, '', false)}
         >
           <DialogTitle id="form-dialog-title">
             <InputBase
@@ -108,7 +114,7 @@ class ValuesList extends Component {
           </DialogTitle>
           <DialogActions>
             <Button
-              onClick={() => this.toggleDialogState(-1, '', false)}
+              onClick={() => this.toggleEditDialogState(-1, '', false)}
               color="primary"
             >
               Cancel
@@ -118,6 +124,28 @@ class ValuesList extends Component {
               color="primary"
             >
               Save
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openDialogDelete}
+          onClose={() => this.toggleDeleteDialogState(-1, false)}
+        >
+          <DialogTitle id="form-dialog-title">
+            Are you sure you want to delete the value? (this action is permanent)
+          </DialogTitle>
+          <DialogActions>
+            <Button
+              onClick={() => this.toggleDeleteDialogState(-1, false)}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {deleteValue(idToDelete); this.toggleDeleteDialogState(-1, false)}}
+              color="secondary"
+            >
+              Delete
             </Button>
           </DialogActions>
         </Dialog>
