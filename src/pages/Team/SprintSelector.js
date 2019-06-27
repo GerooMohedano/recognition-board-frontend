@@ -69,18 +69,18 @@ class SprintSelector extends React.Component {
       beginDate: '2017-08-20',
       endDate: '2019-08-13',
       olderSprints: [
-        { label: 'Sprint 190202' },
-        { label: 'Sprint 190201' },
-        { label: 'Sprint 190102' },
-        { label: 'Sprint 190101' },
-        { label: 'Sprint 181202' },
-        { label: 'Sprint 181201' }
+        { id: 1, sprint: 'Sprint 190202' },
+        { id: 2, sprint: 'Sprint 190201' },
+        { id: 3, sprint: 'Sprint 190102' },
+        { id: 4, sprint: 'Sprint 190101' },
+        { id: 5, sprint: 'Sprint 181202' },
+        { id: 6, sprint: 'Sprint 181201' }
       ]
     }
   }
 
-  selectOlderSprint = (label) => {
-    console.log('go to', label);
+  selectOlderSprint = value => {
+    console.log('go to', value);
   }
 
   editSprintInformation = (value, definition) => {
@@ -122,6 +122,7 @@ class SprintSelector extends React.Component {
               data={olderSprints}
               upperFunction={this.selectOlderSprint}
               placeholder="Select another Sprint..."
+              labelName="sprint"
             />
           </div>
         </div>

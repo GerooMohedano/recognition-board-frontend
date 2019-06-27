@@ -20,6 +20,25 @@ import TeamMembersList from './TeamMembersList';
 
 require('../../commons/Team.css');
 
+const enterpriseMembers = [
+  { id: 1, name: 'Magui' },
+  { id: 2, name: 'Romy' },
+  { id: 3, name: 'Gero' },
+  { id: 4, name: 'Pame' },
+  { id: 5, name: 'Marcio' },
+  { id: 6, name: 'LuisMi' },
+  { id: 7, name: 'Tony' },
+  { id: 8, name: 'Abel' },
+  { id: 9, name: 'Mercedes' },
+  { id: 10, name: 'Sole' },
+  { id: 11, name: 'Ricki' },
+  { id: 12, name: 'Nick' },
+  { id: 13, name: 'Shawn' },
+  { id: 14, name: 'Lali' },
+  { id: 15, name: 'Karina' },
+  { id: 16, name: 'Jimena' }
+]
+
 class TeamConfig extends Component {
   constructor(props) {
     super(props);
@@ -102,6 +121,16 @@ class TeamConfig extends Component {
     });
   }
 
+  addValue = value => {
+    const nextId = this.state.values[this.state.values.length];
+    this.setState(state => ({ values: [...state.values, { id: nextId, name: value, active: true }]}))
+  }
+
+  addNewTeamMember = value => {
+    value
+    && this.setState(state => ({ members: [...state.members, value] }))
+  }
+
   render() {
     const { classes, team, changeTeamName } = this.props;
     const { newTeamName, newTeamLeader, values, members } = this.state;
@@ -141,10 +170,14 @@ class TeamConfig extends Component {
             changeValueName={this.changeValueName}
             changeValueActive={this.changeValueActive}
             deleteValue={this.deleteValue}
+            addNewValue={this.addValue}
           />
           <TeamMembersList
+            teamLeader={newTeamLeader}
             members={members}
             deleteMember={this.deleteMember}
+            enterpriseMembers={enterpriseMembers}
+            addNewTeamMember={this.addNewTeamMember}
           />
         </div>
         <div className="buttonContainers">
@@ -166,7 +199,7 @@ class TeamConfig extends Component {
 
 TeamConfig.propTypes = {
   team: PropTypes.string.isRequired,
-  teamLeader: PropTypes.string,
+  teamLeader: PropTypes.number,
   changeTeamName: PropTypes.func.isRequired
 };
 

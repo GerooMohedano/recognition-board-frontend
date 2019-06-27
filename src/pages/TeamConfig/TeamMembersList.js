@@ -17,7 +17,11 @@ import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CreateIcon from '@material-ui/icons/Add';
+import ConfirmIcon from '@material-ui/icons/Done';
+import CancelIcon from '@material-ui/icons/Clear';
 import CommonProfilePic from '../../images/profilepic.jpg';
+import Autocomplete from '../../commons/CustomAutocomplete';
 
 require('../../commons/Team.css');
 
@@ -28,6 +32,8 @@ class TeamMembersList extends Component {
       openDialogDelete: false,
       nameToDelete: '',
       idToDelete: -1,
+      addingANewMember: false,
+      newTeamMember: {}
     };
   }
 
@@ -39,9 +45,22 @@ class TeamMembersList extends Component {
     });
   }
 
+  toggleAddingMember = value => {
+    this.setState({ addingANewMember: value, newTeamMember: {} })
+  }
+
+  selectNewMember = value => {
+    this.setState({ newTeamMember: value })
+  }
+
+  confirmAddingMember = memberToAdd => {
+    this.setState({ newTeamMember: {} })
+    this.props.addNewTeamMember(memberToAdd);
+  }
+
   render() {
-    const { openDialogDelete, idToDelete, nameToDelete } = this.state;
-    const { members, deleteMember } = this.props;
+    const { openDialogDelete, idToDelete, nameToDelete, addingANewMember, newTeamMember } = this.state;
+    const { members, deleteMember, teamLeader, enterpriseMembers } = this.props;
     return (
       <div className="cardContainer">
         <Card>
@@ -52,13 +71,18 @@ class TeamMembersList extends Component {
             <List component="nav">
               {members.map(member => (
                 <ListItem>
-                  <ListItemText inset primary={member.name} className="textOfList" />
+                  <ListItemText
+                    inset
+                    primary={member.name + (member.id === teamLeader ? ' (team leader)' : '')}
+                    className="textOfList"
+                  />
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={CommonProfilePic} />
                   </ListItemAvatar>
                   <Tooltip title="Kick out">
                     <IconButton
                       aria-label="Delete"
+                      disabled={member.id === teamLeader}
                       onClick={() => this.toggleDeleteDialogState(member.id, member.name, true)}
                     >
                       <DeleteIcon />
@@ -66,6 +90,43 @@ class TeamMembersList extends Component {
                   </Tooltip>
                 </ListItem>
               ))}
+              {addingANewMember
+              && (
+                <ListItem>
+                  <Autocomplete
+                    data={enterpriseMembers.filter(enterpriseMember => (
+                      members.findIndex(member => member.id === enterpriseMember.id) === -1
+                  ))}
+                    upperFunction={this.selectNewMember}
+                    placeholder="Search for a member in the enterprise"
+                    labelName="name"
+                  />
+                  <Tooltip title="Confirm">
+                    <IconButton
+                      aria-label="Delete"
+                      disabled={newTeamMember.name === ''}
+                      onClick={() => this.confirmAddingMember(newTeamMember)}
+                    >
+                      <ConfirmIcon />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title="Cancel">
+                    <IconButton aria-label="Delete" onClick={() => this.toggleAddingMember(false)}>
+                      <CancelIcon />
+                    </IconButton>
+                  </Tooltip>
+                </ListItem>
+              )}
+              <ListItem className="addNewMember">
+                <Tooltip title="Add a new member">
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() => this.toggleAddingMember(true)}
+                  >
+                    <CreateIcon />
+                  </IconButton>
+                </Tooltip>
+              </ListItem>
             </List>
           </CardContent>
         </Card>
@@ -98,7 +159,10 @@ class TeamMembersList extends Component {
 
 TeamMembersList.propTypes = {
   members: PropTypes.array.isRequired,
-  deleteMember: PropTypes.func.isRequired
+  deleteMember: PropTypes.func.isRequired,
+  teamLeader: PropTypes.string.isRequired,
+  enterpriseMembers: PropTypes.array.isRequired,
+  addNewTeamMember: PropTypes.func.isRequired
 };
 
 export default TeamMembersList;

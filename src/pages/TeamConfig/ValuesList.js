@@ -11,11 +11,13 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import ActivateIcon from '@material-ui/icons/PowerSettingsNew';
+import CreateIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 require('../../commons/Team.css');
@@ -26,10 +28,12 @@ class ValuesList extends Component {
     this.state = {
       openDialogEdit: false,
       openDialogDelete: false,
+      openDialogAdd: false,
       nameToChange: '',
       idToChange: -1,
       idToDelete: -1,
-      newName: ''
+      newName: '',
+      nameOfTheNewValue: ''
     };
   }
 
@@ -46,6 +50,10 @@ class ValuesList extends Component {
     this.setState({ newName: name });
   }
 
+  changeNameOfNewValue = name => {
+    this.setState({ nameOfTheNewValue: name });
+  }
+
   saveNewValueName = () => {
     const { idToChange, newName } = this.state
     this.props.changeValueName(idToChange, newName);
@@ -56,9 +64,13 @@ class ValuesList extends Component {
     this.setState({ idToDelete: valueId, openDialogDelete: state });
   }
 
+  toggleAddDialogState = state => {
+    this.setState({ openDialogAdd: state });
+  }
+
   render() {
-    const { openDialogEdit, openDialogDelete, nameToChange, idToDelete } = this.state;
-    const { values, changeValueActive, deleteValue } = this.props;
+    const { openDialogEdit, openDialogDelete, openDialogAdd, nameToChange, idToDelete, nameOfTheNewValue } = this.state;
+    const { values, changeValueActive, deleteValue, addNewValue } = this.props;
     return (
       <div className="cardContainer">
         <Card>
@@ -98,6 +110,16 @@ class ValuesList extends Component {
                   </Tooltip>
                 </ListItem>
               ))}
+              <ListItem className="addNewMember">
+                <Tooltip title="Add a new value">
+                  <IconButton
+                    aria-label="Delete"
+                    onClick={() => this.toggleAddDialogState(true)}
+                  >
+                    <CreateIcon />
+                  </IconButton>
+                </Tooltip>
+              </ListItem>
             </List>
           </CardContent>
         </Card>
@@ -128,12 +150,41 @@ class ValuesList extends Component {
           </DialogActions>
         </Dialog>
         <Dialog
+          open={openDialogAdd}
+          onClose={() => this.toggleAddDialogState(false)}
+        >
+          <DialogTitle id="form-dialog-title">
+            Enter the name for the new value
+          </DialogTitle>
+          <DialogContent>
+            <InputBase
+              placeholder="Write the name of the new value"
+              defaultValue={nameOfTheNewValue}
+              onChange={event => this.changeNameOfNewValue(event.target.value)}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => this.toggleAddDialogState(false)}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {addNewValue(nameOfTheNewValue); this.toggleAddDialogState(false)}}
+              color="primary"
+            >
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
           open={openDialogDelete}
           onClose={() => this.toggleDeleteDialogState(-1, false)}
         >
-          <DialogTitle id="form-dialog-title">
-            Are you sure you want to delete the value? (this action is permanent)
-          </DialogTitle>
+        <DialogTitle id="form-dialog-title">
+          Are you sure you want to delete this value?
+        </DialogTitle>
           <DialogActions>
             <Button
               onClick={() => this.toggleDeleteDialogState(-1, false)}
@@ -145,7 +196,7 @@ class ValuesList extends Component {
               onClick={() => {deleteValue(idToDelete); this.toggleDeleteDialogState(-1, false)}}
               color="secondary"
             >
-              Delete
+              Save
             </Button>
           </DialogActions>
         </Dialog>
@@ -158,7 +209,8 @@ ValuesList.propTypes = {
   values: PropTypes.array.isRequired,
   changeValueName: PropTypes.func.isRequired,
   changeValueActive: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired
+  deleteValue: PropTypes.func.isRequired,
+  addNewValue: PropTypes.func.isRequired
 };
 
 export default ValuesList;

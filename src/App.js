@@ -54,7 +54,7 @@ class App extends Component {
                 return <TeamConfig
                   team={ teamClicked }
                   changeTeamName={ this.updateTeamClicked }
-                  teamLeader="1"
+                  teamLeader={1}
                 />
               }} />
               <Route path="/Enterprise" render={() => {

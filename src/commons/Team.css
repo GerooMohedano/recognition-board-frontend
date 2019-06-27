@@ -86,3 +86,8 @@
 .textOfList {
   padding-left: 0px !important;
 }
+
+.addNewMember {
+  display: inherit !important;
+  text-align: center !important;
+}

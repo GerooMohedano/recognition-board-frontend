@@ -26,13 +26,13 @@ function renderInput(inputProps) {
   );
 }
 
-function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem, upperFunction }) {
+function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, selectedItem, upperFunction, labelName }) {
   const isHighlighted = highlightedIndex === index;
-  const isSelected = (selectedItem || '').indexOf(suggestion.label) > -1;
+  const isSelected = (selectedItem || '').indexOf(suggestion[labelName]) > -1;
   return (
     <MenuItem
       {...itemProps}
-      key={suggestion.label}
+      key={suggestion[labelName]}
       selected={isHighlighted}
       component="div"
       style={{
@@ -41,9 +41,9 @@ function renderSuggestion({ suggestion, index, itemProps, highlightedIndex, sele
     >
       <Button
         fullWidth
-        onClick={() => upperFunction(suggestion.label)}
+        onClick={() => upperFunction(suggestion)}
       >
-        {suggestion.label}
+        {suggestion[labelName]}
       </Button>
     </MenuItem>
   );
@@ -54,10 +54,11 @@ renderSuggestion.propTypes = {
   itemProps: PropTypes.object,
   selectedItem: PropTypes.string,
   suggestion: PropTypes.shape({ label: PropTypes.string }).isRequired,
-  upperFunction: PropTypes.func.isRequired
+  upperFunction: PropTypes.func.isRequired,
+  labelName: PropTypes.string
 };
 
-function getSuggestions(value, suggestions) {
+function getSuggestions(value, suggestions, labelName) {
   const inputValue = deburr(value.trim()).toLowerCase();
   const inputLength = inputValue.length;
   let count = 0;
@@ -65,7 +66,7 @@ function getSuggestions(value, suggestions) {
     ? []
     : suggestions.filter(suggestion => {
         const keep =
-          count < 5 && suggestion.label.slice(0, inputLength).toLowerCase() === inputValue;
+          count < 5 && suggestion[labelName].slice(0, inputLength).toLowerCase() === inputValue;
         if (keep) {
           count += 1;
         }
@@ -103,7 +104,7 @@ const styles = theme => ({
 class CustomAutocomplete extends React.Component {
 
   render() {
-  const { classes, data, upperFunction, placeholder } = this.props;
+  const { classes, data, labelName, upperFunction, placeholder } = this.props;
     return (
       <div className={classes.root}>
         <Downshift id="downshift-simple">
@@ -127,14 +128,15 @@ class CustomAutocomplete extends React.Component {
               <div {...getMenuProps()}>
                 {isOpen ? (
                   <Paper className={classes.paper} square>
-                    {getSuggestions(inputValue, data).map((suggestion, index) =>
+                    {getSuggestions(inputValue, data, labelName).map((suggestion, index) =>
                       renderSuggestion({
                         suggestion,
                         index,
-                        itemProps: getItemProps({ item: suggestion.label }),
+                        itemProps: getItemProps({ item: suggestion[labelName] }),
                         highlightedIndex,
                         selectedItem,
-                        upperFunction
+                        upperFunction,
+                        labelName
                       }),
                     )}
                   </Paper>
@@ -152,7 +154,8 @@ CustomAutocomplete.propTypes = {
   classes: PropTypes.object.isRequired,
   data: PropTypes.array.isRequired,
   upperFunction: PropTypes.func.isRequired,
-  placeholder: PropTypes.string.isRequired
+  placeholder: PropTypes.string.isRequired,
+  labelName: PropTypes.string.isRequired
 };
 
 export default withStyles(styles)(CustomAutocomplete);
