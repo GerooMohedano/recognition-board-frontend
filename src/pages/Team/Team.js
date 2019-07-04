@@ -7,11 +7,43 @@ import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Build from '@material-ui/icons/Build';
+import HistoricChart from '@material-ui/icons/InsertChart';
 import Yella from '../../images/yella.jpg';
+import ChartPolygon from '../../commons/ChartPolygon';
+import HistoricDialog from '../../commons/HistoricDialog';
 
 require('../../commons/Team.css');
 
+const data = [
+  {
+    id: 1, subject: 'Be Accountable', A: 120, B: 110, fullMark: 150,
+  },
+  {
+    id: 2, subject: 'Be Professional', A: 98, B: 130, fullMark: 150,
+  },
+  {
+    id: 3, subject: 'Be Proactive', A: 86, B: 130, fullMark: 150,
+  },
+  {
+    id: 4, subject: 'Be Collaborative', A: 99, B: 100, fullMark: 150,
+  },
+  {
+    id: 5, subject: 'Be Hardito', A: 85, B: 90, fullMark: 150,
+  }
+];
+
 class Team extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      openHistoricDialog: false
+    };
+  }
+
+  changeHistoricDialogState = value => {
+    this.setState({ openHistoricDialog: value });
+  }
+
   render() {
     return (
       <div>
@@ -25,9 +57,22 @@ class Team extends Component {
             </Tooltip>
           </NavLink>
         </div>
-        <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
+        <div className="teamDescription">
+          <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
+          <div className="chartContainer">
+            <ChartPolygon data={data} width={500} height={300} />
+          </div>
+          <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
+            <HistoricChart />
+          </Button>
+        </div>
         <SprintSelector />
         <TeamTable />
+        <HistoricDialog
+          open={this.state.openHistoricDialog}
+          handleClose={() => this.changeHistoricDialogState(false)}
+          selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
+        />
       </div>
     );
   }

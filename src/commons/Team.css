@@ -14,6 +14,10 @@
   float: left;
 }
 
+.teamDescription {
+  display: flex;
+}
+
 .configTeamName {
   font-size: 2.0em;
   font-weight: bold;
@@ -36,10 +40,22 @@
   height: 100px;
 }
 
+.chartContainer {
+   margin-left: auto;
+}
+
+.historicLink {
+  text-align: center;
+}
+
+.historicSelectorContainer {
+  
+}
+
 .teamAvatar {
   margin: 10px;
-  width: 100px !important;
-  height: 100px !important;
+  width: 200px !important;
+  height: 200px !important;
 }
 
 .buttonContainers{

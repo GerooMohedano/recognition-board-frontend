@@ -27,17 +27,15 @@ const data = [
 
 class ChartPolygon extends React.Component {
   render() {
-     const {data} = this.props;
+    const { data, width, height } = this.props;
     return (
-      <div>
-        <div style={{ width: '100%', height: 300, contentAlign: 'center'}}>
-          <RadarChart cx={300} cy={250} outerRadius={150} width={600} height={500} data={data}>
-            <PolarGrid />
-            <PolarAngleAxis dataKey="subject" />
-            <PolarRadiusAxis />
-            <Radar name="Charsito" dataKey="A" stroke="#8884d8" fill="#F4D03F" fillOpacity={0.6} />
-          </RadarChart>
-        </div>
+      <div style={{ width: '100%', height: '100%', contentAlign: 'center'}}>
+        <RadarChart cx={width / 2} cy={height / 2} outerRadius={height / 4} width={width} height={height} data={data}>
+          <PolarGrid />
+          <PolarAngleAxis dataKey="subject" />
+          <PolarRadiusAxis />
+          <Radar name="Charsito" dataKey="A" stroke="#8884d8" fill="#F4D03F" fillOpacity={0.6} />
+        </RadarChart>
       </div>
     );
   }
@@ -45,9 +43,9 @@ class ChartPolygon extends React.Component {
 
 
 ChartPolygon.propTypes = {
-
- data: PropTypes.shape({})
+  data: PropTypes.shape({}).isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired
 }
-
 
 export default ChartPolygon;

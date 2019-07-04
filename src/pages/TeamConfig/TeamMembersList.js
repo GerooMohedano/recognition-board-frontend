@@ -33,7 +33,7 @@ class TeamMembersList extends Component {
       nameToDelete: '',
       idToDelete: -1,
       addingANewMember: false,
-      newTeamMember: {}
+      newTeamMember: { id: -1, name: '' }
     };
   }
 
@@ -46,16 +46,16 @@ class TeamMembersList extends Component {
   }
 
   toggleAddingMember = value => {
-    this.setState({ addingANewMember: value, newTeamMember: {} })
+    this.setState({ addingANewMember: value, newTeamMember: { id: -1, name: '' } })
   }
 
   selectNewMember = value => {
     this.setState({ newTeamMember: value })
   }
 
-  confirmAddingMember = memberToAdd => {
-    this.setState({ newTeamMember: {} })
-    this.props.addNewTeamMember(memberToAdd);
+  confirmAddingMember = () => {
+    this.props.addNewTeamMember(this.state.newTeamMember);
+    this.setState({ newTeamMember: { id: -1, name: '' } })
   }
 
   render() {
