@@ -8,6 +8,7 @@ import EnterpriseInfo from './EnterpriseInfo';
 import Bob from '../../images/bob.jpg';
 import HistoricDialog from '../../commons/HistoricDialog';
 import ChartPolygon from '../../commons/ChartPolygon';
+import EnterpriseCardContainer from './EnterpriseCardContainer';
 
 require('./Enterprise.css');
 
@@ -40,7 +41,11 @@ class Enterprise extends Component {
         address: 'Av Belgrano 1915',
         city: 'SMT',
         telephone: '4214431'
-      }
+      },
+      teams: [
+        { id: 1, name: 'Octopus', active: true },
+        { id: 2, name: 'Elephants', active: true }
+      ]
     };
   }
 
@@ -67,7 +72,9 @@ class Enterprise extends Component {
   }
 
   render() {
-    const { newName, configuring, openHistoricDialog, enterpriseInfo } = this.state;
+    const {
+      newName, configuring, openHistoricDialog, enterpriseInfo, teams
+    } = this.state;
     return (
       <div>
         <div className="title">
@@ -93,7 +100,7 @@ class Enterprise extends Component {
             <HistoricChart />
           </Button>
         </div>
-
+        <EnterpriseCardContainer />
         <HistoricDialog
           open={openHistoricDialog}
           handleClose={() => this.changeHistoricDialogState(false)}

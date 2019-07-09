@@ -56,3 +56,40 @@
 .infoLine {
   margin: 5px !important;
 }
+
+.cardsContainer {
+  width: 100%;
+  margin-top: 50px;
+}
+
+.cardContainer {
+  width: 21%;
+  margin-left: 2%;
+  margin-right: 2%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.textOfList {
+  padding-left: 0px !important;
+}
+
+.addNewTeam {
+  display: inherit !important;
+  text-align: center !important;
+}
+
+.fieldInputOnDialog {
+  width: 100%;
+}
+
+.teamPhoto {
+  width: 100%;
+  display: inline-block;
+}
+
+.teamAvatar {
+  margin: 10px;
+  width: 200px !important;
+  height: 200px !important;
+}

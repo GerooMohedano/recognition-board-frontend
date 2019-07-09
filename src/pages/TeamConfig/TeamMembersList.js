@@ -71,14 +71,13 @@ class TeamMembersList extends Component {
             <List component="nav">
               {members.map(member => (
                 <ListItem>
-                  <ListItemText
-                    inset
-                    primary={member.name + (member.id === teamLeader ? ' (team leader)' : '')}
-                    className="textOfList"
-                  />
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={CommonProfilePic} />
                   </ListItemAvatar>
+                  <ListItemText
+                    inset
+                    primary={member.name + (member.id === teamLeader ? ' (team leader)' : '')}
+                  />
                   <Tooltip title="Kick out">
                     <IconButton
                       aria-label="Delete"
