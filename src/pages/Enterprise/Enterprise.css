@@ -1,0 +1,58 @@
+.title {
+  width: 100%;
+  display: inline-block;
+}
+
+.entrepriseName {
+  font-size: 2.0em;
+  font-weight: bold;
+  float: left;
+}
+
+.enterpriseDescription {
+  display: flex;
+}
+
+.enterpriseAvatar {
+  margin: 10px;
+  width: 200px !important;
+  height: 200px !important;
+}
+
+.chartContainer {
+   margin-left: auto;
+}
+
+.teamPhoto {
+  width: 50%;
+  display: inline-block;
+}
+
+.editableEnterpriseName {
+  margin-left: 11px;
+  width: 65%;
+}
+
+.editableEnterpriseName input {
+  font-size: 2.0em;
+  font-weight: bold;
+}
+
+.configEnterpriseName {
+  font-size: 2.0em;
+  font-weight: bold;
+  float: left;
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.infoPaper {
+  width: -webkit-fill-available;
+  height: fit-content;
+  padding: 10px;
+  margin: 20px;
+}
+
+.infoLine {
+  margin: 5px !important;
+}
