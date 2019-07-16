@@ -2,14 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { NavLink } from 'react-router-dom';
-import Team from '../pages/Team/Team';
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Button from '@material-ui/core/Button';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
-import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
+import InputLabel from '@material-ui/core/InputLabel';
+import IconButton from '@material-ui/core/IconButton';
+import TextField from '@material-ui/core/TextField';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
 import MenuIcon from '@material-ui/icons/Menu'
+import CreateIcon from '@material-ui/icons/Add';
+import Team from '../pages/Team/Team';
 
 const styles = {
   list: {
@@ -23,6 +30,8 @@ const styles = {
 class SideMenu extends React.Component {
   state = {
     left: false,
+    enterpriseDialogState: false,
+    newEnterprise: { name: '', address: '', city: '', telephone: '' }
   };
 
   onTeamNavLinkClick = team => {
@@ -39,8 +48,18 @@ class SideMenu extends React.Component {
     });
   };
 
+  toggleEnterpriseDialogState = newState => {
+    this.setState({ enterpriseDialogState: newState,
+      newEnterprise: { name: '', address: '', city: '', telephone: '' } });
+  }
+
+  updateNewEnterpriseInfo = (newValue, stateAtr) => {
+    this.setState(state => ({ newEnterprise: { ...state.newEnterprise, [stateAtr]: newValue }}));
+  }
+
   render() {
     const { classes } = this.props;
+    const { newEnterprise, enterpriseDialogState } = this.state;
     const empresas = [{name: 'SOVOS', equipos: ['Octopus', 'Elephants']}, {name: 'SCANIA', equipos: ['Managers']}];
     const sideMenuList = [];
     empresas.forEach((empresa) => {
@@ -69,15 +88,22 @@ class SideMenu extends React.Component {
         </ListItem>
       );
     });
-
     const sideList = (
       <div className={classes.list}>
         <List>
           { sideMenuList }
+          <ListItem>
+            <InputLabel>Add a new Enterprise</InputLabel>
+            <IconButton
+              aria-label="Delete"
+              onClick={() => this.toggleEnterpriseDialogState(true)}
+            >
+              <CreateIcon />
+            </IconButton>
+          </ListItem>
         </List>
       </div>
     );
-
     return (
       <div>
         <Button onClick={ this.toggleDrawer('left', true) }>
@@ -97,6 +123,48 @@ class SideMenu extends React.Component {
             { sideList }
           </div>
         </SwipeableDrawer>
+        <Dialog
+          open={enterpriseDialogState}
+          onClose={() => this.toggleEnterpriseDialogState(false)}
+        >
+          <DialogTitle>Add a new enterprise</DialogTitle>
+          <DialogContent>
+            <TextField
+              label="Name"
+              defaultValue={newEnterprise.name}
+              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'name')}
+            />
+            <TextField
+              label="Address"
+              defaultValue={newEnterprise.address}
+              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'address')}
+            />
+            <TextField
+              label="City"
+              defaultValue={newEnterprise.city}
+              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'city')}
+            />
+            <TextField
+              label="Telephone"
+              defaultValue={newEnterprise.telephone}
+              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'telephone')}
+            />
+          </DialogContent>
+          <DialogActions>
+            <Button
+              onClick={() => this.toggleEnterpriseDialogState(false)}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => this.toggleEnterpriseDialogState(false)}
+              color="primary"
+            >
+              Add
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
