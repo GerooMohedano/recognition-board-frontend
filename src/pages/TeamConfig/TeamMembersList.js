@@ -62,7 +62,7 @@ class TeamMembersList extends Component {
     const { openDialogDelete, idToDelete, nameToDelete, addingANewMember, newTeamMember } = this.state;
     const { members, deleteMember, teamLeader, enterpriseMembers } = this.props;
     return (
-      <div className="cardContainer">
+      <div className="cardContainerTeam">
         <Card>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">

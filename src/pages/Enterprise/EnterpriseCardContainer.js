@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import TeamsList from './TeamsList';
 import MembersList from './MembersList';
+import DefaultValuesList from './DefaultValuesList';
+import AwardsList from './AwardsList';
 
 require('./Enterprise.css');
 
@@ -32,10 +34,38 @@ class EnterpriseCardContainer extends Component {
         lastName: 'Salazar', mail: 'cristian.salazar@sovos.com', rol: 0, active: true },
         { id: 9, userName: 'pablo.giroud', firstName: 'Pablo',
         lastName: 'Giroud', mail: 'pablo.giroud@sovos.com', rol: 0, active: true }
+      ],
+      values: [
+        { id: 1, name: 'Puntual' },
+        { id: 2, name: 'Buena onda' },
+        { id: 3, name: 'Responsable' },
+        { id: 4, name: 'Inteligente' },
+        { id: 5, name: 'Valiente' }
+      ],
+      defaultValues: [
+        { id: 1, name: 'Puntual' },
+        { id: 2, name: 'Buena onda' },
+        { id: 3, name: 'Responsable' },
+        { id: 4, name: 'Inteligente' },
+        { id: 5, name: 'Valiente' }
+      ],
+      awards: [
+        { id: 1, name: 'Miss Simpatia', description: 'es muy buena onda',
+          conditions: [{ value: 2, score: 100, biggerThan: 1, otherTeamsOnly: 0 }] },
+        { id: 2, name: 'Cerebrito', description: 'es muy inteligente',
+          conditions: [{ value: 4, score: 100, biggerThan: 1, otherTeamsOnly: 0 }] },
+        { id: 3, name: 'Amigo internacional', description: 'colabora con otros equipos',
+          conditions: [{ value: 2, score: 20, biggerThan: 1, otherTeamsOnly: 1 }] },
+        { id: 4, name: 'Grinch', description: 'el mas odioso',
+          conditions: [{ value: 2, score: -5, biggerThan: 0, otherTeamsOnly: 0 }] },
+        { id: 5, name: 'Leon de oro', description: 'inteligente y valiente',
+          conditions: [{ value: 4, score: 100, biggerThan: 1, otherTeamsOnly: 0 },
+            { value: 5, score: 100, biggerThan: 1, otherTeamsOnly: 0 }] },
       ]
     };
   }
   /* --- teams functions --- */
+
   changeTeamName = (teamId, newName) => {
     this.setState(state => {
       const teamList = state.teams.map(team => {
@@ -129,8 +159,81 @@ class EnterpriseCardContainer extends Component {
         lastName: lastName, mail: mail, rol: rol, active: true }]}))
   }
 
+  /* --- values functions --- */
+
+  changeValueName = (valueId, newName) => {
+    this.setState(state => {
+      const valueList = state.defaultValues.map(value => {
+        if (value.id === valueId) {
+          return { ...value, name: newName };
+        } else {
+          return value;
+        }
+      });
+      return {
+        defaultValues: valueList
+      };
+    });
+  }
+
+  deleteValue = valueId => {
+    this.setState(state => {
+      const valueList = state.defaultValues.filter(value => value.id !== valueId);
+      return {
+        defaultValues: valueList
+      };
+    });
+  }
+
+  addNewValue = name => {
+    const nextId = this.state.defaultValues[this.state.defaultValues.length];
+    this.setState(state => ({ defaultValues: [...state.defaultValues, { id: nextId, name: name }]}))
+  }
+
+  /* --- awards functions --- */
+
+  updateAward = (awardId, name, description, conditions) => {
+    const newConditions = [];
+    conditions.forEach(condition => newConditions.push(
+      { value: condition.value, score: condition.score,
+        biggerThan: condition.biggerThan, otherTeamsOnly: condition.otherTeamsOnly }
+    ));
+    this.setState(state => {
+      const awardList = state.awards.map(award => {
+        if (award.id === awardId) {
+          return { ...award, name: name, description: description, conditions: newConditions };
+        } else {
+          return award;
+        }
+      });
+      return {
+        awards: awardList
+      };
+    });
+  }
+
+  deleteAward = awardId => {
+    this.setState(state => {
+      const awardList = state.awards.filter(award => award.id !== awardId);
+      return {
+        awards: awardList
+      };
+    });
+  }
+
+  addNewAward = (name, description, conditions) => {
+    const nextId = this.state.awards[this.state.awards.length];
+    const newConditions = [];
+    conditions.forEach(condition => newConditions.push(
+      { value: condition.value, score: condition.score,
+        biggerThan: condition.biggerThan, otherTeamsOnly: condition.otherTeamsOnly }
+    ));
+    this.setState(state => ({ awards: [...state.awards, { id: nextId, name: name,
+      description: description, conditions: newConditions }]}));
+  }
+
   render() {
-    const { teams, enterpriseMembers } = this.state;
+    const { teams, enterpriseMembers, defaultValues, values, awards } = this.state;
     return (
       <div className="cardsContainer">
         <TeamsList
@@ -146,6 +249,19 @@ class EnterpriseCardContainer extends Component {
           changeEnterpriseMemberActive={this.changeEnterpriseMemberActive}
           deleteEnterpriseMember={this.deleteEnterpriseMember}
           addNewEnterpriseMember={this.addNewEnterpriseMember}
+        />
+        <DefaultValuesList
+          values={defaultValues}
+          changeValueName={this.changeValueName}
+          deleteValue={this.deleteValue}
+          addNewValue={this.addNewValue}
+        />
+        <AwardsList
+          values={values}
+          awards={awards}
+          updateAward={this.updateAward}
+          deleteAward={this.deleteAward}
+          addNewAward={this.addNewAward}
         />
       </div>
     );

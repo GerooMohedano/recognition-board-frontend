@@ -16,13 +16,12 @@ import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
-import ActivateIcon from '@material-ui/icons/PowerSettingsNew';
 import CreateIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 
 require('../../commons/Team.css');
 
-class ValuesList extends Component {
+class DefaultValuesList extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -69,14 +68,17 @@ class ValuesList extends Component {
   }
 
   render() {
-    const { openDialogEdit, openDialogDelete, openDialogAdd, nameToChange, idToDelete, nameOfTheNewValue } = this.state;
-    const { values, changeValueActive, deleteValue, addNewValue } = this.props;
+    const {
+      openDialogEdit, openDialogDelete, openDialogAdd,
+      nameToChange, idToDelete, nameOfTheNewValue
+    } = this.state;
+    const { values, deleteValue, addNewValue } = this.props;
     return (
-      <div className="cardContainerTeam">
+      <div className="cardContainer">
         <Card>
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
-              Values
+              Default Values
             </Typography>
             <List component="nav">
               {values.map(value => (
@@ -85,18 +87,9 @@ class ValuesList extends Component {
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
-                      disabled={!value.active}
                       onClick={() => this.toggleEditDialogState(value.id, value.name, true)}
                     >
                       <EditIcon />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={value.active ? "Desactivate" : "Activate"}>
-                    <IconButton
-                      aria-label="Delete"
-                      onClick={() => changeValueActive(value.id, !value.active)}
-                    >
-                      <ActivateIcon color={value.active ? "primary" : "secondary"} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete">
@@ -128,6 +121,7 @@ class ValuesList extends Component {
         >
           <DialogTitle id="form-dialog-title">
             <InputBase
+              className="fieldInputOnDialog"
               placeholder="Change the name of the value"
               defaultValue={nameToChange}
               onChange={event => this.changeNewValueName(event.target.value)}
@@ -157,6 +151,7 @@ class ValuesList extends Component {
           </DialogTitle>
           <DialogContent>
             <InputBase
+              className="fieldInputOnDialog"
               placeholder="Write the name of the new value"
               defaultValue={nameOfTheNewValue}
               onChange={event => this.changeNameOfNewValue(event.target.value)}
@@ -205,12 +200,11 @@ class ValuesList extends Component {
   }
 }
 
-ValuesList.propTypes = {
+DefaultValuesList.propTypes = {
   values: PropTypes.array.isRequired,
   changeValueName: PropTypes.func.isRequired,
-  changeValueActive: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,
   addNewValue: PropTypes.func.isRequired
 };
 
-export default ValuesList;
+export default DefaultValuesList;

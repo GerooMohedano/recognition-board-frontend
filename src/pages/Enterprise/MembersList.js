@@ -297,7 +297,7 @@ class MembersList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {this.confirmUpdateMember(idToDelete); this.closeEditDialogState()}}
+              onClick={() => {this.confirmUpdateMember(); this.closeEditDialogState()}}
               color="primary"
               disabled={updatedData.userName === ''}
             >
