@@ -103,13 +103,13 @@ class SprintSelector extends React.Component {
         <div className="sprintNavigation">
           <Tooltip title="Go to the previous Sprint">
             <Fab aria-label="Delete" className="navigationButton">
-              <KeyboardArrowLeft />
+              <KeyboardArrowLeft style={{ zIndex: '1', color: 'white' }} />
             </Fab>
           </Tooltip>
           <h2 className="navigationButton">{ sprint }</h2>
           <Tooltip title="Go to the next Sprint">
             <Fab aria-label="Delete" className="navigationButton">
-              <KeyboardArrowRight />
+              <KeyboardArrowRight style={{ zIndex: '1', color: 'white' }} />
             </Fab>
           </Tooltip>
         </div>

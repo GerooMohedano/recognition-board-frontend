@@ -13,13 +13,21 @@ import ViewNotes from './ViewNotes';
 
 const styles = theme => ({
   root: {
-    width: '100%',
     marginTop: theme.spacing.unit * 3,
     overflowX: 'auto',
+    margin: '24px 20px 20px 30px'
   },
   table: {
     minWidth: 700,
   },
+  header: {
+    backgroundColor: '#9DBEFA',
+    fontWeight: 'bold'
+  },
+  firstColumn: {
+    backgroundColor: '#D8A4DB',
+    fontWeight: 'bold'
+  }
 });
 const personas = ['Marcio', 'Magui', 'Pame', 'Facundo', 'Gero'];
 const values = ['Be Accountable', 'Be Professional', 'Be Proactive', 'Be Collaborative', 'Be Hardito'];
@@ -46,19 +54,21 @@ class TeamTable extends React.Component {
   }
 
   createColumns = () => {
-    const columns = [<TableCell>Valores</TableCell>];
+    const { classes } = this.props;
+    const columns = [<TableCell className={classes.header}>Valores</TableCell>];
     personas.forEach(person => {
-      columns.push(<TableCell align="right">{ person }</TableCell>);
+      columns.push(<TableCell className={classes.header} align="right">{ person }</TableCell>);
     });
     return columns;
   }
 
   createRows = () => {
+    const { classes } = this.props;
     const { openCreateNote } = this.state;
     const rows = [];
     values.forEach(value => {
       rows.push(<TableRow key={ value }>
-        <TableCell>{ value }</TableCell>
+        <TableCell className={classes.firstColumn}>{ value }</TableCell>
         {personas.map(persona => (
           <TableCell align="right">
             <Button

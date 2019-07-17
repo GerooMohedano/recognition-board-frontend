@@ -18,7 +18,7 @@ require('./AppLayout.css');
 
 const styles = theme => ({
   root: {
-    width: '100%',
+    width: '100%'
   },
   grow: {
     flexGrow: 1,
@@ -84,6 +84,9 @@ const styles = theme => ({
       display: 'none',
     },
   },
+  toolbar: {
+    backgroundColor: '#C670CC'
+  }
 });
 
 class AppLayout extends React.Component {
@@ -92,7 +95,7 @@ class AppLayout extends React.Component {
     return (
       <div className={classes.root}>
         <AppBar position="static">
-          <Toolbar>
+          <Toolbar className={classes.toolbar}>
             <SideMenu
               updateTeamClicked={ updateTeamClicked }
               updateEnterpriseClicked={ updateEnterpriseClicked }

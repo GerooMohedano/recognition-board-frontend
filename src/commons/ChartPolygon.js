@@ -34,7 +34,7 @@ class ChartPolygon extends React.Component {
           <PolarGrid />
           <PolarAngleAxis dataKey="subject" />
           <PolarRadiusAxis />
-          <Radar name="Charsito" dataKey="A" stroke="#8884d8" fill="#F4D03F" fillOpacity={0.6} />
+          <Radar name="Charsito" dataKey="A" stroke="#649BFF" fill="#C670CC" fillOpacity={0.6} />
         </RadarChart>
       </div>
     );

@@ -4,6 +4,10 @@
   width: 11%;
 }
 
+.navigationButton span:last-child {
+  background-color: #649BFF;
+}
+
 .sprintTitle {
   margin: 2%;
   width: 66%;

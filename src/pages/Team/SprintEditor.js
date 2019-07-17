@@ -34,7 +34,7 @@ class SprintEditor extends React.Component {
       <div className="sprintToolBar">
         <Tooltip title="Create a new Sprint">
           <IconButton onClick={() => this.handleDialogOpen('newDialog')}>
-            <CreateIcon />
+            <CreateIcon style={{ color: 'black' }} />
           </IconButton>
         </Tooltip>
         <SprintDialog
@@ -47,7 +47,7 @@ class SprintEditor extends React.Component {
         />
         <Tooltip title="Edit current Sprint">
           <IconButton onClick={() => this.handleDialogOpen('editDialog')}>
-            <EditIcon />
+            <EditIcon style={{ color: 'black' }} />
           </IconButton>
         </Tooltip>
         <SprintDialog
@@ -61,7 +61,7 @@ class SprintEditor extends React.Component {
         />
         <Tooltip title="Delete current Sprint">
           <IconButton onClick={() => this.handleDialogOpen('deleteDialog')}>
-            <DeleteIcon />
+            <DeleteIcon style={{ color: 'black' }} />
           </IconButton>
         </Tooltip>
         <SprintDialog
