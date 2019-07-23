@@ -15,7 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import ActivateIcon from '@material-ui/icons/PowerSettingsNew';
@@ -80,7 +80,7 @@ class TeamsList extends Component {
     const { teams, changeTeamActive, deleteTeam, addNewTeam } = this.props;
     return (
       <div className="cardContainer">
-        <Card>
+        <Card className="cardForEnterprise">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Teams
@@ -91,20 +91,22 @@ class TeamsList extends Component {
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={TeamCatPic} />
                   </ListItemAvatar>
-                  <ListItemText inset primary={team.name} />
+                  <ListItemText inset primary={team.name} className="memberItemText" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
                       disabled={!team.active}
                       onClick={() => this.toggleEditDialogState(team.id, team.name, true)}
+                      className="iconListButton"
                     >
-                      <EditIcon />
+                      <EditIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title={team.active ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
                       onClick={() => changeTeamActive(team.id, !team.active)}
+                      className="iconListButton"
                     >
                       <ActivateIcon color={team.active ? "primary" : "secondary"} />
                     </IconButton>
@@ -113,8 +115,9 @@ class TeamsList extends Component {
                     <IconButton
                       aria-label="Delete"
                       onClick={() => this.toggleDeleteDialogState(team.id, true)}
+                      className="iconListButton"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -125,7 +128,7 @@ class TeamsList extends Component {
                     aria-label="Delete"
                     onClick={() => this.toggleAddDialogState(true)}
                   >
-                    <CreateIcon />
+                    <CreateIcon style={{ color: 'black' }} />
                   </IconButton>
                 </Tooltip>
               </ListItem>
@@ -137,7 +140,7 @@ class TeamsList extends Component {
           onClose={() => this.toggleEditDialogState(-1, '', false)}
         >
           <DialogTitle id="form-dialog-title">
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Change the name of the team"
               defaultValue={nameToChange}
@@ -173,7 +176,7 @@ class TeamsList extends Component {
             Enter the name for the new team
           </DialogTitle>
           <DialogContent>
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Write the name of the new team"
               defaultValue={nameOfTheNewTeam}

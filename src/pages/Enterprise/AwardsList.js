@@ -125,7 +125,7 @@ class AwardsList extends Component {
     const { values, awards, updateAward, deleteAward, addNewAward } = this.props;
     return (
       <div className="cardContainer">
-        <Card>
+        <Card className="cardForEnterprise">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Awards
@@ -143,15 +143,16 @@ class AwardsList extends Component {
                       aria-label="Delete"
                       onClick={() => this.openEditDialog(award)}
                     >
-                      <EditIcon />
+                      <EditIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
                       onClick={() => this.toggleDeleteDialogState(award.id, award.name, true)}
+                      className="iconListButton"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -161,8 +162,9 @@ class AwardsList extends Component {
                   <IconButton
                     aria-label="Delete"
                     onClick={() => this.toggleAddDialogState(true)}
+                    className="iconListButton"
                   >
-                    <CreateIcon />
+                    <CreateIcon style={{ color: 'black' }} />
                   </IconButton>
                 </Tooltip>
               </ListItem>
@@ -199,28 +201,29 @@ class AwardsList extends Component {
             Please enter the information for the new award
           </DialogTitle>
           <DialogContent>
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Award name"
               defaultValue={newAwardData.name}
               onChange={event => this.updateAwardInfo(event.target.value, 'newAwardData', 'name')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Award description"
               defaultValue={newAwardData.description}
               onChange={event => this.updateAwardInfo(event.target.value, 'newAwardData', 'description')}
             />
-            <Typography>
+            <Typography style={{ marginTop: '15px' }} gutterBottom variant="h5" component="h2">
               Conditions
             </Typography>
             <List component="nav">
               <ListItem>
-                <FormControl>
+                <FormControl className="valueSelector">
                   <InputLabel>Value</InputLabel>
                   <Select
                     value={conditionToAdd}
                     onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'value')}
+                    className="valueSelector"
                   >
                     <MenuItem value={-1}><em>None</em></MenuItem>
                     {values.map(oneValue => (<MenuItem value={oneValue.id}>{oneValue.name}</MenuItem>))}
@@ -235,6 +238,7 @@ class AwardsList extends Component {
                   label="Score"
                   defaultValue={conditionToAdd.score}
                   onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'score')}
+                  type="number"
                 />
                 <InputLabel>Only counts votes from other teams</InputLabel>
                 <Checkbox
@@ -295,28 +299,29 @@ class AwardsList extends Component {
             Update the information of this award
           </DialogTitle>
           <DialogContent>
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Award name"
               defaultValue={updatedAwardData.name}
               onChange={event => this.updateAwardInfo(event.target.value, 'updatedAwardData', 'name')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Award description"
               defaultValue={updatedAwardData.description}
               onChange={event => this.updateAwardInfo(event.target.value, 'updatedAwardData', 'description')}
             />
-            <Typography>
+            <Typography style={{ marginTop: '15px' }} gutterBottom variant="h5" component="h2">
               Conditions
             </Typography>
             <List component="nav">
               <ListItem>
-                <FormControl>
+                <FormControl className="valueSelector">
                   <InputLabel>Value</InputLabel>
                   <Select
                     value={conditionToAdd}
                     onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'value')}
+                    className="valueSelector"
                   >
                     <MenuItem value={-1}><em>None</em></MenuItem>
                     {values.map(oneValue => (<MenuItem value={oneValue.id}>{oneValue.name}</MenuItem>))}
@@ -327,10 +332,12 @@ class AwardsList extends Component {
                   checked={conditionToAdd.biggerThan}
                   onChange={() => this.updateAwardInfo(conditionToAdd.biggerThan === 1 ? 0 : 1, 'conditionToAdd', 'biggerThan')}
                 />
-                <InputBase
+                <TextField
+                  label="Score"
                   placeholder="Score"
                   defaultValue={conditionToAdd.score}
                   onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'score')}
+                  type="number"
                 />
                 <InputLabel>Only counts votes from other teams</InputLabel>
                 <Checkbox

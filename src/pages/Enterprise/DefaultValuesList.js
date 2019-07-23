@@ -13,7 +13,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import CreateIcon from '@material-ui/icons/Add';
@@ -75,7 +75,7 @@ class DefaultValuesList extends Component {
     const { values, deleteValue, addNewValue } = this.props;
     return (
       <div className="cardContainer">
-        <Card>
+        <Card className="cardForEnterprise">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Default Values
@@ -88,16 +88,18 @@ class DefaultValuesList extends Component {
                     <IconButton
                       aria-label="Delete"
                       onClick={() => this.toggleEditDialogState(value.id, value.name, true)}
+                      className="iconListButton"
                     >
-                      <EditIcon />
+                      <EditIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
                       onClick={() => this.toggleDeleteDialogState(value.id, true)}
+                      className="iconListButton"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -108,7 +110,7 @@ class DefaultValuesList extends Component {
                     aria-label="Delete"
                     onClick={() => this.toggleAddDialogState(true)}
                   >
-                    <CreateIcon />
+                    <CreateIcon style={{ color: 'black' }} />
                   </IconButton>
                 </Tooltip>
               </ListItem>
@@ -120,7 +122,7 @@ class DefaultValuesList extends Component {
           onClose={() => this.toggleEditDialogState(-1, '', false)}
         >
           <DialogTitle id="form-dialog-title">
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Change the name of the value"
               defaultValue={nameToChange}
@@ -150,7 +152,7 @@ class DefaultValuesList extends Component {
             Enter the name for the new value
           </DialogTitle>
           <DialogContent>
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Write the name of the new value"
               defaultValue={nameOfTheNewValue}

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -17,8 +18,19 @@ import MoodBad from '@material-ui/icons/MoodBad';
 
 require('./ViewNotes.css');
 
-const colorForGood = '#3f51b5';
-const colorForBad = '#f50057';
+const colorForGood = '#659BFF';
+const colorForBad = '#C670CC';
+
+const styles = theme => ({
+  moodIcon: {
+    colorPrimary: {
+      color: '#659BFF'
+    },
+    colorSecondary: {
+      color: '#C670CC'
+    }
+  }
+})
 
 class ViewNotes extends React.Component {
   constructor(props) {
@@ -102,7 +114,7 @@ class ViewNotes extends React.Component {
   }
 
   render() {
-    const { value, persona, openCreateNote, handleCreateNoteButton } = this.props;
+    const { classes, value, persona, openCreateNote, handleCreateNoteButton } = this.props;
     const { creatingNote, newNoteMessage, newNotePuntuation } = this.state;
     return (
       <Dialog
@@ -129,13 +141,19 @@ class ViewNotes extends React.Component {
                       variant="outlined"
                     />
                     <div>
-                      <Mood color={(newNotePuntuation === 1) ? "primary" : "disabled"} />
+                      <Mood
+                        className={classes.moodIcon}
+                        color={(newNotePuntuation === 1) ? "primary" : "disabled"}
+                      />
                       <Switch
                         checked={newNotePuntuation !== 1}
                         onChange={this.handlePuntuationChange()}
                         color="default"
                       />
-                      <MoodBad color={(newNotePuntuation !== 1) ? "secondary" : "disabled"} />
+                      <MoodBad
+                        className={classes.moodIcon}
+                        color={(newNotePuntuation !== 1) ? "secondary" : "disabled"}
+                      />
                     </div>
                   </CardContent>
                 </Card>
@@ -169,4 +187,4 @@ ViewNotes.propTypes = {
   openCreateNote: PropTypes.shape({}).isRequired,
 };
 
-export default ViewNotes;
+export default withStyles(styles)(ViewNotes);

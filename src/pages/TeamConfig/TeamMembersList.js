@@ -63,7 +63,7 @@ class TeamMembersList extends Component {
     const { members, deleteMember, teamLeader, enterpriseMembers } = this.props;
     return (
       <div className="cardContainerTeam">
-        <Card>
+        <Card className="cardForTeam">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Team Members
@@ -76,7 +76,8 @@ class TeamMembersList extends Component {
                   </ListItemAvatar>
                   <ListItemText
                     inset
-                    primary={member.name + (member.id === teamLeader ? ' (team leader)' : '')}
+                    primary={member.name}
+                    secondary={member.id === teamLeader ? 'team leader' : null}
                   />
                   <Tooltip title="Kick out">
                     <IconButton
@@ -84,7 +85,7 @@ class TeamMembersList extends Component {
                       disabled={member.id === teamLeader}
                       onClick={() => this.toggleDeleteDialogState(member.id, member.name, true)}
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -122,7 +123,7 @@ class TeamMembersList extends Component {
                     aria-label="Delete"
                     onClick={() => this.toggleAddingMember(true)}
                   >
-                    <CreateIcon />
+                    <CreateIcon style={{ color: 'black' }} />
                   </IconButton>
                 </Tooltip>
               </ListItem>

@@ -1,28 +1,40 @@
-
-body {
-  margin: 0;
-  font-family: Arial;
-  background-color: #f2f2f2;
+.profileTitle {
+  width: 100%;
+  display: inline-block;
 }
 
-.boxes {
-  color: #fff;
-  padding: 1em;
-  text-align: center;
-  background-color: #efefef;
-  height:110%;
+.profileName {
+  font-size: 2.0em;
+  font-weight: bold;
+  float: left;
 }
 
+.profileDescription {
+  display: flex;
+}
 
-.perfil   { background-color: #A2DED0; }
-.pizarras  { background-color: #F4D03F; }
-.logros   { background-color: #6C7A89; }
-.chart { background-color: #59ABE3; }
+.profilePhoto {
+  width: 50%;
+  display: inline-block;
+}
 
-/* Our Grid Code */
-.app-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  grid-template-rows: 50vh 50vh;
-  grid-template-rows: 100vh 100vh;
+.profileAvatar {
+  margin: 10px;
+  width: 200px !important;
+  height: 200px !important;
+}
+
+.profileChartContainer {
+  margin-left: auto;
+}
+
+.infoPaper {
+  width: -webkit-fill-available;
+  height: fit-content;
+  padding: 10px;
+  margin: 20px;
+}
+
+.infoLine {
+  margin: 5px !important;
 }

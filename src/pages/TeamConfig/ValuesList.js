@@ -73,7 +73,7 @@ class ValuesList extends Component {
     const { values, changeValueActive, deleteValue, addNewValue } = this.props;
     return (
       <div className="cardContainerTeam">
-        <Card>
+        <Card className="cardForTeam">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Values
@@ -88,7 +88,7 @@ class ValuesList extends Component {
                       disabled={!value.active}
                       onClick={() => this.toggleEditDialogState(value.id, value.name, true)}
                     >
-                      <EditIcon />
+                      <EditIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title={value.active ? "Desactivate" : "Activate"}>
@@ -104,7 +104,7 @@ class ValuesList extends Component {
                       aria-label="Delete"
                       onClick={() => this.toggleDeleteDialogState(value.id, true)}
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -115,7 +115,7 @@ class ValuesList extends Component {
                     aria-label="Delete"
                     onClick={() => this.toggleAddDialogState(true)}
                   >
-                    <CreateIcon />
+                    <CreateIcon style={{ color: 'black' }} />
                   </IconButton>
                 </Tooltip>
               </ListItem>

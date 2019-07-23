@@ -103,3 +103,8 @@
   display: inherit !important;
   text-align: center !important;
 }
+
+.cardForTeam > div {
+  overflow-y: auto;
+  max-height: 500px;
+}

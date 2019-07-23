@@ -15,7 +15,7 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
-import InputBase from '@material-ui/core/InputBase';
+import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -107,7 +107,7 @@ class MembersList extends Component {
     } = this.props;
     return (
       <div className="cardContainer">
-        <Card>
+        <Card className="cardForEnterprise">
           <CardContent>
             <Typography gutterBottom variant="h5" component="h2">
               Enterprise Members
@@ -120,23 +120,27 @@ class MembersList extends Component {
                   </ListItemAvatar>
                   <ListItemText
                     inset
-                    primary={member.userName + (member.rol === 1 ? ' (admin)' : '')}
+                    primary={member.userName}
+                    secondary={member.rol === 1 ? 'admin' : null}
+                    className="memberItemText"
                   />
-                  <Tooltip title={member.active ? "Desactivate" : "Activate"}>
-                    <IconButton
-                      aria-label="Delete"
-                      onClick={() => changeEnterpriseMemberActive(member.id, !member.active)}
-                    >
-                      <ActivateIcon color={member.active ? "primary" : "secondary"} />
-                    </IconButton>
-                  </Tooltip>
                   <Tooltip title="Edit member">
                     <IconButton
                       aria-label="Delete"
                       onClick={() => this.openEditDialogState(member)}
                       disabled={!member.active}
+                      className="iconListButton"
                     >
-                      <EditIcon />
+                      <EditIcon style={{ color: 'black' }} />
+                    </IconButton>
+                  </Tooltip>
+                  <Tooltip title={member.active ? "Desactivate" : "Activate"}>
+                    <IconButton
+                      aria-label="Delete"
+                      onClick={() => changeEnterpriseMemberActive(member.id, !member.active)}
+                      className="iconListButton"
+                    >
+                      <ActivateIcon color={member.active ? "primary" : "secondary"} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Kick out">
@@ -144,8 +148,9 @@ class MembersList extends Component {
                       aria-label="Delete"
                       disabled={member.rol === 1}
                       onClick={() => this.toggleDeleteDialogState(member.id, member.userName, true)}
+                      className="iconListButton"
                     >
-                      <DeleteIcon />
+                      <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -156,7 +161,7 @@ class MembersList extends Component {
                     aria-label="Delete"
                     onClick={() => this.toggleAddMember(true)}
                   >
-                    <CreateIcon />
+                    <CreateIcon style={{ color: 'black' }} />
                   </IconButton>
                 </Tooltip>
               </ListItem>
@@ -197,37 +202,39 @@ class MembersList extends Component {
               <Avatar alt="Remy Sharp" src={NonPhoto} className="teamAvatar" />
               <input type="file" />
             </div>
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="User name"
               defaultValue={newTeamMember.userName}
               onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'userName')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="First name"
               defaultValue={newTeamMember.firstName}
               onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'firstName')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Last name"
               defaultValue={newTeamMember.lastName}
               onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'lastName')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Mail"
               defaultValue={newTeamMember.mail}
               onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'mail')}
             />
-            <Typography>
-              Rol
-            </Typography>
-            <Checkbox
-              checked={newTeamMember.rol}
-              onChange={() => this.updateMemberInfo(newTeamMember.rol === 1 ? 0 : 1, 'newTeamMember', 'rol')}
-            />
+            <div style={{ display: 'inline-flex'}}>
+              <Typography style={{ fontSize: '1.2em', padding: '10px' }}>
+                Is this user enterprise administrator?
+              </Typography>
+              <Checkbox
+                checked={newTeamMember.rol}
+                onChange={() => this.updateMemberInfo(newTeamMember.rol === 1 ? 0 : 1, 'newTeamMember', 'rol')}
+              />
+            </div>
           </DialogContent>
           <DialogActions>
             <Button
@@ -257,37 +264,39 @@ class MembersList extends Component {
               <Avatar alt="Remy Sharp" src={NonPhoto} className="teamAvatar" />
               <input type="file" />
             </div>
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="User name"
               defaultValue={updatedData.userName}
               onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'userName')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="First name"
               defaultValue={updatedData.firstName}
               onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'firstName')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Last name"
               defaultValue={updatedData.lastName}
               onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'lastName')}
             />
-            <InputBase
+            <TextField
               className="fieldInputOnDialog"
               placeholder="Mail"
               defaultValue={updatedData.mail}
               onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'mail')}
             />
-            <Typography>
-              Rol
-            </Typography>
-            <Checkbox
-              checked={updatedData.rol === 1}
-              onChange={() => this.updateMemberInfo(updatedData.rol === 1 ? 0 : 1, 'updatedData', 'rol')}
-            />
+            <div style={{ display: 'inline-flex'}}>
+              <Typography style={{ fontSize: '1.2em', padding: '10px' }}>
+                Is this user enterprise administrator?
+              </Typography>
+              <Checkbox
+                checked={updatedData.rol === 1}
+                onChange={() => this.updateMemberInfo(updatedData.rol === 1 ? 0 : 1, 'updatedData', 'rol')}
+              />
+            </div>
           </DialogContent>
           <DialogActions>
             <Button

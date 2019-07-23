@@ -63,14 +63,20 @@
 }
 
 .cardContainer {
-  width: 21%;
-  margin-left: 2%;
-  margin-right: 2%;
+  width: 23%;
+  margin-left: 1%;
+  margin-right: 1%;
   display: inline-block;
   vertical-align: top;
 }
 
+.cardForEnterprise > div {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
 .textOfList {
+  overflow-x: hidden;
   padding-left: 0px !important;
 }
 
@@ -92,4 +98,16 @@
   margin: 10px;
   width: 200px !important;
   height: 200px !important;
+}
+
+.memberItemText {
+  overflow-x: hidden;
+}
+
+.iconListButton {
+  padding: 2% !important;
+}
+
+.valueSelector {
+  width: inherit !important;
 }
