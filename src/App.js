@@ -3,14 +3,10 @@ import { BrowserRouter as Router, Route, Link, NavLink, Switch } from 'react-rou
 import SignInForm from './pages/SignInForm/SignInForm';
 import AppLayout from './layouts/AppLayout';
 import Perfil from './pages/Perfil/Perfil';
-import NewEnterpriseForm from './pages/NewEnterpriseForm/NewEnterpriseForm';
-import NewTeamForm from './pages/NewTeamForm/NewTeamForm';
-import NewUserForm from './pages/NewUserForm/NewUserForm';
 import Enterprise from './pages/Enterprise/Enterprise';
 import Team from './pages/Team/Team';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
-import Achievement from './pages/Achievement/Achievement';
 import TeamConfig from './pages/TeamConfig/TeamConfig';
 
 require('./App.css');
@@ -44,12 +40,8 @@ class App extends Component {
               />
             }} />
             <Switch>
-              <Route path="/NuevaEmpresa" component={ NewEnterpriseForm } />
               <Route path="/Signin" component={ SignInForm } />
-              <Route path="/Logros" component={ Achievement } />
-              <Route path="/Perfil" component={ Perfil } />
-              <Route path="/NuevoEquipo" component={ NewTeamForm } />
-              <Route path="/NuevoUsuario" component={ NewUserForm } />
+              <Route path="/Perfil/:idUsuario" component={ Perfil } />
               <Route path="/TeamConfig" render={() => {
                 return <TeamConfig
                   team={ teamClicked }
@@ -60,7 +52,7 @@ class App extends Component {
               <Route path="/Enterprise" render={() => {
                 return <Enterprise enterprise={ enterpriseClicked } />
               }} />
-              <Route path="/Team" render={() => {
+              <Route path="/Team/:idTeamClicked" render={() => {
                 return <Team team={ teamClicked } />
               }} />
               <Route component={ PageNotFound } />

@@ -75,7 +75,7 @@ class SideMenu extends React.Component {
           <NavLink
             className="commonLink"
             key={`NavLink${equipo}`}
-            to="/Team"
+            to={`/Team/${equipo}`}
             onClick={() => this.onTeamNavLinkClick(equipo)}
           >
             <ListItem key={`ListItem${equipo}`} button>

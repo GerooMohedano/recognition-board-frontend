@@ -38,3 +38,33 @@
 .infoLine {
   margin: 5px !important;
 }
+
+.cardContainerTeams {
+  width: 48%;
+  margin-left: 1%;
+  margin-right: 1%;
+  display: inline-block;
+  vertical-align: top;
+}
+
+.cardForTeam > div {
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+.textOfListTeams {
+  overflow-x: hidden;
+  padding-left: 0px !important;
+}
+
+.iconListButtonTeams {
+  padding: 2% !important;
+}
+
+.iconListButtonTeams {
+  padding: 2% !important;
+}
+
+.memberItemText {
+  overflow-x: hidden;
+}

@@ -106,7 +106,7 @@ class AppLayout extends React.Component {
             <SearchBar />
             <div className={classes.grow} />
             <div>
-              <NavLink to="/Perfil" className="linkPerfil">
+              <NavLink to="/Perfil/1" className="linkPerfil">
                 <IconButton
                   aria-owns="material-appbar"
                   aria-haspopup="true"

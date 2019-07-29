@@ -5,10 +5,11 @@
   "dependencies": {
     "@material-ui/core": "^3.9.2",
     "@material-ui/icons": "^3.0.2",
-    "axios": "^0.18.0",
+    "axios": "^0.18.1",
     "downshift": "^3.2.10",
     "keycode": "^2.2.0",
     "material-ui-icons": "^1.0.0-beta.36",
+    "moment": "^2.24.0",
     "react": "^16.7.0",
     "react-avatar": "^3.6.0",
     "react-d3-radar": "^1.0.0-rc6",

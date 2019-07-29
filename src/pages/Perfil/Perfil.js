@@ -20,7 +20,11 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HistoricChart from '@material-ui/icons/InsertChart';
 import Gero from '../../images/gero.jpg';
 import ChartPolygon from '../../commons/ChartPolygon';
+import HistoricDialog from '../../commons/HistoricDialog';
 import ProfileInfo from './ProfileInfo';
+import AwardsList from './AwardsList';
+import TeamsList from './TeamsList';
+
 
 require('./Perfil.css');
 
@@ -41,6 +45,21 @@ const data = [
     id: 5, subject: 'Be Hardito', A: 85, B: 90, fullMark: 150,
   }
 ];
+
+const awards = [
+  { id: 1, name: "Muy piola 1", description: "asd caso qw c qjwc qwo", achieved: true },
+  { id: 2, name: "Muy piola 2", description: "asd caso qw c qjwc qwo", achieved: true },
+  { id: 3, name: "Muy piola 3", description: "asd caso qw c qjwc qwo", achieved: false},
+  { id: 4, name: "Muy piola 4", description: "asd caso qw c qjwc qwo", achieved: false },
+  { id: 5, name: "Muy piola 5", description: "asd caso qw c qjwc qwo", achieved: true },
+  { id: 6, name: "Muy piola 6", description: "asd caso qw c qjwc qwo", achieved: false },
+  { id: 7, name: "Muy piola 7", description: "asd caso qw c qjwc qwo", achieved: true }
+];
+
+const teams = [
+  { id: 1, name: "Octopus" },
+  { id: 2, name: "Elephants" }
+]
 
 class Perfil extends React.Component {
   constructor(props) {
@@ -95,7 +114,18 @@ class Perfil extends React.Component {
           <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
             <HistoricChart />
           </Button>
+          <HistoricDialog
+            open={openHistoricDialog}
+            handleClose={() => this.changeHistoricDialogState(false)}
+            selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
+          />
         </div>
+        <AwardsList
+          awards={awards}
+        />
+        <TeamsList
+          teams={teams}
+        />
       </div>
     );
   }
