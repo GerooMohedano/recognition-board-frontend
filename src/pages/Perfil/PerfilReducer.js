@@ -1,42 +1,25 @@
+import generateReducer from '../../shared/helpers/reducerHelpers';
 import * as types from './PerfilConstants';
-import { baseUrl } from '../../shared/jsUtils/Utils';
-import request from '../../shared/jsUtils/request';
 
-export function fetchingTrends() {
-  return {
-    type: types.FETCHING_TRENDS,
-    payload: {}
-  };
-}
+const INITIAL_STATE = {
+  fetchingUserInfo: true,
+  fetchError: {
+    state: false,
+    message: ''
+  },
+  userInfo: {}
+};
 
-export function fetchTrendsSuccess(data) {
-  const jobs = [];
-  Object.keys(data.data).forEach(
-    (job) => {
-      const elem = {};
-      elem.index = job;
-      elem.values = data.data[job];
-      jobs.push(elem);
-    }
-  );
-  return {
-    type: types.FETCH_TRENDS_SUCCESS,
-    payload: { trends: jobs }
-  };
-}
+const behaviors = {
+  [types.FETCHING_USER_INFO](state) {
+    return Object.assign({}, state, { fetchingUserInfo: true, fetchError: { state: false, message: '' } });
+  },
+  [types.FETCH_USER_INFO_SUCCESS](state, action) {
+    return Object.assign({}, state, { userInfo: action.userInfo, fetchingUserInfo: false, fetchError: { state: false, message: '' } });
+  },
+  [types.FETCH_USER_INFO_FAILURE](state, action) {
+    return Object.assign({}, state, { fetchingUserInfo: false, fetchError: { state: true, message: action.payload } });
+  }
+};
 
-export function fetchTrendsFailure(error) {
-  return {
-    type: types.FETCH_TRENDS_FAILURE,
-    payload: error
-  };
-}
-
-export function fetchTrends() {
-  return function (dispatch) {
-    dispatch(fetchingTrends());
-    return request.get(`${baseUrl()}/api/trend`)
-      .then(response => dispatch(fetchTrendsSuccess(response)))
-      .catch(error => dispatch(fetchTrendsFailure(error)));
-  };
-}
+export default generateReducer(INITIAL_STATE, behaviors);

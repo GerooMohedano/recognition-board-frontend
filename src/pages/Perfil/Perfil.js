@@ -73,6 +73,7 @@ class Perfil extends React.Component {
         description: 'Cool guy'
       }
     };
+    this.props.fetchUserInfo(this.props.match.params.idUsuario);
   }
 
   changeHistoricDialogState = value => {
@@ -133,6 +134,12 @@ class Perfil extends React.Component {
 
 Perfil.propTypes = {
   classes: PropTypes.object.isRequired,
+  fetchingUserInfo: PropTypes.bool.isRequired,
+  fetchUserInfo: PropTypes.func.isRequired,
+  fetchError: PropTypes.shape({
+    state: PropTypes.bool.isRequired,
+    message: PropTypes.Object
+  })
 };
 
 export default Perfil;
