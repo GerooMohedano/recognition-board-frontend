@@ -196,11 +196,26 @@ class TeamConfig extends Component {
     );
   }
 }
-
+/*
 TeamConfig.propTypes = {
   team: PropTypes.string.isRequired,
   teamLeader: PropTypes.number,
   changeTeamName: PropTypes.func.isRequired
+};*/
+
+TeamConfig.propTypes = {
+  team: PropTypes.string.isRequired,
+  teamLeader: PropTypes.number,
+  changeTeamName: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired,
+  team: PropTypes.string.isRequired,
+  fetchingTeamConfigInfo: PropTypes.bool.isRequired,
+  fetchTeamConfigInfo: PropTypes.func.isRequired,
+  fetchError: PropTypes.shape({
+    state: PropTypes.bool.isRequired,
+    message: PropTypes.Object
+  })
 };
+
 
 export default TeamConfig;

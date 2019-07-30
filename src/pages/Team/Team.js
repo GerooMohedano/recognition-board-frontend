@@ -77,9 +77,19 @@ class Team extends Component {
     );
   }
 }
-
+/*
 Team.propTypes = {
   team: PropTypes.string.isRequired
+};*/
+Team.propTypes = {
+  classes: PropTypes.object.isRequired,
+  team: PropTypes.string.isRequired,
+  fetchingTeamInfo: PropTypes.bool.isRequired,
+  fetchTeamInfo: PropTypes.func.isRequired,
+  fetchError: PropTypes.shape({
+    state: PropTypes.bool.isRequired,
+    message: PropTypes.Object
+  })
 };
 
 export default Team;

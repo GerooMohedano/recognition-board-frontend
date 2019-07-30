@@ -110,9 +110,18 @@ class Enterprise extends Component {
     );
   }
 }
-
+/*
 Enterprise.propTypes = {
   enterprise: PropTypes.string.isRequired
+};*/
+Enterprise.propTypes = {
+  classes: PropTypes.object.isRequired,
+  enterprise: PropTypes.string.isRequired,
+  fetchingEnterpriseInfo: PropTypes.bool.isRequired,
+  fetchEnterpriseInfo: PropTypes.func.isRequired,
+  fetchError: PropTypes.shape({
+    state: PropTypes.bool.isRequired,
+    message: PropTypes.Object
+  })
 };
-
 export default Enterprise;
