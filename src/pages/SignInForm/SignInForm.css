@@ -6,12 +6,12 @@
 
 .App__Aside {
   width: 50%;
-  background-color: #ff66cc;
+  background-color: #C670CC;
 }
 
 .App__Form {
   width: 50%;
-  background-color: #2E4158;
+  background-color: #659BFF;
   padding: 25px 40px;
   overflow: auto;
 }
@@ -49,7 +49,7 @@
 }
 
 .FormCenter {
-  margin-bottom: 100px;
+  vertical-align: middle !important;
 }
 
 .FormTitle {

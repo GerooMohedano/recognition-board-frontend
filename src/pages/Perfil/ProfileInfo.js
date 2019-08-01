@@ -19,9 +19,7 @@ class ProfileInfo extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      newFirstName: this.props.info.firstName,
-      newLastName: this.props.info.lastName,
-      newDescription: this.props.info.description
+      newMail: this.props.mail
     }
   }
 
@@ -37,17 +35,15 @@ class ProfileInfo extends React.Component {
   }
 
   undoChanges = () => {
-    const { info } = this.props;
+    const { mail } = this.props;
     this.setState({
-      newFirstName: info.firstName,
-      newLastName: info.lastName,
-      newDescription: info.description
+      newMail: mail
     });
     this.props.changeConfiguring(false);
   }
 
   render() {
-    const { newFirstName, newLastName, newDescription } = this.state;
+    const { newMail } = this.state;
     const { configuring, changeConfiguring, name } = this.props;
     return (
       <Paper className="infoPaper" elevation={1}>
@@ -82,33 +78,11 @@ class ProfileInfo extends React.Component {
           <TextField
             className="infoLine"
             label="First Name"
-            value={newFirstName}
-            onChange={event => this.updateInfo('newFirstName', event.target.value)}
+            value={newMail}
+            onChange={event => this.updateInfo('newMail', event.target.value)}
           />
         ) : (
-          <Typography className="infoLine" component="p">{newFirstName}</Typography>
-        )}
-        {configuring
-        ? (
-          <TextField
-            className="infoLine"
-            label="Last Name"
-            value={newLastName}
-            onChange={event => this.updateInfo('newLastName', event.target.value)}
-          />
-        ) : (
-          <Typography className="infoLine" component="p">{newLastName}</Typography>
-        )}
-        {configuring
-        ? (
-          <TextField
-            className="infoLine"
-            label="Description"
-            value={newDescription}
-            onChange={event => this.updateInfo('newDescription', event.target.value)}
-          />
-        ) : (
-          <Typography className="infoLine" component="p">{newDescription}</Typography>
+          <Typography className="infoLine" component="p">{newMail}</Typography>
         )}
       </Paper>
     );
@@ -117,7 +91,7 @@ class ProfileInfo extends React.Component {
 
 ProfileInfo.propTypes = {
   configuring: PropTypes.bool.isRequired,
-  info: PropTypes.shape({}).isRequired,
+  mail: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   changeInfo: PropTypes.func.isRequired,
   changeConfiguring: PropTypes.func.isRequired

@@ -64,15 +64,7 @@ class App extends Component {
           )
           :
           (
-            <div className="App">
-              <div className="App__Aside" />
-              <div className="App__Form">
-                <div className="FormTitle">
-                  <NavLink to="/sign-in" activeClassName="FormTitle__Link--Active" className="FormTitle__Link">Ingresar</NavLink>
-                </div>
-                <Route path="/sign-in" component={ SignInForm } />
-              </div>
-            </div>
+            <Route path="/sign-in" component={ SignInForm } />
           )
           }
         </Router>

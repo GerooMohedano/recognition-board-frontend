@@ -16,6 +16,7 @@ import Avatar from '@material-ui/core/Avatar';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
 import ExpansionPanelSummary from '@material-ui/core/ExpansionPanelSummary';
 import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HistoricChart from '@material-ui/icons/InsertChart';
 import Gero from '../../images/gero.jpg';
@@ -73,8 +74,22 @@ class Perfil extends React.Component {
         description: 'Cool guy'
       }
     };
-    this.props.fetchUserInfo(this.props.match.params.idUsuario);
+    // this.props.fetchUserInfo(this.props.match.params.idUsuario);
   }
+
+  componentDidMount() {
+    this.props.fetchUserInfo(this.props.match.params.idUsuario);
+    // const idUsuario = this.props.match.params.idUsuario;
+    // const { getUsersInfo } = this;
+    // const data = getUsersInfo(idUsuario);
+    // console.log(data);
+    // this.setState({ infoapi: getUsersInfo(idUsuario) });
+  }
+
+  // getUsersInfo = async idUsuario => {
+  //   const data = await request.get(`${baseUrl()}/perfil/${idUsuario}`);
+  //   return data;
+  // };
 
   changeHistoricDialogState = value => {
     this.setState({ openHistoricDialog: value });
@@ -92,43 +107,48 @@ class Perfil extends React.Component {
 
   render() {
     const { openHistoricDialog, configuring, profileInfo } = this.state;
-    return (
-      <div>
-        <div className="profileTitle">
-          <div className="profileName">geronimo.mohedano</div>
-        </div>
-        <div className="profileDescription">
-          <div className="profilePhoto">
-            <Avatar alt="Remy Sharp" src={Gero} className="profileAvatar" />
-            {configuring && (<input type="file" />)}
+    const { fetchingUserInfo, userInfo } = this.props;
+    console.log(userInfo);
+    if (fetchingUserInfo || userInfo === undefined)
+      return (<CircularProgress />);
+    else
+      return (
+        <div>
+          <div className="profileTitle">
+            <div className="profileName">geronimo.mohedano</div>
           </div>
-          <ProfileInfo
-            configuring={configuring}
-            name="geronimo.mohedano"
-            info={profileInfo}
-            changeInfo={this.changeInfo}
-            changeConfiguring={this.changeConfiguring}
-          />
-          <div className="profileChartContainer">
-            <ChartPolygon data={data} width={500} height={300} />
+          <div className="profileDescription">
+            <div className="profilePhoto">
+              <Avatar alt="Remy Sharp" src={Gero} className="profileAvatar" />
+              {configuring && (<input type="file" />)}
+            </div>
+            <ProfileInfo
+              configuring={configuring}
+              name={userInfo.data.usuarios[0].nombre}
+              mail={userInfo.data.usuarios[0].mail}
+              changeInfo={this.changeInfo}
+              changeConfiguring={this.changeConfiguring}
+            />
+            <div className="profileChartContainer">
+              <ChartPolygon data={data} width={500} height={300} />
+            </div>
+            <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
+              <HistoricChart />
+            </Button>
+            <HistoricDialog
+              open={openHistoricDialog}
+              handleClose={() => this.changeHistoricDialogState(false)}
+              selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
+            />
           </div>
-          <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
-            <HistoricChart />
-          </Button>
-          <HistoricDialog
-            open={openHistoricDialog}
-            handleClose={() => this.changeHistoricDialogState(false)}
-            selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
+          <AwardsList
+            awards={awards}
+          />
+          <TeamsList
+            teams={teams}
           />
         </div>
-        <AwardsList
-          awards={awards}
-        />
-        <TeamsList
-          teams={teams}
-        />
-      </div>
-    );
+      );
   }
 }
 
@@ -139,7 +159,8 @@ Perfil.propTypes = {
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.Object
-  })
+  }),
+  userInfo: PropTypes.shape({}).isRequired
 };
 
 export default Perfil;

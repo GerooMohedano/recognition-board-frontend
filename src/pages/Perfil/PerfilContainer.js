@@ -4,9 +4,9 @@ import { fetchUserInfo } from './PerfilAction';
 
 function mapStateToProps(state) {
   return {
-    fetchingUserInfo: state.fetchingUserInfo,
-    userInfo: state.userInfo,
-    fetchError: state.fetchError
+    fetchingUserInfo: state.perfil.fetchingUserInfo,
+    userInfo: state.perfil.userInfo,
+    fetchError: state.perfil.fetchError
   };
 }
 
