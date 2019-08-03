@@ -32,3 +32,34 @@ export function fetchUserInfo(idUsuario) {
       .catch(error => dispatch(fetchUserInfoFailure(error)));
   };
 }
+
+export function modifyingMail() {
+  return {
+    type: types.MODIFYING_MAIL,
+    payload: {}
+  };
+}
+
+export function modifyMailSuccess(data) {
+  return {
+    type: types.MODIFY_MAIL_SUCCESS,
+    modifiedMail: data
+  };
+}
+
+
+export function modifyMailFailure(error) {
+  return {
+    type: types.MODIFY_MAIL_FAILURE,
+    payload: error
+  };
+}
+
+export function modifyMail(newMailInfo) {
+  return function (dispatch) {
+    dispatch(modifyingMail());
+    return request.post(`${baseUrl()}/modificarMailUsuario`, newMailInfo)
+      .then(response => dispatch(modifyMailSuccess(response)))
+      .catch(error => dispatch(modifyMailFailure(error)));
+  };
+}
