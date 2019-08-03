@@ -40,14 +40,14 @@ class TeamsList extends Component {
                   </ListItemAvatar>
                   <ListItemText
                     inset
-                    primary={team.name}
+                    primary={team.nombre_equipo}
                     className="memberItemText"
                   />
                   <Tooltip title="Go to the board of this team">
                     <NavLink
                       className="commonLink"
-                      key={`NavLink${team.id}`}
-                      to={`/Team/${team.id}`}
+                      key={`NavLink${team.idEquipo}`}
+                      to={`/Team/${team.idEquipo}`}
                     >
                       <IconButton
                         aria-label="Delete"

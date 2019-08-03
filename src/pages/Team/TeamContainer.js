@@ -4,9 +4,9 @@ import { fetchTeamInfo } from './TeamActions';
 
 function mapStateToProps(state) {
   return {
-    fetchingTeamInfo: state.fetchingTeamInfo,
-    teamInfo: state.teamInfo,
-    fetchError: state.fetchError
+    fetchingTeamInfo: state.team.fetchingTeamInfo,
+    teamInfo: state.team.teamInfo,
+    fetchError: state.team.fetchError
   };
 }
 

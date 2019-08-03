@@ -21,6 +21,11 @@ class AwardsList extends Component {
     };
   }
 
+  convertDate = isoDate => {
+    const date = new Date(isoDate);
+    return date.toDateString();
+  }
+
   render() {
     const { awards } = this.props;
     return (
@@ -33,17 +38,18 @@ class AwardsList extends Component {
             <List component="nav">
               {awards.map(award => (
                 <ListItem>
-                  <ExpansionPanel disabled={!award.achieved} style={{ width: '100%' }}>
+                  <ExpansionPanel style={{ width: '100%' }}>
                     <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                       <ListItemText
                         inset
-                        primary={award.name}
+                        primary={award.nombre_logro}
+                        secondary={`Obtained on ${this.convertDate(award.fecha)}`}
                         className="textOfListTeams"
                       />
                     </ExpansionPanelSummary>
                     <ExpansionPanelDetails>
                       <Typography>
-                        {award.description}
+                        {award.descripcion}
                       </Typography>
                     </ExpansionPanelDetails>
                   </ExpansionPanel>
