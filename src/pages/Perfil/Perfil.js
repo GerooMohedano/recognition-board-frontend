@@ -53,11 +53,6 @@ class Perfil extends React.Component {
     this.state = {
       openHistoricDialog: false,
       configuring: false,
-      profileInfo: {
-        firstName: 'Geronimo',
-        lastName: 'Mohedano',
-        description: 'Cool guy'
-      }
     };
     // this.props.fetchUserInfo(this.props.match.params.idUsuario);
   }
@@ -84,14 +79,12 @@ class Perfil extends React.Component {
     this.setState({ configuring: value});
   }
 
-  changeInfo = (newFirstName, newLastName, newDescription) => {
-    this.setState({
-      firstName: newFirstName, lastName: newLastName, description: newDescription
-    });
+  changeInfo = newMail => {
+    this.props.modifyMail({ idUsuario: this.props.match.params.idUsuario, mail: newMail });
   }
 
   render() {
-    const { openHistoricDialog, configuring, profileInfo } = this.state;
+    const { openHistoricDialog, configuring } = this.state;
     const { fetchingUserInfo, userInfo } = this.props;
     console.log(userInfo);
     if (fetchingUserInfo || userInfo === undefined)
@@ -148,7 +141,8 @@ Perfil.propTypes = {
     state: PropTypes.bool.isRequired,
     message: PropTypes.Object
   }),
-  userInfo: PropTypes.shape({}).isRequired
+  userInfo: PropTypes.shape({}).isRequired,
+  modifyMail: PropTypes.func.isRequired
 };
 
 export default Perfil;

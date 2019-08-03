@@ -28,9 +28,9 @@ class ProfileInfo extends React.Component {
   }
 
   saveChanges = () => {
-    const { newFirstName, newLastName, newDescription } = this.state;
+    const { newMail } = this.state;
     const { changeInfo, changeConfiguring } = this.props;
-    changeInfo(newFirstName, newLastName, newDescription);
+    changeInfo(newMail);
     changeConfiguring(false);
   }
 

@@ -3,7 +3,12 @@ import * as types from './PerfilConstants';
 
 const INITIAL_STATE = {
   fetchingUserInfo: true,
+  modifyingMail: true,
   fetchError: {
+    state: false,
+    message: ''
+  },
+  fetchModifyMailError: {
     state: false,
     message: ''
   },
@@ -19,6 +24,15 @@ const behaviors = {
   },
   [types.FETCH_USER_INFO_FAILURE](state, action) {
     return Object.assign({}, state, { fetchingUserInfo: false, fetchError: { state: true, message: action.payload } });
+  },
+  [types.MODIFYING_MAIL](state) {
+    return Object.assign({}, state, { modifyingMail: true, fetchModifyMailError: { state: false, message: '' } });
+  },
+  [types.MODIFY_MAIL_SUCCESS](state, action) {
+    return Object.assign({}, state, { modifyingMail: false, fetchModifyMailError: { state: false, message: '' } });
+  },
+  [types.MODIFY_MAIL_FAILURE](state, action) {
+    return Object.assign({}, state, { modifyingMail: false, fetchModifyMailError: { state: true, message: action.payload } });
   }
 };
 
