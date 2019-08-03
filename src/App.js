@@ -52,9 +52,7 @@ class App extends Component {
                     teamLeader={1}
                   />
                 }} />
-                <Route path="/Enterprise" render={() => {
-                  return <Enterprise enterprise={ enterpriseClicked } />
-                }} />
+                <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />
                 <Route path="/Team/:idTeamClicked" render={() => {
                   return <Team team={ teamClicked } />
                 }} />

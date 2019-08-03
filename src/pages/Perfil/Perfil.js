@@ -93,9 +93,8 @@ class Perfil extends React.Component {
   render() {
     const { openHistoricDialog, configuring, profileInfo } = this.state;
     const { fetchingUserInfo, userInfo } = this.props;
-    console.log(userInfo);
     if (fetchingUserInfo || userInfo === undefined)
-      return (<CircularProgress />);
+    return (<CircularProgress />);
     else
       return (
         <div>
@@ -146,7 +145,7 @@ Perfil.propTypes = {
   fetchUserInfo: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
-    message: PropTypes.Object
+    message: PropTypes.object
   }),
   userInfo: PropTypes.shape({}).isRequired
 };

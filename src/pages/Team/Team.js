@@ -88,7 +88,7 @@ Team.propTypes = {
   fetchTeamInfo: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
-    message: PropTypes.Object
+    message: PropTypes.object
   })
 };
 

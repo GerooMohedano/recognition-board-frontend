@@ -4,9 +4,9 @@ import { fetchEnterpriseInfo } from './EnterpriseAction';
 
 function mapStateToProps(state) {
   return {
-    fetchingEnterpriseInfo: state.fetchingEnterpriseInfo,
-    enterpriseInfo: state.enterpriseInfo,
-    fetchError: state.fetchError
+    fetchingEnterpriseInfo: state.enterprise.fetchingEnterpriseInfo,
+    enterpriseInfo: state.enterprise.enterpriseInfo,
+    fetchError: state.enterprise.fetchError
   };
 }
 

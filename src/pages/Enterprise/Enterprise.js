@@ -9,6 +9,7 @@ import Bob from '../../images/bob.jpg';
 import HistoricDialog from '../../commons/HistoricDialog';
 import ChartPolygon from '../../commons/ChartPolygon';
 import EnterpriseCardContainer from './EnterpriseCardContainer';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 require('./Enterprise.css');
 
@@ -49,6 +50,11 @@ class Enterprise extends Component {
     };
   }
 
+  componentDidMount(){
+    this.props.fetchEnterpriseInfo(this.props.match.params.idEmpresa);
+
+  }
+
   changeConfiguring = value => {
     this.setState({ configuring: value});
   }
@@ -73,41 +79,45 @@ class Enterprise extends Component {
 
   render() {
     const {
-      newName, configuring, openHistoricDialog, enterpriseInfo, teams
+      newName, configuring, openHistoricDialog, enterpriseInfoState, teams
     } = this.state;
-    return (
-      <div>
-        <div className="title">
-          <div className="entrepriseName"> IM IN Enterprise {newName}</div>
-        </div>
-        <div className="enterpriseDescription">
-          <div className="teamPhoto">
-            <Avatar alt="Remy Sharp" src={Bob} className="enterpriseAvatar" />
-            {configuring && (<input type="file" />)}
+    const { fetchingEnterpriseInfo, enterpriseInfo } = this.props;
+    if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
+    return (<CircularProgress />);
+    else
+      return (
+        <div>
+          <div className="title">
+            <div className="entrepriseName"> IM IN Enterprise {newName}</div>
           </div>
-          <EnterpriseInfo
-            configuring={configuring}
-            name={newName}
-            info={enterpriseInfo}
-            updateName={this.updateName}
-            changeInfo={this.changeInfo}
-            changeConfiguring={this.changeConfiguring}
+          <div className="enterpriseDescription">
+            <div className="teamPhoto">
+              <Avatar alt="Remy Sharp" src={Bob} className="enterpriseAvatar" />
+              {configuring && (<input type="file" />)}
+            </div>
+            <EnterpriseInfo
+              configuring={configuring}
+              name={enterpriseInfo.data.empresas[0].nombre}
+              info={enterpriseInfo}
+              updateName={this.updateName}
+              changeInfo={this.changeInfo}
+              changeConfiguring={this.changeConfiguring}
+            />
+            <div className="chartContainer">
+              <ChartPolygon data={data} width={500} height={300} />
+            </div>
+            <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
+              <HistoricChart />
+            </Button>
+          </div>
+          <EnterpriseCardContainer />
+          <HistoricDialog
+            open={openHistoricDialog}
+            handleClose={() => this.changeHistoricDialogState(false)}
+            selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
           />
-          <div className="chartContainer">
-            <ChartPolygon data={data} width={500} height={300} />
-          </div>
-          <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
-            <HistoricChart />
-          </Button>
         </div>
-        <EnterpriseCardContainer />
-        <HistoricDialog
-          open={openHistoricDialog}
-          handleClose={() => this.changeHistoricDialogState(false)}
-          selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
-        />
-      </div>
-    );
+      );
   }
 }
 /*
@@ -121,7 +131,8 @@ Enterprise.propTypes = {
   fetchEnterpriseInfo: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
-    message: PropTypes.Object
-  })
+    message: PropTypes.object
+  }),
+  enterpriseInfo: PropTypes.shape({}).isRequired
 };
 export default Enterprise;
