@@ -52,7 +52,6 @@ class Enterprise extends Component {
 
   componentDidMount(){
     this.props.fetchEnterpriseInfo(this.props.match.params.idEmpresa);
-
   }
 
   changeConfiguring = value => {

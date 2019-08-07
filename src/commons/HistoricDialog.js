@@ -56,11 +56,13 @@ class HistoricDialog extends React.Component {
 
   changeValueForHistoric = value => {
     this.setState({ valueForHistoric: value });
+    this.props.getHistoricValues(value);
   }
 
   render() {
     const { valueForHistoric } = this.state;
-    const { selectValues, open, handleClose } = this.props;
+    const { selectValues, open, handleClose, historicValues, isLoading } = this.props;
+    console.log(historicValues);
     return (
       <Dialog
         open={open}
@@ -81,8 +83,10 @@ class HistoricDialog extends React.Component {
           </Select>
           {
             selectValues.findIndex(value => value.id === valueForHistoric) !== -1
+            && !isLoading
+            && historicValues !== undefined
             && (<LinearChart
-              data={data}
+              data={historicValues.data.data.map(record => ({ date: record.fechaInicio, punctuation: record.punctuacion }))}
               value={selectValues.find(value => value.id === valueForHistoric).name}
             />)
           }
@@ -97,7 +101,10 @@ HistoricDialog.propTypes = {
   selectValues: PropTypes.shape({}).isRequired,
   dataForHistoric: PropTypes.shape({}),
   open: PropTypes.bool.isRequired,
-  handleClose: PropTypes.func.isRequired
+  handleClose: PropTypes.func.isRequired,
+  historicValues: PropTypes.shape({}).isRequired,
+  getHistoricValues: PropTypes.func.isRequired,
+  isLoading: PropTypes.bool.isRequired
 }
 
 export default HistoricDialog;

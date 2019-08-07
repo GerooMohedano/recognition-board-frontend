@@ -17,7 +17,7 @@ export function fetchEnterpriseInfoSuccess(data) {
 }
 
 
-export function fetchEnterpriseFailure(error) {
+export function fetchEnterpriseInfoFailure(error) {
   return {
     type: types.FETCH_ENTERPRISE_INFO_FAILURE,
     payload: error

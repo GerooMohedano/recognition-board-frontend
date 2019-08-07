@@ -3,6 +3,17 @@
   display: inline-block;
 }
 
+.circularProgressContainer {
+  width: 100%;
+  text-align: center;
+}
+
+.circularProgress {
+  margin-top: 50px;
+  width: 200px !important;
+  height: 200px !important;
+}
+
 .profileName {
   font-size: 2.0em;
   font-weight: bold;

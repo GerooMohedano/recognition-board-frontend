@@ -63,3 +63,65 @@ export function modifyMail(newMailInfo) {
       .catch(error => dispatch(modifyMailFailure(error)));
   };
 }
+
+export function gettingHistoricValues() {
+  return {
+    type: types.GETTING_HISTORIC_VALUES,
+    payload: {}
+  };
+}
+
+export function getHistoricValuesSuccess(data) {
+  return {
+    type: types.GET_HISTORIC_VALUES_SUCCESS,
+    historicValues: data
+  };
+}
+
+
+export function getHistoricValuesFailure(error) {
+  return {
+    type: types.GET_HISTORIC_VALUES_FAILURE,
+    payload: error
+  };
+}
+
+export function getHistoricValues(valuesInfo) {
+  return function (dispatch) {
+    dispatch(gettingHistoricValues());
+    return request.post(`${baseUrl()}/HistoricoValorUsuario`, valuesInfo)
+      .then(response => dispatch(getHistoricValuesSuccess(response)))
+      .catch(error => dispatch(getHistoricValuesFailure(error)));
+  };
+}
+
+export function gettingEveryAward() {
+  return {
+    type: types.GETTING_EVERY_AWARD,
+    payload: {}
+  };
+}
+
+export function getEveryAwardSucces(data) {
+  return {
+    type: types.GET_EVERY_AWARD_SUCCESS,
+    everyAward: data
+  };
+}
+
+
+export function getEveryAwardFailure(error) {
+  return {
+    type: types.GET_EVERY_AWARD_FAILURE,
+    payload: error
+  };
+}
+
+export function getEveryAward(userId) {
+  return function (dispatch) {
+    dispatch(gettingEveryAward());
+    return request.post(`${baseUrl()}/logrosUsuario`, userId)
+      .then(response => dispatch(getEveryAwardSucces(response)))
+      .catch(error => dispatch(getEveryAwardFailure(error)));
+  };
+}

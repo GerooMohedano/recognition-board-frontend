@@ -26,45 +26,66 @@ class AwardsList extends Component {
     return date.toDateString();
   }
 
-  render() {
+  getDataOfEarned = (idLogro, valor) => {
     const { awards } = this.props;
-    return (
-      <div className="cardContainerTeams">
-        <Card className="cardForTeam">
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="h2">
-              Awards
-            </Typography>
-            <List component="nav">
-              {awards.map(award => (
-                <ListItem>
-                  <ExpansionPanel style={{ width: '100%' }}>
-                    <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
-                      <ListItemText
-                        inset
-                        primary={award.nombre_logro}
-                        secondary={`Obtained on ${this.convertDate(award.fecha)}`}
-                        className="textOfListTeams"
-                      />
-                    </ExpansionPanelSummary>
-                    <ExpansionPanelDetails>
-                      <Typography>
-                        {award.descripcion}
-                      </Typography>
-                    </ExpansionPanelDetails>
-                  </ExpansionPanel>
-                </ListItem>
-              ))}
-            </List>
-          </CardContent>
-        </Card>
-      </div>
-    );
+    const awardIndex = awards.findIndex(award => award.idLogro === idLogro);
+    return awardIndex === -1 ? "" : `Obtained on ${this.convertDate(awards[awardIndex][valor])}`;
+  }
+
+  isAwardEarned = idLogro => {
+    const { awards } = this.props;
+    const awardIndex = awards.findIndex(award => award.idLogro === idLogro);
+    return awardIndex === -1 ? false : true;
+  }
+
+  render() {
+    const { everyAward, gettingEveryAward, retry } = this.props;
+    if (!gettingEveryAward && everyAward !== undefined && everyAward.data.status !== "error")
+      return (
+        <div className="cardContainerTeams">
+          <Card className="cardForTeam">
+            <CardContent>
+              <Typography gutterBottom variant="h5" component="h2">
+                Awards
+              </Typography>
+              <List component="nav">
+                {everyAward.data.data.map(award => (
+                  <ListItem>
+                    <ExpansionPanel
+                      style={{ width: '100%' }}
+                      disabled={() => !this.isAwardEarned(award.idLogro)}
+                    >
+                      <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
+                        <ListItemText
+                          inset
+                          primary={award.nombre_logro}
+                          secondary={() => this.getDataOfEarned(award.idLogro, "fecha")}
+                          className="textOfListTeams"
+                        />
+                      </ExpansionPanelSummary>
+                      <ExpansionPanelDetails>
+                        <Typography>
+                          {() => this.getDataOfEarned(award.idLogro, "descripcion")}
+                        </Typography>
+                      </ExpansionPanelDetails>
+                    </ExpansionPanel>
+                  </ListItem>
+                ))}
+              </List>
+            </CardContent>
+          </Card>
+        </div>
+      );
+    else {
+      return null;
+    }
   }
 }
 
 AwardsList.propTypes = {
-  awards: PropTypes.array.isRequired
+  awards: PropTypes.array.isRequired,
+  everyAward: PropTypes.array.isRequired,
+  retry: PropTypes.func.isRequired
 };
 
 export default AwardsList;

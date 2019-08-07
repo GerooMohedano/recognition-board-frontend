@@ -54,22 +54,18 @@ class Perfil extends React.Component {
       openHistoricDialog: false,
       configuring: false,
     };
-    // this.props.fetchUserInfo(this.props.match.params.idUsuario);
   }
 
   componentDidMount() {
-    this.props.fetchUserInfo(this.props.match.params.idUsuario);
-    // const idUsuario = this.props.match.params.idUsuario;
-    // const { getUsersInfo } = this;
-    // const data = getUsersInfo(idUsuario);
-    // console.log(data);
-    // this.setState({ infoapi: getUsersInfo(idUsuario) });
+    const { getEveryAward, fetchUserInfo, match } = this.props;
+    fetchUserInfo(match.params.idUsuario);
+    getEveryAward({ idUsuario: match.params.idUsuario });
   }
 
-  // getUsersInfo = async idUsuario => {
-  //   const data = await request.get(`${baseUrl()}/perfil/${idUsuario}`);
-  //   return data;
-  // };
+  retryGetAward = () => {
+    const { getEveryAward, match } = this.props;
+    getEveryAward({ idUsuario: match.params.idUsuario });
+  }
 
   changeHistoricDialogState = value => {
     this.setState({ openHistoricDialog: value });
@@ -83,11 +79,18 @@ class Perfil extends React.Component {
     this.props.modifyMail({ idUsuario: this.props.match.params.idUsuario, mail: newMail });
   }
 
+  selectValueForHistoric = value => {
+    this.props.getHistoricValues({ idUsuario: this.props.match.params.idUsuario, idValor: value })
+  }
+
   render() {
     const { openHistoricDialog, configuring } = this.state;
-    const { fetchingUserInfo, userInfo } = this.props;
+    const {
+      fetchingUserInfo, userInfo, gettingHistoricValues, historicValues,
+      everyAward, gettingEveryAward
+    } = this.props;
     if (fetchingUserInfo || userInfo === undefined)
-    return (<CircularProgress />);
+      return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
       return (
         <div>
@@ -106,7 +109,7 @@ class Perfil extends React.Component {
             <div className="profileChartContainer">
               <ChartPolygon
                 data={userInfo.data.valores.map(valor => ({
-                  id: valor.idValor, subject: valor.nombre[1], A: valor.Total
+                  id: valor.idValor, subject: valor.nombre, A: valor.Total
                 }))}
                 width={500}
                 height={300}
@@ -118,11 +121,19 @@ class Perfil extends React.Component {
             <HistoricDialog
               open={openHistoricDialog}
               handleClose={() => this.changeHistoricDialogState(false)}
-              selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
+              selectValues={userInfo.data.valores.map(valor => ({
+                id: valor.idValor, name: valor.nombre
+              }))}
+              historicValues={historicValues}
+              getHistoricValues={this.selectValueForHistoric}
+              isLoading={gettingHistoricValues}
             />
           </div>
           <AwardsList
+            gettingEveryAward={gettingEveryAward}
+            everyAward={everyAward}
             awards={userInfo.data.logros}
+            retry={this.retryGetAward}
           />
           <TeamsList
             teams={userInfo.data.equipos}
@@ -141,7 +152,13 @@ Perfil.propTypes = {
     message: PropTypes.object
   }),
   userInfo: PropTypes.shape({}).isRequired,
-  modifyMail: PropTypes.func.isRequired
+  modifyMail: PropTypes.func.isRequired,
+  gettingHistoricValues: PropTypes.bool.isRequired,
+  historicValues: PropTypes.shape({}).isRequired,
+  getHistoricValues: PropTypes.func.isRequired,
+  getEveryAward: PropTypes.func.isRequired,
+  gettingEveryAward: PropTypes.bool.isRequired,
+  everyAward: PropTypes.shape({}).isRequired
 };
 
 export default Perfil;

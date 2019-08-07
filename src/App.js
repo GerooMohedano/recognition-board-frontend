@@ -5,7 +5,7 @@ import store from './routeStore';
 import SignInForm from './pages/SignInForm/SignInForm';
 import AppLayout from './layouts/AppLayout';
 import Perfil from './pages/Perfil/PerfilContainer';
-import Enterprise from './pages/Enterprise/Enterprise';
+import Enterprise from './pages/Enterprise/EnterpriseContainer';
 import Team from './pages/Team/Team';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
