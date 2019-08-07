@@ -62,7 +62,6 @@ class HistoricDialog extends React.Component {
   render() {
     const { valueForHistoric } = this.state;
     const { selectValues, open, handleClose, historicValues, isLoading } = this.props;
-    console.log(historicValues);
     return (
       <Dialog
         open={open}
@@ -86,7 +85,7 @@ class HistoricDialog extends React.Component {
             && !isLoading
             && historicValues !== undefined
             && (<LinearChart
-              data={historicValues.data.data.map(record => ({ date: record.fechaInicio, punctuation: record.punctuacion }))}
+              data={historicValues.data.data.map(record => ({ date: record.fechaInicio, punctuation: record.puntuacion }))}
               value={selectValues.find(value => value.id === valueForHistoric).name}
             />)
           }

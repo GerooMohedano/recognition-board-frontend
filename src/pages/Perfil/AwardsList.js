@@ -26,10 +26,16 @@ class AwardsList extends Component {
     return date.toDateString();
   }
 
-  getDataOfEarned = (idLogro, valor) => {
+  getDataOfEarned = idLogro => {
     const { awards } = this.props;
     const awardIndex = awards.findIndex(award => award.idLogro === idLogro);
-    return awardIndex === -1 ? "" : `Obtained on ${this.convertDate(awards[awardIndex][valor])}`;
+    return awardIndex === -1 ? "" : `Obtained on ${this.convertDate(awards[awardIndex].fecha)}`;
+  }
+
+  getDescriptionOfEarned = idLogro => {
+    const { awards } = this.props;
+    const awardIndex = awards.findIndex(award => award.idLogro === idLogro);
+    return awardIndex === -1 ? "" : awards[awardIndex].descripcion;
   }
 
   isAwardEarned = idLogro => {
@@ -53,19 +59,19 @@ class AwardsList extends Component {
                   <ListItem>
                     <ExpansionPanel
                       style={{ width: '100%' }}
-                      disabled={() => !this.isAwardEarned(award.idLogro)}
+                      disabled={!this.isAwardEarned(award.idLogro)}
                     >
                       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />}>
                         <ListItemText
                           inset
                           primary={award.nombre_logro}
-                          secondary={() => this.getDataOfEarned(award.idLogro, "fecha")}
+                          secondary={this.getDataOfEarned(award.idLogro)}
                           className="textOfListTeams"
                         />
                       </ExpansionPanelSummary>
                       <ExpansionPanelDetails>
                         <Typography>
-                          {() => this.getDataOfEarned(award.idLogro, "descripcion")}
+                          {this.getDescriptionOfEarned(award.idLogro)}
                         </Typography>
                       </ExpansionPanelDetails>
                     </ExpansionPanel>

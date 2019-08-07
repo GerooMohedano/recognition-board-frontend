@@ -26,26 +26,7 @@ import ProfileInfo from './ProfileInfo';
 import AwardsList from './AwardsList';
 import TeamsList from './TeamsList';
 
-
 require('./Perfil.css');
-
-const data = [
-  {
-    id: 1, subject: 'Be Accountable', A: 12
-  },
-  {
-    id: 2, subject: 'Be Professional', A: -1
-  },
-  {
-    id: 3, subject: 'Be Proactive', A: 8
-  },
-  {
-    id: 4, subject: 'Be Collaborative', A: 9
-  },
-  {
-    id: 5, subject: 'Be Hardito', A: 8
-  }
-];
 
 class Perfil extends React.Component {
   constructor(props) {
