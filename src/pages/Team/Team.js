@@ -50,8 +50,12 @@ class Team extends Component {
     this.setState({ openHistoricDialog: value });
   }
 
+  selectValueForHistoric = value => {
+    this.props.getHistoricValues({ idEquipo: this.props.match.params.idTeam, idValor: value })
+  }
+
   render() {
-    const { teamInfo, fetchingTeams } = this.props;
+    const { teamInfo, fetchingTeams, historicValues, gettingHistoricValues } = this.props;
     console.log(teamInfo);
     if (fetchingTeams || teamInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
@@ -91,9 +95,9 @@ class Team extends Component {
             selectValues={teamInfo.data.evaluacion.map(valor => ({
               id: valor.idValor, name: valor.nombre_valor
             }))}
-            // historicValues={historicValues}
-            // getHistoricValues={this.selectValueForHistoric}
-            // isLoading={gettingHistoricValues}
+            historicValues={historicValues}
+            getHistoricValues={this.selectValueForHistoric}
+            isLoading={gettingHistoricValues}
           />
         </div>
       );
@@ -104,11 +108,14 @@ Team.propTypes = {
   classes: PropTypes.object.isRequired,
   team: PropTypes.string.isRequired,
   fetchingTeams: PropTypes.bool.isRequired,
+  gettingHistoricValues: PropTypes.bool.isRequired,
   fetchTeams: PropTypes.func.isRequired,
+  getHistoricValues: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
   }),
+  historicValues: PropTypes.shape({}).isRequired,
   teamInfo: PropTypes.shape({}).isRequired
 };
 

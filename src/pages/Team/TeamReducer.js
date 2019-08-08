@@ -3,10 +3,16 @@ import * as types from './TeamConstants';
 
 const INITIAL_STATE = {
   fetchingTeams: true,
+  gettingHistoricValues: true,
   fetchError: {
     state: false,
     message: ''
   },
+  getHistoricError: {
+    state: false,
+    message: ''
+  },
+  historicValues: {},
   teamInfo: {}
 };
 
@@ -19,6 +25,15 @@ const behaviors = {
   },
   [types.FETCH_TEAMS_FAILURE](state, action) {
     return Object.assign({}, state, { fetchingTeams: false, fetchError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_HISTORIC_VALUES](state) {
+    return Object.assign({}, state, { gettingHistoricValues: true, getHistoricError: { state: false, message: '' } });
+  },
+  [types.GET_HISTORIC_VALUES_SUCCESS](state, action) {
+    return Object.assign({}, state, { historicValues: action.historicValues, gettingHistoricValues: false, getHistoricError: { state: false, message: '' } });
+  },
+  [types.GET_HISTORIC_VALUES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingHistoricValues: false, getHistoricError: { state: true, message: action.payload } });
   }
 };
 
