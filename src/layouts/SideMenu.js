@@ -66,7 +66,7 @@ class SideMenu extends React.Component {
   render() {
     const { classes } = this.props;
     const { newEnterprise, enterpriseDialogState } = this.state;
-    const empresas = [{name: 'SOVOS', equipos: ['Octopus', 'Elephants']}, {name: 'SCANIA', equipos: ['Managers']}];
+    const empresas = [{name: 'SOVOS', equipos: [{id: 1, name: 'Octopus'}, {id: 2, name: 'Elephants'}]}, {name: 'SCANIA', equipos: ['Managers']}];
     const sideMenuList = [];
     empresas.forEach((empresa) => {
       const sideMenuSubList = [];
@@ -74,12 +74,12 @@ class SideMenu extends React.Component {
         sideMenuSubList.push(
           <NavLink
             className="commonLink"
-            key={`NavLink${equipo}`}
-            to={`/Team/${equipo}`}
-            onClick={() => this.onTeamNavLinkClick(equipo)}
+            key={`NavLink${equipo.name}`}
+            to={`/Team/${equipo.id}`}
+            onClick={() => this.onTeamNavLinkClick(equipo.name)}
           >
-            <ListItem key={`ListItem${equipo}`} button>
-              <ListItemText key={`ListItemText${equipo}`} primary={equipo} className="textOfListSideMenu" />
+            <ListItem key={`ListItem${equipo.name}`} button>
+              <ListItemText key={`ListItemText${equipo.name}`} primary={equipo.name} className="textOfListSideMenu" />
             </ListItem>
           </NavLink>
         );

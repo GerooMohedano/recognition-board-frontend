@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
 import TeamTable from './TeamTable';
 import SprintSelector from './SprintSelector';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -40,56 +41,75 @@ class Team extends Component {
     };
   }
 
+  componentDidMount() {
+    const { fetchTeams, match } = this.props;
+    fetchTeams(match.params.idTeam);
+  }
+
   changeHistoricDialogState = value => {
     this.setState({ openHistoricDialog: value });
   }
 
   render() {
-    return (
-      <div>
-        <div className="title">
-          <div className="teamName"> IM IN Team {this.props.team}</div>
-          <NavLink to="/TeamConfig">
-            <Tooltip title="Edit this team configuration">
-              <Button>
-                <Build />
-              </Button>
-            </Tooltip>
-          </NavLink>
-        </div>
-        <div className="teamDescription">
-          <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
-          <div className="chartContainer">
-            <ChartPolygon data={data} width={500} height={300} />
+    const { teamInfo, fetchingTeams } = this.props;
+    console.log(teamInfo);
+    if (fetchingTeams || teamInfo === undefined)
+      return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
+    else
+      return (
+        <div>
+          <div className="title">
+            <div className="teamName"> IM IN Team {teamInfo.data.equipos[0].nombre_equipo}</div>
+            <NavLink to="/TeamConfig">
+              <Tooltip title="Edit this team configuration">
+                <Button>
+                  <Build />
+                </Button>
+              </Tooltip>
+            </NavLink>
           </div>
-          <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
-            <HistoricChart />
-          </Button>
+          <div className="teamDescription">
+            <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
+            <div className="chartContainer">
+              <ChartPolygon
+                data={teamInfo.data.evaluacion.map(valor => ({
+                  id: valor.idValor, subject: valor.nombre_valor, A: valor.Total
+                }))}
+                width={500}
+                height={300}
+              />
+            </div>
+            <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
+              <HistoricChart />
+            </Button>
+          </div>
+          <SprintSelector />
+          <TeamTable />
+          <HistoricDialog
+            open={this.state.openHistoricDialog}
+            handleClose={() => this.changeHistoricDialogState(false)}
+            selectValues={teamInfo.data.evaluacion.map(valor => ({
+              id: valor.idValor, name: valor.nombre_valor
+            }))}
+            // historicValues={historicValues}
+            // getHistoricValues={this.selectValueForHistoric}
+            // isLoading={gettingHistoricValues}
+          />
         </div>
-        <SprintSelector />
-        <TeamTable />
-        <HistoricDialog
-          open={this.state.openHistoricDialog}
-          handleClose={() => this.changeHistoricDialogState(false)}
-          selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
-        />
-      </div>
-    );
+      );
   }
 }
-/*
-Team.propTypes = {
-  team: PropTypes.string.isRequired
-};*/
+
 Team.propTypes = {
   classes: PropTypes.object.isRequired,
   team: PropTypes.string.isRequired,
-  fetchingTeamInfo: PropTypes.bool.isRequired,
-  fetchTeamInfo: PropTypes.func.isRequired,
+  fetchingTeams: PropTypes.bool.isRequired,
+  fetchTeams: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
-  })
+  }),
+  teamInfo: PropTypes.shape({}).isRequired
 };
 
 export default Team;

@@ -1,6 +1,6 @@
 import * as types from './TeamConstants';
-import { baseUrl } from 'shared/jsUtils/Utils';
-import request from 'shared/jsUtils/request';
+import { baseUrl } from '../../shared/jsUtils/Utils';
+import request from '../../shared/jsUtils/request';
 
 export function fetchingTeams() {
   return {
@@ -10,18 +10,9 @@ export function fetchingTeams() {
 }
 
 export function fetchTeamsSuccess(data) {
-  const teams = [];
-  Object.keys(data.data).forEach(
-    (team) => {
-      const elem = {};
-      elem.index = team;
-      elem.values = data.data[team];
-      jobs.push(elem);
-    }
-  );
   return {
     type: types.FETCH_TEAMS_SUCCESS,
-    payload: { trends: teams }
+    teamInfo: data
   };
 }
 
@@ -32,10 +23,10 @@ export function fetchTeamsFailure(error) {
   };
 }
 
-export function fetchTeams() {
+export function fetchTeams(idTeam) {
   return function (dispatch) {
     dispatch(fetchingTeams());
-    return request.get(`${baseUrl()}/Team`)
+    return request.get(`${baseUrl()}/equipo/${idTeam}`)
       .then(response => dispatch(fetchTeamsSuccess(response)))
       .catch(error => dispatch(fetchTeamsFailure(error)));
   };

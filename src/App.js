@@ -6,7 +6,7 @@ import SignInForm from './pages/SignInForm/SignInForm';
 import AppLayout from './layouts/AppLayout';
 import Perfil from './pages/Perfil/PerfilContainer';
 import Enterprise from './pages/Enterprise/EnterpriseContainer';
-import Team from './pages/Team/Team';
+import Team from './pages/Team/TeamContainer';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
 import TeamConfig from './pages/TeamConfig/TeamConfig';
@@ -53,8 +53,7 @@ class App extends Component {
                   />
                 }} />
                 <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />
-                <Route path="/Team/:idTeamClicked" render={() => {
-                  return <Team team={ teamClicked } />
+                <Route path="/Team/:idTeam" component={ Team } />
                 }} />
                 <Route component={ PageNotFound } />
               </Switch>

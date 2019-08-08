@@ -2,7 +2,7 @@ import generateReducer from '../../shared/helpers/reducerHelpers';
 import * as types from './TeamConstants';
 
 const INITIAL_STATE = {
-  fetchingTeamInfo: true,
+  fetchingTeams: true,
   fetchError: {
     state: false,
     message: ''
@@ -11,14 +11,14 @@ const INITIAL_STATE = {
 };
 
 const behaviors = {
-  [types.FETCHING_TEAM_INFO](state) {
-    return Object.assign({}, state, { fetchingTeamInfo: true, fetchError: { state: false, message: '' } });
+  [types.FETCHING_TEAMS](state) {
+    return Object.assign({}, state, { fetchingTeams: true, fetchError: { state: false, message: '' } });
   },
-  [types.FETCH_TEAM_INFO_SUCCESS](state, action) {
-    return Object.assign({}, state, { teamInfo: action.teamInfo, fetchingTeamInfo: false, fetchError: { state: false, message: '' } });
+  [types.FETCH_TEAMS_SUCCESS](state, action) {
+    return Object.assign({}, state, { teamInfo: action.teamInfo, fetchingTeams: false, fetchError: { state: false, message: '' } });
   },
-  [types.FETCH_TEAM_INFO_FAILURE](state, action) {
-    return Object.assign({}, state, { fetchingTeamInfo: false, fetchError: { state: true, message: action.payload } });
+  [types.FETCH_TEAMS_FAILURE](state, action) {
+    return Object.assign({}, state, { fetchingTeams: false, fetchError: { state: true, message: action.payload } });
   }
 };
 
