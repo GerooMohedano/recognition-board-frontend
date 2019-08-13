@@ -29,60 +29,40 @@ const styles = theme => ({
     fontWeight: 'bold'
   }
 });
-const personas = ['Marcio', 'Magui', 'Pame', 'Facundo', 'Gero'];
-const values = ['Be Accountable', 'Be Professional', 'Be Proactive', 'Be Collaborative', 'Be Hardito'];
 
 class TeamTable extends React.Component {
   constructor(props) {
     super(props);
-    const openCreateNote = this.initializeDialogState();
     this.state = {
-      openCreateNote
+      openCreateNote: false,
+      valueName: '',
+      userName: ''
     };
   }
 
-  initializeDialogState = () => {
-    const auxCreateNoteState = {};
-    values.forEach(value => {
-      const stateByValue = {};
-      personas.forEach(persona => {
-        stateByValue[persona] = false;
-      });
-      auxCreateNoteState[value] = stateByValue;
-    });
-    return auxCreateNoteState;
-  }
-
   createColumns = () => {
-    const { classes } = this.props;
+    const { classes, members } = this.props;
     const columns = [<TableCell className={classes.header}>Valores</TableCell>];
-    personas.forEach(person => {
-      columns.push(<TableCell className={classes.header} align="right">{ person }</TableCell>);
+    members.forEach(person => {
+      columns.push(<TableCell className={classes.header} align="right">{ person.nombre_usuario }</TableCell>);
     });
     return columns;
   }
 
   createRows = () => {
-    const { classes } = this.props;
-    const { openCreateNote } = this.state;
+    const { classes, values, members } = this.props;
     const rows = [];
     values.forEach(value => {
-      rows.push(<TableRow key={ value }>
-        <TableCell className={classes.firstColumn}>{ value }</TableCell>
-        {personas.map(persona => (
+      rows.push(<TableRow key={ value.nombre_valor }>
+        <TableCell className={classes.firstColumn}>{ value.nombre_valor }</TableCell>
+        {members.map(persona => (
           <TableCell align="right">
             <Button
-              key={"button" + value + persona}
-              onClick={() => this.handleCreateNoteButton(value, persona, true)}
+              key={"button" + value.nombre_valor + persona.nombre_usuario}
+              onClick={() => this.handleCreateNoteButton(value, persona)}
             >
               <ThumbsUpDown />
             </Button>
-            <ViewNotes
-              value={value}
-              persona={persona}
-              openCreateNote={openCreateNote}
-              handleCreateNoteButton={this.handleCreateNoteButton}
-            />
           </TableCell>
         ))}
       </TableRow>);
@@ -90,20 +70,20 @@ class TeamTable extends React.Component {
     return rows;
   }
 
-  handleCreateNoteButton = (value, persona, stateOfOpen) => {
-    this.setState(prevState => ({
-      openCreateNote: {
-        ...prevState.openCreateNote,
-        [value]: {
-          ...prevState.openCreateNote[value],
-          [persona]: stateOfOpen
-        }
-      }
-    }));
+  handleCreateNoteButton = (value, persona) => {
+    this.setState({
+      openCreateNote: true,
+      valueName: value.nombre_valor,
+      userName: persona.nombre_usuario
+    });
+    this.props.getNotes({ idUsuario: persona.idUsuario, idValor: value.idValor, idPizarra: 9});
   }
 
+  handleCloseDialog = () => this.setState({ openCreateNote: false });
+
   render() {
-    const { classes } = this.props;
+    const { openCreateNote, valueName, userName } = this.state;
+    const { classes, gettingNotes, notes } = this.props;
     const columns = this.createColumns();
     const rows = this.createRows();
     return (
@@ -118,6 +98,14 @@ class TeamTable extends React.Component {
             { rows }
           </TableBody>
         </Table>
+        <ViewNotes
+          value={valueName}
+          user={userName}
+          openCreateNote={openCreateNote}
+          handleCloseDialog={this.handleCloseDialog}
+          gettingNotes={gettingNotes}
+          notes={notes}
+        />
       </Paper>
     );
   }
@@ -125,6 +113,11 @@ class TeamTable extends React.Component {
 
 TeamTable.propTypes = {
   classes: PropTypes.object.isRequired,
+  members: PropTypes.array.isRequired,
+  values: PropTypes.array.isRequired,
+  gettingNotes: PropTypes.bool.isRequired,
+  notes: PropTypes.shape({}).isRequired,
+  getNotes: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TeamTable);

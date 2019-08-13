@@ -55,7 +55,10 @@ class Team extends Component {
   }
 
   render() {
-    const { teamInfo, fetchingTeams, historicValues, gettingHistoricValues } = this.props;
+    const {
+      teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
+      gettingNotes, notes, getNotes
+    } = this.props;
     console.log(teamInfo);
     if (fetchingTeams || teamInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
@@ -88,7 +91,13 @@ class Team extends Component {
             </Button>
           </div>
           <SprintSelector />
-          <TeamTable />
+          <TeamTable
+            members={teamInfo.data.usuarios}
+            values={teamInfo.data.evaluacion}
+            gettingNotes={gettingNotes}
+            notes={notes}
+            getNotes={getNotes}
+          />
           <HistoricDialog
             open={this.state.openHistoricDialog}
             handleClose={() => this.changeHistoricDialogState(false)}
@@ -109,14 +118,17 @@ Team.propTypes = {
   team: PropTypes.string.isRequired,
   fetchingTeams: PropTypes.bool.isRequired,
   gettingHistoricValues: PropTypes.bool.isRequired,
+  gettingNotes: PropTypes.bool.isRequired,
   fetchTeams: PropTypes.func.isRequired,
   getHistoricValues: PropTypes.func.isRequired,
+  getNotes: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
   }),
   historicValues: PropTypes.shape({}).isRequired,
-  teamInfo: PropTypes.shape({}).isRequired
+  teamInfo: PropTypes.shape({}).isRequired,
+  notes: PropTypes.shape({}).isRequired
 };
 
 export default Team;

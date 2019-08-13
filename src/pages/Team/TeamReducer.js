@@ -4,6 +4,7 @@ import * as types from './TeamConstants';
 const INITIAL_STATE = {
   fetchingTeams: true,
   gettingHistoricValues: true,
+  gettingNotes: true,
   fetchError: {
     state: false,
     message: ''
@@ -12,8 +13,13 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  getNotesError: {
+    state: false,
+    message: ''
+  },
   historicValues: {},
-  teamInfo: {}
+  teamInfo: {},
+  notes: {}
 };
 
 const behaviors = {
@@ -34,6 +40,15 @@ const behaviors = {
   },
   [types.GET_HISTORIC_VALUES_FAILURE](state, action) {
     return Object.assign({}, state, { gettingHistoricValues: false, getHistoricError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_NOTES](state) {
+    return Object.assign({}, state, { gettingNotes: true, getNotesError: { state: false, message: '' } });
+  },
+  [types.GET_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { notes: action.notes, gettingNotes: false, getNotesError: { state: false, message: '' } });
+  },
+  [types.GET_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingNotes: false, getNotesError: { state: true, message: action.payload } });
   }
 };
 

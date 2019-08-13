@@ -37,28 +37,6 @@ class ViewNotes extends React.Component {
     super(props);
     this.state = {
       creatingNote: false,
-      notes: [
-        {
-          author: 'Gero',
-          message: "She's an amazing person",
-          isGood: true
-        },
-        {
-          author: 'Poyo',
-          message: "She's done a great job on GTD creation",
-          isGood: true
-        },
-        {
-          author: 'Marcio',
-          message: "E muy inoperante la mina",
-          isGood: false
-        },
-        {
-          author: 'Romy',
-          message: "Insert text in here",
-          isGood: true
-        }
-      ],
       newNoteMessage: '',
       newNotePuntuation: 1,
       newNoteAuthor: 'Romy'
@@ -66,24 +44,28 @@ class ViewNotes extends React.Component {
   }
 
   createCardsWithNotes = () => {
-    const { notes } = this.state;
+    const { notes, gettingNotes } = this.props;
     const cards = [];
-    notes.forEach(note => {
-      const cardColor = note.isGood ? colorForGood : colorForBad;
-      cards.push(
-        <Card style={{ backgroundColor: cardColor }}>
-          <CardContent>
-            <Typography className="cardParagraph" gutterBottom component="p">
-              {`from ${note.author}`}
-            </Typography>
-            <Typography className="cardParagraph" component="p">
-              {note.message}
-            </Typography>
-          </CardContent>
-        </Card>
-      );
-    });
-    return cards;
+    if (notes !== undefined && !gettingNotes) {
+      notes.data.data.forEach(note => {
+        const cardColor = note.puntuacion === 1 ? colorForGood : colorForBad;
+        cards.push(
+          <Card style={{ backgroundColor: cardColor }}>
+            <CardContent>
+              <Typography className="cardParagraph" gutterBottom component="p">
+                {`from ${note.autor}`}
+              </Typography>
+              <Typography className="cardParagraph" component="p">
+                {note.descripcion}
+              </Typography>
+            </CardContent>
+          </Card>
+        );
+      });
+      return cards;
+    } else {
+      return null;
+    }
   }
 
   createNewBlankNote = () => {
@@ -98,31 +80,22 @@ class ViewNotes extends React.Component {
     this.setState({ newNotePuntuation: event.target.checked ? -1 : 1 });
   }
 
-  createNewNoteWithContext = () => {
-    const { newNoteAuthor, newNoteMessage, newNotePuntuation } = this.state;
-    this.setState(prevState => ({
-      notes: [
-        ...prevState.notes,
-        {
-          author: newNoteAuthor,
-          message: newNoteMessage,
-          isGood: newNotePuntuation === 1 ? true : false
-        }
-      ],
-      newNoteMessage: ''
-    }));
-  }
+  createNewNoteWithContext = () => this.setState({ newNoteMessage: '' });
 
   render() {
-    const { classes, value, persona, openCreateNote, handleCreateNoteButton } = this.props;
+    const {
+      classes, value, user, openCreateNote, handleCloseDialog,
+      notes, gettingNotes
+    } = this.props;
     const { creatingNote, newNoteMessage, newNotePuntuation } = this.state;
+    console.log(notes);
     return (
       <Dialog
-        key={"dialog" + value + persona}
-        open={openCreateNote[value][persona]}
-        onClose={() => handleCreateNoteButton(value, persona, false)}
+        key="dialog"
+        open={openCreateNote}
+        onClose={() => handleCloseDialog()}
       >
-        <DialogTitle id="form-dialog-title">{value + ' ' + persona}</DialogTitle>
+        <DialogTitle id="form-dialog-title">{value + ' - ' + user}</DialogTitle>
           <DialogContent className="notesContainer">
             {this.createCardsWithNotes()}
             {(creatingNote)
@@ -158,7 +131,7 @@ class ViewNotes extends React.Component {
                   </CardContent>
                 </Card>
                 <DialogActions>
-                  <Button onClick={() => handleCreateNoteButton(value, persona, false)} color="primary">
+                  <Button onClick={() => handleCloseDialog()} color="primary">
                     Cancel
                   </Button>
                   <Button onClick={() => this.createNewNoteWithContext()} color="primary">
@@ -181,10 +154,12 @@ class ViewNotes extends React.Component {
 }
 
 ViewNotes.propTypes = {
-  value: PropTypes.string.isRequired,
-  persona: PropTypes.string.isRequired,
-  handleCreateNoteButton: PropTypes.func.isRequired,
-  openCreateNote: PropTypes.shape({}).isRequired,
+  values: PropTypes.string.isRequired,
+  user: PropTypes.string.isRequired,
+  handleCloseDialog: PropTypes.func.isRequired,
+  openCreateNote: PropTypes.bool.isRequired,
+  gettingNotes: PropTypes.bool.isRequired,
+  notes: PropTypes.shape({}).isRequired
 };
 
 export default withStyles(styles)(ViewNotes);

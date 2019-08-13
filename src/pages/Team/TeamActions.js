@@ -62,3 +62,34 @@ export function getHistoricValues(valuesInfo) {
       .catch(error => dispatch(getHistoricValuesFailure(error)));
   };
 }
+
+export function gettingNotes() {
+  return {
+    type: types.GETTING_NOTES,
+    payload: {}
+  };
+}
+
+export function getNotesSuccess(data) {
+  return {
+    type: types.GET_NOTES_SUCCESS,
+    notes: data
+  };
+}
+
+
+export function getNotesFailure(error) {
+  return {
+    type: types.GET_NOTES_FAILURE,
+    payload: error
+  };
+}
+
+export function getNotes(notesRequested) {
+  return function (dispatch) {
+    dispatch(gettingNotes());
+    return request.post(`${baseUrl()}/notasUsuario`, notesRequested)
+      .then(response => dispatch(getNotesSuccess(response)))
+      .catch(error => dispatch(getNotesFailure(error)));
+  };
+}

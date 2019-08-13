@@ -1,16 +1,19 @@
 import { connect } from 'react-redux';
 import Team from './Team';
-import { fetchTeams, getHistoricValues } from './TeamActions';
+import { fetchTeams, getHistoricValues, getNotes } from './TeamActions';
 
 function mapStateToProps(state) {
   return {
     fetchingTeams: state.team.fetchingTeams,
-    gettingHistoricValues: state.perfil.gettingHistoricValues,
+    gettingHistoricValues: state.team.gettingHistoricValues,
+    gettingNotes: state.team.gettingNotes,
     teamInfo: state.team.teamInfo,
-    historicValues: state.perfil.historicValues,
-    getHistoricError: state.perfil.getHistoricError,
+    notes: state.team.notes,
+    historicValues: state.team.historicValues,
+    getHistoricError: state.team.getHistoricError,
+    getNotesError: state.team.getNotesError,
     fetchError: state.team.fetchError
   };
 }
 
-export default connect(mapStateToProps, { fetchTeams, getHistoricValues })(Team);
+export default connect(mapStateToProps, { fetchTeams, getHistoricValues, getNotes })(Team);
