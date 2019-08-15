@@ -36,7 +36,9 @@ class TeamTable extends React.Component {
     this.state = {
       openCreateNote: false,
       valueName: '',
-      userName: ''
+      userName: '',
+      userId: -1,
+      valueId: -1
     };
   }
 
@@ -71,19 +73,22 @@ class TeamTable extends React.Component {
   }
 
   handleCreateNoteButton = (value, persona) => {
+    const { indexPizarra } = this.props;
     this.setState({
       openCreateNote: true,
       valueName: value.nombre_valor,
-      userName: persona.nombre_usuario
+      userName: persona.nombre_usuario,
+      userId: persona.idUsuario,
+      valueId: value.idValor
     });
-    this.props.getNotes({ idUsuario: persona.idUsuario, idValor: value.idValor, idPizarra: 9});
+    this.props.getNotes({ idUsuario: persona.idUsuario, idValor: value.idValor, idPizarra: indexPizarra });
   }
 
   handleCloseDialog = () => this.setState({ openCreateNote: false });
 
   render() {
-    const { openCreateNote, valueName, userName } = this.state;
-    const { classes, gettingNotes, notes } = this.props;
+    const { openCreateNote, valueName, userName, userId, valueId } = this.state;
+    const { classes, gettingNotes, notes, indexPizarra, createNote } = this.props;
     const columns = this.createColumns();
     const rows = this.createRows();
     return (
@@ -99,12 +104,14 @@ class TeamTable extends React.Component {
           </TableBody>
         </Table>
         <ViewNotes
-          value={valueName}
-          user={userName}
+          value={{ id: valueId, name: valueName }}
+          user={{ id: userId, name: userName }}
           openCreateNote={openCreateNote}
           handleCloseDialog={this.handleCloseDialog}
           gettingNotes={gettingNotes}
+          indexPizarra={indexPizarra}
           notes={notes}
+          createNote={createNote}
         />
       </Paper>
     );
@@ -117,7 +124,9 @@ TeamTable.propTypes = {
   values: PropTypes.array.isRequired,
   gettingNotes: PropTypes.bool.isRequired,
   notes: PropTypes.shape({}).isRequired,
-  getNotes: PropTypes.func.isRequired
+  indexPizarra: PropTypes.number.isRequired,
+  getNotes: PropTypes.func.isRequired,
+  createNote: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TeamTable);

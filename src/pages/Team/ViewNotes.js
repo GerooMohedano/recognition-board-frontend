@@ -15,6 +15,7 @@ import Switch from '@material-ui/core/Switch'
 import AddCircleOutline from '@material-ui/icons/AddCircleOutline';
 import Mood from '@material-ui/icons/Mood';
 import MoodBad from '@material-ui/icons/MoodBad';
+import DeleteIcon from '@material-ui/icons/Delete';
 
 require('./ViewNotes.css');
 
@@ -38,23 +39,32 @@ class ViewNotes extends React.Component {
     this.state = {
       creatingNote: false,
       newNoteMessage: '',
-      newNotePuntuation: 1,
-      newNoteAuthor: 'Romy'
+      author: 4,
+      newNotePuntuation: 1
     };
   }
 
   createCardsWithNotes = () => {
     const { notes, gettingNotes } = this.props;
     const cards = [];
-    if (notes !== undefined && !gettingNotes) {
+    if (notes !== undefined && notes.data !== undefined  && notes.data.data !== undefined && !gettingNotes) {
       notes.data.data.forEach(note => {
         const cardColor = note.puntuacion === 1 ? colorForGood : colorForBad;
         cards.push(
           <Card style={{ backgroundColor: cardColor }}>
             <CardContent>
-              <Typography className="cardParagraph" gutterBottom component="p">
-                {`from ${note.autor}`}
-              </Typography>
+              <div>
+                <Typography className="cardParagraph" gutterBottom component="p">
+                  {`from ${note.autor}`}
+                </Typography>
+                {note.puntuacion === 1
+                  ? (<Mood className="noteCardIcon" />)
+                  : (<MoodBad className="noteCardIcon" />)
+                }
+                <Button className="noteDeleteButton">
+                  <DeleteIcon style={{ color: 'white' }} />
+                </Button>
+              </div>
               <Typography className="cardParagraph" component="p">
                 {note.descripcion}
               </Typography>
@@ -66,6 +76,10 @@ class ViewNotes extends React.Component {
     } else {
       return null;
     }
+  }
+
+  componentDidUpdate(){
+    console.log(this.props.notes);
   }
 
   createNewBlankNote = () => {
@@ -80,7 +94,20 @@ class ViewNotes extends React.Component {
     this.setState({ newNotePuntuation: event.target.checked ? -1 : 1 });
   }
 
-  createNewNoteWithContext = () => this.setState({ newNoteMessage: '' });
+  createNewNoteWithContext = () => {
+    const { newNoteMessage, newNotePuntuation, author } = this.state;
+    const { user, value, indexPizarra, createNote, handleCloseDialog } = this.props;
+    createNote({
+      nombre: indexPizarra,
+      idAutor: author,
+      idDestinatario: user.id,
+      idValor: value.id,
+      descripcion: newNoteMessage,
+      puntuacion: newNotePuntuation
+    });
+    this.setState({ newNoteMessage: '', newNotePuntuation: 1 });
+    handleCloseDialog();
+  }
 
   render() {
     const {
@@ -95,7 +122,7 @@ class ViewNotes extends React.Component {
         open={openCreateNote}
         onClose={() => handleCloseDialog()}
       >
-        <DialogTitle id="form-dialog-title">{value + ' - ' + user}</DialogTitle>
+        <DialogTitle id="form-dialog-title">{value.name + ' - ' + user.name}</DialogTitle>
           <DialogContent className="notesContainer">
             {this.createCardsWithNotes()}
             {(creatingNote)
@@ -134,7 +161,7 @@ class ViewNotes extends React.Component {
                   <Button onClick={() => handleCloseDialog()} color="primary">
                     Cancel
                   </Button>
-                  <Button onClick={() => this.createNewNoteWithContext()} color="primary">
+                  <Button disabled={newNoteMessage === ''} onClick={() => this.createNewNoteWithContext()} color="primary">
                     Create
                   </Button>
                 </DialogActions>
@@ -154,11 +181,13 @@ class ViewNotes extends React.Component {
 }
 
 ViewNotes.propTypes = {
-  values: PropTypes.string.isRequired,
-  user: PropTypes.string.isRequired,
+  value: PropTypes.shape({}).isRequired,
+  user: PropTypes.shape({}).isRequired,
   handleCloseDialog: PropTypes.func.isRequired,
   openCreateNote: PropTypes.bool.isRequired,
   gettingNotes: PropTypes.bool.isRequired,
+  indexPizarra: PropTypes.number.isRequired,
+  createNote: PropTypes.func.isRequired,
   notes: PropTypes.shape({}).isRequired
 };
 

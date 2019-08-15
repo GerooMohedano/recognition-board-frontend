@@ -9,4 +9,16 @@
 
 .cardParagraph {
   color: white !important;
+  display: inline-flex !important;
+}
+
+.noteCardIcon {
+  color: white;
+  float: right;
+}
+
+.noteDeleteButton {
+  float: right;
+  padding: 0 !important;
+  min-width: 0 !important;
 }

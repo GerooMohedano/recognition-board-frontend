@@ -65,22 +65,13 @@ class SprintSelector extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      sprint: 'Sprint 190301',
-      beginDate: '2017-08-20',
-      endDate: '2019-08-13',
-      olderSprints: [
-        { id: 1, sprint: 'Sprint 190202' },
-        { id: 2, sprint: 'Sprint 190201' },
-        { id: 3, sprint: 'Sprint 190102' },
-        { id: 4, sprint: 'Sprint 190101' },
-        { id: 5, sprint: 'Sprint 181202' },
-        { id: 6, sprint: 'Sprint 181201' }
-      ]
     }
   }
 
   selectOlderSprint = value => {
-    console.log('go to', value);
+    const { sprints, changeIndexPizarra } = this.props;
+    const newIndex = sprints.findIndex(sprint => sprint.idPizarra === value.id);
+    changeIndexPizarra(newIndex);
   }
 
   editSprintInformation = (value, definition) => {
@@ -88,28 +79,43 @@ class SprintSelector extends React.Component {
   }
 
   render() {
-    const { classes } = this.props;
-    const { sprint, beginDate, endDate, olderSprints } = this.state;
+    const { classes, sprints, indexPizarra, shiftIndexPizarra } = this.props;
+    const leftColor = indexPizarra === 0 ? '#E0E0E0' : '#649BFF';
+    const rightColor = indexPizarra === sprints.length - 1 ? '#E0E0E0' : '#649BFF';
     return (
       <div className="sprintSelectorContainer">
         <div className="sprintEditor">
           <SprintEditor
-            sprintName={sprint}
+            sprintName={sprints[indexPizarra].titulo}
             editSprintInformation={this.editSprintInformation}
-            beginDate={beginDate}
-            endDate={endDate}
+            beginDate={sprints[indexPizarra].fechaInicio}
+            endDate={sprints[indexPizarra].fechaFin}
             />
         </div>
         <div className="sprintNavigation">
           <Tooltip title="Go to the previous Sprint">
-            <Fab aria-label="Delete" className="navigationButton">
+            <Fab
+              aria-label="Delete"
+              className="navigationButton"
+              disabled={indexPizarra === 0}
+              style={{ backgroundColor: leftColor }}
+              onClick={() => shiftIndexPizarra(-1)}
+            >
               <KeyboardArrowLeft style={{ zIndex: '1', color: 'white' }} />
             </Fab>
           </Tooltip>
-          <h2 className="navigationButton">{ sprint }</h2>
+          <h2 className="navigationButton">{ sprints[indexPizarra].titulo }</h2>
           <Tooltip title="Go to the next Sprint">
-            <Fab aria-label="Delete" className="navigationButton">
-              <KeyboardArrowRight style={{ zIndex: '1', color: 'white' }} />
+            <Fab
+              aria-label="Delete"
+              className="navigationButton"
+              disabled={indexPizarra === sprints.length - 1}
+              style={{ backgroundColor: rightColor }}
+              onClick={() => shiftIndexPizarra(1)}
+            >
+              <KeyboardArrowRight
+                style={{ zIndex: '1', color: 'white' }}
+              />
             </Fab>
           </Tooltip>
         </div>
@@ -119,7 +125,7 @@ class SprintSelector extends React.Component {
               <SearchIcon />
             </div>
             <SearchSprints
-              data={olderSprints}
+              data={sprints.map(sprint => ({ id: sprint.idPizarra, sprint: sprint.titulo }))}
               upperFunction={this.selectOlderSprint}
               placeholder="Select another Sprint..."
               labelName="sprint"
@@ -133,6 +139,10 @@ class SprintSelector extends React.Component {
 
 SprintSelector.propTypes = {
   classes: PropTypes.object.isRequired,
+  sprints: PropTypes.shape({}).isRequired,
+  indexPizarra: PropTypes.number.isRequired,
+  shiftIndexPizarra: PropTypes.func.isRequired,
+  changeIndexPizarra: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SprintSelector);

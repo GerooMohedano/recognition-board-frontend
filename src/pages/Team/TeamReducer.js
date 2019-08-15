@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   fetchingTeams: true,
   gettingHistoricValues: true,
   gettingNotes: true,
+  creattingNote: true,
   fetchError: {
     state: false,
     message: ''
@@ -14,6 +15,10 @@ const INITIAL_STATE = {
     message: ''
   },
   getNotesError: {
+    state: false,
+    message: ''
+  },
+  createNoteError: {
     state: false,
     message: ''
   },
@@ -49,6 +54,15 @@ const behaviors = {
   },
   [types.GET_NOTES_FAILURE](state, action) {
     return Object.assign({}, state, { gettingNotes: false, getNotesError: { state: true, message: action.payload } });
+  },
+  [types.CREATING_NOTE](state) {
+    return Object.assign({}, state, { creattingNote: true, createNoteError: { state: false, message: '' } });
+  },
+  [types.CREATE_NOTE_SUCCESS](state, action) {
+    return Object.assign({}, state, { creattingNote: false, createNoteError: { state: false, message: '' } });
+  },
+  [types.CREATE_NOTE_FAILURE](state, action) {
+    return Object.assign({}, state, { creattingNote: false, createNoteError: { state: true, message: action.payload } });
   }
 };
 

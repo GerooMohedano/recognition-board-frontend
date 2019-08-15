@@ -93,3 +93,34 @@ export function getNotes(notesRequested) {
       .catch(error => dispatch(getNotesFailure(error)));
   };
 }
+
+export function creattingNote() {
+  return {
+    type: types.CREATING_NOTE,
+    payload: {}
+  };
+}
+
+export function createNoteSuccess(data) {
+  return {
+    type: types.CREATE_NOTE_SUCCESS,
+    noteCreated: data
+  };
+}
+
+
+export function createNoteFailure(error) {
+  return {
+    type: types.CREATE_NOTE_FAILURE,
+    payload: error
+  };
+}
+
+export function createNote(noteToCreate) {
+  return function (dispatch) {
+    dispatch(creattingNote());
+    return request.post(`${baseUrl()}/nuevaNota`, noteToCreate)
+      .then(response => dispatch(createNoteSuccess(response)))
+      .catch(error => dispatch(createNoteFailure(error)));
+  };
+}

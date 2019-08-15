@@ -15,35 +15,26 @@ import HistoricDialog from '../../commons/HistoricDialog';
 
 require('../../commons/Team.css');
 
-const data = [
-  {
-    id: 1, subject: 'Be Accountable', A: 120, B: 110, fullMark: 150,
-  },
-  {
-    id: 2, subject: 'Be Professional', A: 98, B: 130, fullMark: 150,
-  },
-  {
-    id: 3, subject: 'Be Proactive', A: 86, B: 130, fullMark: 150,
-  },
-  {
-    id: 4, subject: 'Be Collaborative', A: 99, B: 100, fullMark: 150,
-  },
-  {
-    id: 5, subject: 'Be Hardito', A: 85, B: 90, fullMark: 150,
-  }
-];
-
 class Team extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      openHistoricDialog: false
+      openHistoricDialog: false,
+      indexPizarra: -1
     };
   }
 
   componentDidMount() {
     const { fetchTeams, match } = this.props;
     fetchTeams(match.params.idTeam);
+  }
+
+  componentDidUpdate() {
+    const { teamInfo } = this.props;
+    const { indexPizarra } = this.state;
+    if (teamInfo && teamInfo.data && indexPizarra === -1) {
+      this.setState({ indexPizarra: teamInfo.data.pizarras.length - 1 });
+    }
   }
 
   changeHistoricDialogState = value => {
@@ -54,13 +45,22 @@ class Team extends Component {
     this.props.getHistoricValues({ idEquipo: this.props.match.params.idTeam, idValor: value })
   }
 
+  shiftIndexPizarra = valueToAdd => {
+    this.setState(prevState => ({ indexPizarra: prevState.indexPizarra + valueToAdd }));
+  }
+
+  changeIndexPizarra = value => {
+    this.setState({ indexPizarra: value });
+  }
+
   render() {
     const {
       teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
-      gettingNotes, notes, getNotes
+      gettingNotes, notes, getNotes, createNote
     } = this.props;
+    const { indexPizarra } = this.state;
     console.log(teamInfo);
-    if (fetchingTeams || teamInfo === undefined)
+    if (fetchingTeams || teamInfo === undefined || indexPizarra === -1)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
       return (
@@ -90,13 +90,20 @@ class Team extends Component {
               <HistoricChart />
             </Button>
           </div>
-          <SprintSelector />
+          <SprintSelector
+            shiftIndexPizarra={this.shiftIndexPizarra}
+            changeIndexPizarra={this.changeIndexPizarra}
+            sprints={teamInfo.data.pizarras}
+            indexPizarra={indexPizarra}
+          />
           <TeamTable
             members={teamInfo.data.usuarios}
             values={teamInfo.data.evaluacion}
             gettingNotes={gettingNotes}
             notes={notes}
             getNotes={getNotes}
+            indexPizarra={teamInfo.data.pizarras[indexPizarra].idPizarra}
+            createNote={createNote}
           />
           <HistoricDialog
             open={this.state.openHistoricDialog}
@@ -119,9 +126,11 @@ Team.propTypes = {
   fetchingTeams: PropTypes.bool.isRequired,
   gettingHistoricValues: PropTypes.bool.isRequired,
   gettingNotes: PropTypes.bool.isRequired,
+  creattingNote: PropTypes.bool.isRequired,
   fetchTeams: PropTypes.func.isRequired,
   getHistoricValues: PropTypes.func.isRequired,
   getNotes: PropTypes.func.isRequired,
+  createNote: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
