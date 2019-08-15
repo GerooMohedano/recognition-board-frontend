@@ -6,6 +6,7 @@ const INITIAL_STATE = {
   gettingHistoricValues: true,
   gettingNotes: true,
   creattingNote: true,
+  delettingNote: true,
   fetchError: {
     state: false,
     message: ''
@@ -19,6 +20,10 @@ const INITIAL_STATE = {
     message: ''
   },
   createNoteError: {
+    state: false,
+    message: ''
+  },
+  deleteNoteError: {
     state: false,
     message: ''
   },
@@ -63,6 +68,15 @@ const behaviors = {
   },
   [types.CREATE_NOTE_FAILURE](state, action) {
     return Object.assign({}, state, { creattingNote: false, createNoteError: { state: true, message: action.payload } });
+  },
+  [types.DELETTING_NOTE](state) {
+    return Object.assign({}, state, { delettingNote: true, deleteNoteError: { state: false, message: '' } });
+  },
+  [types.DELETE_NOTE_SUCCESS](state, action) {
+    return Object.assign({}, state, { delettingNote: false, deleteNoteError: { state: false, message: '' } });
+  },
+  [types.DELETE_NOTE_FAILURE](state, action) {
+    return Object.assign({}, state, { delettingNote: false, deleteNoteError: { state: true, message: action.payload } });
   }
 };
 

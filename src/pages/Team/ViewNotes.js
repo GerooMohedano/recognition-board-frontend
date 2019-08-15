@@ -45,7 +45,8 @@ class ViewNotes extends React.Component {
   }
 
   createCardsWithNotes = () => {
-    const { notes, gettingNotes } = this.props;
+    const { notes, gettingNotes, deleteNote, handleCloseDialog } = this.props;
+    const { author } = this.state;
     const cards = [];
     if (notes !== undefined && notes.data !== undefined  && notes.data.data !== undefined && !gettingNotes) {
       notes.data.data.forEach(note => {
@@ -61,9 +62,15 @@ class ViewNotes extends React.Component {
                   ? (<Mood className="noteCardIcon" />)
                   : (<MoodBad className="noteCardIcon" />)
                 }
-                <Button className="noteDeleteButton">
-                  <DeleteIcon style={{ color: 'white' }} />
-                </Button>
+                {note.idUsuario === author
+                && (
+                  <Button
+                    className="noteDeleteButton"
+                    onClick={() => {deleteNote({ idNota: note.idNota }); handleCloseDialog()}}
+                  >
+                    <DeleteIcon style={{ color: 'white' }} />
+                  </Button>
+                )}
               </div>
               <Typography className="cardParagraph" component="p">
                 {note.descripcion}
@@ -188,6 +195,7 @@ ViewNotes.propTypes = {
   gettingNotes: PropTypes.bool.isRequired,
   indexPizarra: PropTypes.number.isRequired,
   createNote: PropTypes.func.isRequired,
+  deleteNote: PropTypes.func.isRequired,
   notes: PropTypes.shape({}).isRequired
 };
 

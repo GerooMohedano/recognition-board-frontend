@@ -88,7 +88,7 @@ class TeamTable extends React.Component {
 
   render() {
     const { openCreateNote, valueName, userName, userId, valueId } = this.state;
-    const { classes, gettingNotes, notes, indexPizarra, createNote } = this.props;
+    const { classes, gettingNotes, notes, indexPizarra, createNote, deleteNote } = this.props;
     const columns = this.createColumns();
     const rows = this.createRows();
     return (
@@ -112,6 +112,7 @@ class TeamTable extends React.Component {
           indexPizarra={indexPizarra}
           notes={notes}
           createNote={createNote}
+          deleteNote={deleteNote}
         />
       </Paper>
     );
@@ -126,7 +127,8 @@ TeamTable.propTypes = {
   notes: PropTypes.shape({}).isRequired,
   indexPizarra: PropTypes.number.isRequired,
   getNotes: PropTypes.func.isRequired,
-  createNote: PropTypes.func.isRequired
+  createNote: PropTypes.func.isRequired,
+  deleteNote: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(TeamTable);

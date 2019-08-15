@@ -56,7 +56,7 @@ class Team extends Component {
   render() {
     const {
       teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
-      gettingNotes, notes, getNotes, createNote
+      gettingNotes, notes, getNotes, createNote, deleteNote
     } = this.props;
     const { indexPizarra } = this.state;
     console.log(teamInfo);
@@ -104,6 +104,7 @@ class Team extends Component {
             getNotes={getNotes}
             indexPizarra={teamInfo.data.pizarras[indexPizarra].idPizarra}
             createNote={createNote}
+            deleteNote={deleteNote}
           />
           <HistoricDialog
             open={this.state.openHistoricDialog}
@@ -127,10 +128,12 @@ Team.propTypes = {
   gettingHistoricValues: PropTypes.bool.isRequired,
   gettingNotes: PropTypes.bool.isRequired,
   creattingNote: PropTypes.bool.isRequired,
+  delettingNote: PropTypes.bool.isRequired,
   fetchTeams: PropTypes.func.isRequired,
   getHistoricValues: PropTypes.func.isRequired,
   getNotes: PropTypes.func.isRequired,
   createNote: PropTypes.func.isRequired,
+  deleteNote: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object

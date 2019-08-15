@@ -124,3 +124,34 @@ export function createNote(noteToCreate) {
       .catch(error => dispatch(createNoteFailure(error)));
   };
 }
+
+export function delettingNote() {
+  return {
+    type: types.DELETTING_NOTE,
+    payload: {}
+  };
+}
+
+export function deleteNoteSuccess(data) {
+  return {
+    type: types.DELETE_NOTE_SUCCESS,
+    noteDeleted: data
+  };
+}
+
+
+export function deleteNoteFailure(error) {
+  return {
+    type: types.DELETE_NOTE_FAILURE,
+    payload: error
+  };
+}
+
+export function deleteNote(noteToDelete) {
+  return function (dispatch) {
+    dispatch(delettingNote());
+    return request.post(`${baseUrl()}/borrarNota`, noteToDelete)
+      .then(response => dispatch(deleteNoteSuccess(response)))
+      .catch(error => dispatch(deleteNoteFailure(error)));
+  };
+}
