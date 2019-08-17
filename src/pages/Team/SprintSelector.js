@@ -79,14 +79,16 @@ class SprintSelector extends React.Component {
   }
 
   render() {
-    const { classes, sprints, indexPizarra, shiftIndexPizarra } = this.props;
+    const { classes, sprints, indexPizarra, shiftIndexPizarra, modifySprint } = this.props;
     const leftColor = indexPizarra === 0 ? '#E0E0E0' : '#649BFF';
     const rightColor = indexPizarra === sprints.length - 1 ? '#E0E0E0' : '#649BFF';
     return (
       <div className="sprintSelectorContainer">
         <div className="sprintEditor">
           <SprintEditor
+            sprintId={sprints[indexPizarra].idPizarra}
             sprintName={sprints[indexPizarra].titulo}
+            modifySprint={modifySprint}
             editSprintInformation={this.editSprintInformation}
             beginDate={sprints[indexPizarra].fechaInicio}
             endDate={sprints[indexPizarra].fechaFin}
@@ -142,6 +144,7 @@ SprintSelector.propTypes = {
   sprints: PropTypes.shape({}).isRequired,
   indexPizarra: PropTypes.number.isRequired,
   shiftIndexPizarra: PropTypes.func.isRequired,
+  modifySprint: PropTypes.func.isRequired,
   changeIndexPizarra: PropTypes.func.isRequired
 };
 

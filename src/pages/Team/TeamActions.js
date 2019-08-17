@@ -155,3 +155,34 @@ export function deleteNote(noteToDelete) {
       .catch(error => dispatch(deleteNoteFailure(error)));
   };
 }
+
+export function modifyingSprint() {
+  return {
+    type: types.MODIFYING_SPRINT,
+    payload: {}
+  };
+}
+
+export function modifySprintSuccess(data) {
+  return {
+    type: types.MODIFY_SPRINT_SUCCESS,
+    sprintModified: data
+  };
+}
+
+
+export function modifiySprintFailure(error) {
+  return {
+    type: types.MODIFY_SPRINT_FAILURE,
+    payload: error
+  };
+}
+
+export function modifySprint(newSprintInfo) {
+  return function (dispatch) {
+    dispatch(modifyingSprint());
+    return request.post(`${baseUrl()}/ModificarPizarra`, newSprintInfo)
+      .then(response => dispatch(modifySprintSuccess(response)))
+      .catch(error => dispatch(modifiySprintFailure(error)));
+  };
+}

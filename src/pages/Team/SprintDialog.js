@@ -37,7 +37,8 @@ class SprintDialog extends React.Component {
 
   render() {
     const {
-      sprintName, handleClose, open, dialogType, editSprintInformation, beginDate, endDate
+      sprintName, handleClose, open, dialogType, editSprintInformation,
+      beginDate, endDate, modifySprint
     } = this.props;
     return (
       <Dialog
@@ -133,7 +134,8 @@ SprintDialog.propTypes = {
   open: PropTypes.bool.isRequired,
   dialogType: PropTypes.string.isRequired,
   beginDate: PropTypes.string,
-  endDate: PropTypes.string
+  endDate: PropTypes.string,
+  modifySprint: PropTypes.func.isRequired
 };
 
 export default SprintDialog;

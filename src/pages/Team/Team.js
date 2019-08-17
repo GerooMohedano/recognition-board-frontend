@@ -56,7 +56,7 @@ class Team extends Component {
   render() {
     const {
       teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
-      gettingNotes, notes, getNotes, createNote, deleteNote
+      gettingNotes, notes, getNotes, createNote, deleteNote, modifySprint
     } = this.props;
     const { indexPizarra } = this.state;
     console.log(teamInfo);
@@ -93,6 +93,7 @@ class Team extends Component {
           <SprintSelector
             shiftIndexPizarra={this.shiftIndexPizarra}
             changeIndexPizarra={this.changeIndexPizarra}
+            modifySprint={modifySprint}
             sprints={teamInfo.data.pizarras}
             indexPizarra={indexPizarra}
           />
@@ -129,11 +130,13 @@ Team.propTypes = {
   gettingNotes: PropTypes.bool.isRequired,
   creattingNote: PropTypes.bool.isRequired,
   delettingNote: PropTypes.bool.isRequired,
+  modifyingSprint: PropTypes.bool.isRequired,
   fetchTeams: PropTypes.func.isRequired,
   getHistoricValues: PropTypes.func.isRequired,
   getNotes: PropTypes.func.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
+  modifySprint: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object

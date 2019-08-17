@@ -7,6 +7,7 @@ const INITIAL_STATE = {
   gettingNotes: true,
   creattingNote: true,
   delettingNote: true,
+  modifyingSprint: true,
   fetchError: {
     state: false,
     message: ''
@@ -24,6 +25,10 @@ const INITIAL_STATE = {
     message: ''
   },
   deleteNoteError: {
+    state: false,
+    message: ''
+  },
+  modifySprintError: {
     state: false,
     message: ''
   },
@@ -77,6 +82,15 @@ const behaviors = {
   },
   [types.DELETE_NOTE_FAILURE](state, action) {
     return Object.assign({}, state, { delettingNote: false, deleteNoteError: { state: true, message: action.payload } });
+  },
+  [types.MODIFYING_SPRINT](state) {
+    return Object.assign({}, state, { modifyingSprint: true, modifySprintError: { state: false, message: '' } });
+  },
+  [types.MODIFY_SPRINT_SUCCESS](state, action) {
+    return Object.assign({}, state, { modifyingSprint: false, modifySprintError: { state: false, message: '' } });
+  },
+  [types.MODIFY_SPRINT_FAILURE](state, action) {
+    return Object.assign({}, state, { modifyingSprint: false, modifySprintError: { state: true, message: action.payload } });
   }
 };
 
