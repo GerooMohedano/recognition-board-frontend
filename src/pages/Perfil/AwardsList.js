@@ -45,8 +45,8 @@ class AwardsList extends Component {
   }
 
   render() {
-    const { everyAward, gettingEveryAward, retry } = this.props;
-    if (!gettingEveryAward && everyAward !== undefined && everyAward.data.status !== "error")
+    const { everyAward } = this.props;
+    if (everyAward !== undefined)
       return (
         <div className="cardContainerTeams">
           <Card className="cardForTeam">
@@ -55,7 +55,7 @@ class AwardsList extends Component {
                 Awards
               </Typography>
               <List component="nav">
-                {everyAward.data.data.map(award => (
+                {everyAward.map(award => (
                   <ListItem>
                     <ExpansionPanel
                       style={{ width: '100%' }}
@@ -90,8 +90,7 @@ class AwardsList extends Component {
 
 AwardsList.propTypes = {
   awards: PropTypes.array.isRequired,
-  everyAward: PropTypes.array.isRequired,
-  retry: PropTypes.func.isRequired
+  everyAward: PropTypes.array.isRequired
 };
 
 export default AwardsList;

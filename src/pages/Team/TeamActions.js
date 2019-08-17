@@ -186,3 +186,65 @@ export function modifySprint(newSprintInfo) {
       .catch(error => dispatch(modifiySprintFailure(error)));
   };
 }
+
+export function creattingSprint() {
+  return {
+    type: types.CREATTING_SPRINT,
+    payload: {}
+  };
+}
+
+export function createSprintSuccess(data) {
+  return {
+    type: types.CREATE_SPRINT_SUCCESS,
+    sprintCreated: data
+  };
+}
+
+
+export function createSprintFailure(error) {
+  return {
+    type: types.CREATE_SPRINT_FAILURE,
+    payload: error
+  };
+}
+
+export function createSprint(newSprintInfo) {
+  return function (dispatch) {
+    dispatch(creattingSprint());
+    return request.post(`${baseUrl()}/altaPizarra`, newSprintInfo)
+      .then(response => dispatch(modifySprintSuccess(response)))
+      .catch(error => dispatch(createSprintFailure(error)));
+  };
+}
+
+export function delettingSprint() {
+  return {
+    type: types.DELETTING_SPRINT,
+    payload: {}
+  };
+}
+
+export function deleteSprintSuccess(data) {
+  return {
+    type: types.DELETE_SPRINT_SUCCESS,
+    sprintDeleted: data
+  };
+}
+
+
+export function deleteSprintFailure(error) {
+  return {
+    type: types.DELETE_SPRINT_FAILURE,
+    payload: error
+  };
+}
+
+export function deleteSprint(sprintToDelete) {
+  return function (dispatch) {
+    dispatch(delettingSprint());
+    return request.post(`${baseUrl()}/BorrarPizarra`, sprintToDelete)
+      .then(response => dispatch(deleteSprintSuccess(response)))
+      .catch(error => dispatch(deleteSprintFailure(error)));
+  };
+}

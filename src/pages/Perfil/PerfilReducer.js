@@ -5,7 +5,6 @@ const INITIAL_STATE = {
   fetchingUserInfo: true,
   modifyingMail: true,
   gettingHistoricValues: true,
-  gettingEveryAward: true,
   fetchError: {
     state: false,
     message: ''
@@ -18,13 +17,8 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
-  getEveryAwardError: {
-    state: false,
-    message: ''
-  },
   userInfo: {},
-  historicValues: {},
-  everyAward: {}
+  historicValues: {}
 };
 
 const behaviors = {
@@ -54,15 +48,6 @@ const behaviors = {
   },
   [types.GET_HISTORIC_VALUES_FAILURE](state, action) {
     return Object.assign({}, state, { gettingHistoricValues: false, getHistoricError: { state: true, message: action.payload } });
-  },
-  [types.GETTING_EVERY_AWARD](state) {
-    return Object.assign({}, state, { gettingEveryAward: true, getEveryAwardError: { state: false, message: '' } });
-  },
-  [types.GET_EVERY_AWARD_SUCCESS](state, action) {
-    return Object.assign({}, state, { everyAward: action.everyAward, gettingEveryAward: false, getEveryAwardError: { state: false, message: '' } });
-  },
-  [types.GET_EVERY_AWARD_FAILURE](state, action) {
-    return Object.assign({}, state, { gettingEveryAward: false, getEveryAwardError: { state: true, message: action.payload } });
   }
 };
 

@@ -8,6 +8,8 @@ const INITIAL_STATE = {
   creattingNote: true,
   delettingNote: true,
   modifyingSprint: true,
+  creattingSprint: true,
+  delettingSprint: true,
   fetchError: {
     state: false,
     message: ''
@@ -29,6 +31,14 @@ const INITIAL_STATE = {
     message: ''
   },
   modifySprintError: {
+    state: false,
+    message: ''
+  },
+  createSprintError: {
+    state: false,
+    message: ''
+  },
+  deleteSprintError: {
     state: false,
     message: ''
   },
@@ -91,6 +101,24 @@ const behaviors = {
   },
   [types.MODIFY_SPRINT_FAILURE](state, action) {
     return Object.assign({}, state, { modifyingSprint: false, modifySprintError: { state: true, message: action.payload } });
+  },
+  [types.CREATTING_SPRINT](state) {
+    return Object.assign({}, state, { creattingSprint: true, createSprintError: { state: false, message: '' } });
+  },
+  [types.CREATE_SPRINT_SUCCESS](state, action) {
+    return Object.assign({}, state, { creattingSprint: false, createSprintError: { state: false, message: '' } });
+  },
+  [types.CREATE_SPRINT_FAILURE](state, action) {
+    return Object.assign({}, state, { creattingSprint: false, createSprintError: { state: true, message: action.payload } });
+  },
+  [types.DELETTING_SPRINT](state) {
+    return Object.assign({}, state, { delettingSprint: true, deleteSprintError: { state: false, message: '' } });
+  },
+  [types.DELETE_SPRINT_SUCCESS](state, action) {
+    return Object.assign({}, state, { delettingSprint: false, deleteSprintError: { state: false, message: '' } });
+  },
+  [types.DELETE_SPRINT_FAILURE](state, action) {
+    return Object.assign({}, state, { delettingSprint: false, deleteSprintError: { state: true, message: action.payload } });
   }
 };
 

@@ -38,14 +38,8 @@ class Perfil extends React.Component {
   }
 
   componentDidMount() {
-    const { getEveryAward, fetchUserInfo, match } = this.props;
+    const { fetchUserInfo, match } = this.props;
     fetchUserInfo(match.params.idUsuario);
-    getEveryAward({ idUsuario: match.params.idUsuario });
-  }
-
-  retryGetAward = () => {
-    const { getEveryAward, match } = this.props;
-    getEveryAward({ idUsuario: match.params.idUsuario });
   }
 
   changeHistoricDialogState = value => {
@@ -67,8 +61,7 @@ class Perfil extends React.Component {
   render() {
     const { openHistoricDialog, configuring } = this.state;
     const {
-      fetchingUserInfo, userInfo, gettingHistoricValues, historicValues,
-      everyAward, gettingEveryAward
+      fetchingUserInfo, userInfo, gettingHistoricValues, historicValues
     } = this.props;
     if (fetchingUserInfo || userInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
@@ -111,10 +104,8 @@ class Perfil extends React.Component {
             />
           </div>
           <AwardsList
-            gettingEveryAward={gettingEveryAward}
-            everyAward={everyAward}
-            awards={userInfo.data.logros}
-            retry={this.retryGetAward}
+            everyAward={userInfo.data.logros}
+            awards={userInfo.data.suslogros}
           />
           <TeamsList
             teams={userInfo.data.equipos}
@@ -137,9 +128,6 @@ Perfil.propTypes = {
   gettingHistoricValues: PropTypes.bool.isRequired,
   historicValues: PropTypes.shape({}).isRequired,
   getHistoricValues: PropTypes.func.isRequired,
-  getEveryAward: PropTypes.func.isRequired,
-  gettingEveryAward: PropTypes.bool.isRequired,
-  everyAward: PropTypes.shape({}).isRequired
 };
 
 export default Perfil;

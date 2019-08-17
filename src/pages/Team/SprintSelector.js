@@ -74,12 +74,11 @@ class SprintSelector extends React.Component {
     changeIndexPizarra(newIndex);
   }
 
-  editSprintInformation = (value, definition) => {
-    this.setState({ [definition]: value });
-  }
-
   render() {
-    const { classes, sprints, indexPizarra, shiftIndexPizarra, modifySprint } = this.props;
+    const {
+      classes, reloadPage, sprints, indexPizarra, idEquipo,
+      shiftIndexPizarra, modifySprint, createSprint, deleteSprint
+    } = this.props;
     const leftColor = indexPizarra === 0 ? '#E0E0E0' : '#649BFF';
     const rightColor = indexPizarra === sprints.length - 1 ? '#E0E0E0' : '#649BFF';
     return (
@@ -89,9 +88,12 @@ class SprintSelector extends React.Component {
             sprintId={sprints[indexPizarra].idPizarra}
             sprintName={sprints[indexPizarra].titulo}
             modifySprint={modifySprint}
-            editSprintInformation={this.editSprintInformation}
+            createSprint={createSprint}
+            deleteSprint={deleteSprint}
             beginDate={sprints[indexPizarra].fechaInicio}
             endDate={sprints[indexPizarra].fechaFin}
+            idEquipo={idEquipo}
+            reloadPage={reloadPage}
             />
         </div>
         <div className="sprintNavigation">
@@ -141,11 +143,15 @@ class SprintSelector extends React.Component {
 
 SprintSelector.propTypes = {
   classes: PropTypes.object.isRequired,
+  idEquipo: PropTypes.number.isRequired,
   sprints: PropTypes.shape({}).isRequired,
   indexPizarra: PropTypes.number.isRequired,
   shiftIndexPizarra: PropTypes.func.isRequired,
   modifySprint: PropTypes.func.isRequired,
-  changeIndexPizarra: PropTypes.func.isRequired
+  createSprint: PropTypes.func.isRequired,
+  deleteSprint: PropTypes.func.isRequired,
+  changeIndexPizarra: PropTypes.func.isRequired,
+  reloadPage: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SprintSelector);
