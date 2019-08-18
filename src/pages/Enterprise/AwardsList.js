@@ -131,11 +131,11 @@ class AwardsList extends Component {
               Awards
             </Typography>
             <List component="nav">
-              {awards.map(award => (
+              {this.props.awards.map(award => (
                 <ListItem>
                   <ListItemText
                     inset
-                    primary={award.name}
+                    primary={award.nombre_logro}
                     className="textOfList"
                   />
                   <Tooltip title="Edit Award">

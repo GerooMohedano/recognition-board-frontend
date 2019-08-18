@@ -11,10 +11,10 @@ class EnterpriseCardContainer extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      teams: [
+      /*teams: [
         { id: 1, name: 'Octopus', active: true },
         { id: 2, name: 'Elephants', active: true }
-      ],
+      ],*/
       enterpriseMembers: [
         { id: 1, userName: 'geronimo.mohedano', firstName: 'Geronimo',
         lastName: 'Mohedano', mail: 'geronimo.mohedano@sovos.com', rol: 1, active: true },
@@ -237,28 +237,28 @@ class EnterpriseCardContainer extends Component {
     return (
       <div className="cardsContainer">
         <TeamsList
-          teams={teams}
+          teams={this.props.teams}
           changeTeamName={this.changeTeamName}
           changeTeamActive={this.changeTeamActive}
           deleteTeam={this.deleteTeam}
           addNewTeam={this.addNewTeam}
         />
         <MembersList
-          members={enterpriseMembers}
+          members={this.props.members}
           updateEnterpriseMember={this.updateEnterpriseMember}
           changeEnterpriseMemberActive={this.changeEnterpriseMemberActive}
           deleteEnterpriseMember={this.deleteEnterpriseMember}
           addNewEnterpriseMember={this.addNewEnterpriseMember}
         />
         <DefaultValuesList
-          values={defaultValues}
+          values={this.props.values}
           changeValueName={this.changeValueName}
           deleteValue={this.deleteValue}
           addNewValue={this.addNewValue}
         />
         <AwardsList
           values={values}
-          awards={awards}
+          awards={this.props.awards}
           updateAward={this.updateAward}
           deleteAward={this.deleteAward}
           addNewAward={this.addNewAward}
@@ -269,6 +269,10 @@ class EnterpriseCardContainer extends Component {
 }
 
 EnterpriseCardContainer.propTypes = {
+  teams: PropTypes.array.isRequired, 
+  members: PropTypes.array.isRequired,
+  values: PropTypes.array.isRequired,
+  awards: PropTypes.array.isRequired
 };
 
 export default EnterpriseCardContainer;

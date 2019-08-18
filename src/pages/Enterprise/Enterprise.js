@@ -35,7 +35,7 @@ class Enterprise extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newName: this.props.enterprise,
+     // newName, newAddress, newTelephone: this.props.enterprise,
       openHistoricDialog: false,
       configuring: false,
       enterpriseInfo: {
@@ -43,26 +43,31 @@ class Enterprise extends Component {
         city: 'SMT',
         telephone: '4214431'
       },
-      teams: [
+      /*teams: [
         { id: 1, name: 'Octopus', active: true },
         { id: 2, name: 'Elephants', active: true }
-      ]
+      ]*/
     };
   }
 
   componentDidMount(){
-    this.props.fetchEnterpriseInfo(this.props.match.params.idEmpresa);
+    const { fetchEnterpriseInfo, match } = this.props;
+    fetchEnterpriseInfo(match.params.idEmpresa);
   }
 
   changeConfiguring = value => {
     this.setState({ configuring: value});
   }
-
-  changeInfo = (newAddress, newCity, newTelephone) => {
+  /*
+  changeInfo = (newAddress, newTelephone) => {
     this.setState({
-      address: newAddress, city: newCity, telephone: newTelephone
+      address: newAddress, telephone: newTelephone
     });
+  }*/
+  changeAddress = newAddress => {
+      this.props.modifyAddress({ idUsuario: this.props.match.params.idUsuario, address : newAddress , telephone :  this.props.match.params.telephone})
   }
+
 
   changeHistoricDialogState = value => {
     this.setState({ openHistoricDialog: value });
@@ -81,6 +86,7 @@ class Enterprise extends Component {
       newName, configuring, openHistoricDialog, enterpriseInfoState, teams
     } = this.state;
     const { fetchingEnterpriseInfo, enterpriseInfo } = this.props;
+    console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
     return (<CircularProgress />);
     else
@@ -96,20 +102,31 @@ class Enterprise extends Component {
             </div>
             <EnterpriseInfo
               configuring={configuring}
-              name={enterpriseInfo.data.empresas[0].nombre}
-              info={enterpriseInfo}
+              name={enterpriseInfo.data.empresas[0].nombre_empresa}
+              address={enterpriseInfo.data.empresas[0].direccion}
+              telephone={enterpriseInfo.data.empresas[0].telefono}
               updateName={this.updateName}
-              changeInfo={this.changeInfo}
+              changeAddress={this.changeAddress}
               changeConfiguring={this.changeConfiguring}
             />
             <div className="chartContainer">
-              <ChartPolygon data={data} width={500} height={300} />
+              <ChartPolygon data={enterpriseInfo.data.valores.map(valor => ({
+                  id: valor.idValor, subject: valor.Valor, A: valor.Total
+                }))}
+                 width={500} 
+                 height={300}
+               />
             </div>
             <Button color="secondary" onClick={() => this.changeHistoricDialogState(true)}>
               <HistoricChart />
             </Button>
           </div>
-          <EnterpriseCardContainer />
+          <EnterpriseCardContainer
+            teams={enterpriseInfo.data.equipos}
+            members={enterpriseInfo.data.usuarios}
+            values={enterpriseInfo.data.valores}
+            awards={enterpriseInfo.data.logros}
+          />
           <HistoricDialog
             open={openHistoricDialog}
             handleClose={() => this.changeHistoricDialogState(false)}
@@ -132,6 +149,7 @@ Enterprise.propTypes = {
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
   }),
-  enterpriseInfo: PropTypes.shape({}).isRequired
+  enterpriseInfo: PropTypes.shape({}).isRequired,
+  modifyAddress: PropTypes.func.isRequired
 };
 export default Enterprise;

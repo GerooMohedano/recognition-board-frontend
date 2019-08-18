@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import Enterprise from './Enterprise';
-import { fetchEnterpriseInfo } from './EnterpriseAction';
+import { fetchEnterpriseInfo, modifyAddress } from './EnterpriseAction';
 
 function mapStateToProps(state) {
   return {
@@ -10,4 +10,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchEnterpriseInfo })(Enterprise);
+export default connect(mapStateToProps, { fetchEnterpriseInfo, modifyAddress })(Enterprise);

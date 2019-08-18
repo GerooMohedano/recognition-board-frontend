@@ -103,8 +103,9 @@ class MembersList extends Component {
       idToDelete, nameToDelete, newTeamMember, updatedData
     } = this.state;
     const {
-      members, changeEnterpriseMemberActive, deleteEnterpriseMember
+      changeEnterpriseMemberActive, deleteEnterpriseMember
     } = this.props;
+    const {members} = this.props;
     return (
       <div className="cardContainer">
         <Card className="cardForEnterprise">
@@ -113,14 +114,14 @@ class MembersList extends Component {
               Enterprise Members
             </Typography>
             <List component="nav">
-              {members.map(member => (
+              {this.props.members.map(member => (
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={CommonProfilePic} />
                   </ListItemAvatar>
                   <ListItemText
                     inset
-                    primary={member.userName}
+                    primary={member.nombre_usuario}
                     secondary={member.rol === 1 ? 'admin' : null}
                     className="memberItemText"
                   />

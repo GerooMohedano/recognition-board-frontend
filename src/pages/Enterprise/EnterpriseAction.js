@@ -32,3 +32,33 @@ export function fetchEnterpriseInfo(idEmpresa) {
       .catch(error => dispatch(fetchEnterpriseInfoFailure(error)));
   };
 }
+export function modifyingAddress() {
+  return {
+    type: types.MODIFYING_ADDRESS,
+    payload: {}
+  };
+}
+
+export function modifyAddressSuccess(data) {
+  return {
+    type: types.MODIFY_ADDRESS_SUCCESS,
+    modifiedAddress: data
+  };
+}
+
+
+export function modifyAddressFailure(error) {
+  return {
+    type: types.MODIFY_ADDRESS_FAILURE,
+    payload: error
+  };
+}
+
+export function modifyAddress(idEmpresa, newAddressInfo, telephone) {
+  return function (dispatch) {
+    dispatch(modifyingAddress());
+    return request.post(`${baseUrl()}/modificarEmpresa`, idEmpresa, newAddressInfo, telephone)
+      .then(response => dispatch(modifyAddressSuccess(response)))
+      .catch(error => dispatch(modifyAddressFailure(error)));
+  };
+}
