@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import InputBase from '@material-ui/core/InputBase';
@@ -14,6 +16,9 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction';
 import ListItemText from '@material-ui/core/ListItemText';
 import IconButton from '@material-ui/core/IconButton';
+import EditIcon from '@material-ui/icons/Create';
+import AcceptIcon from '@material-ui/icons/Done';
+import CancelIcon from '@material-ui/icons/Clear';
 import Yella from '../../images/yella.jpg';
 import ValuesList from './ValuesList';
 import TeamMembersList from './TeamMembersList';
@@ -43,8 +48,8 @@ class TeamConfig extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      newTeamName: this.props.team,
-      newTeamLeader: this.props.teamLeader ? this.props.teamLeader : '',
+      newTeamName: '',
+      configuring: false,
       values: [
         { id: 1, name: 'Be Professional', active: true },
         { id: 2, name: 'Be Proactive', active: true },
@@ -64,12 +69,32 @@ class TeamConfig extends Component {
     }
   }
 
+  componentDidMount() {
+    const { match, fetchTeamConfig } = this.props;
+    fetchTeamConfig(match.params.idTeam);
+  }
+
+  componentDidUpdate(prevProps) {
+    const { teamUpdated, teamLeaderUpdated, fetchTeamConfig, match } = this.props;
+    if (prevProps.teamUpdated !== teamUpdated && teamUpdated && teamUpdated.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+    if (prevProps.teamLeaderUpdated !== teamLeaderUpdated && teamLeaderUpdated && teamLeaderUpdated.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+  }
+
   changeTeamName = () => event => {
     this.setState({ newTeamName: event.target.value });
   }
 
   selectTeamLeader = label => {
-    this.setState({ newTeamLeader: label });
+    const { match, updateTeamLeader, teamConfigInfo } = this.props;
+    updateTeamLeader({
+      idEquipo: match.params.idTeam,
+      idViejoAdmin: teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario,
+      idNuevoAdmin: label
+    });
   }
 
   changeValueName = (valueId, newName) => {
@@ -131,90 +156,119 @@ class TeamConfig extends Component {
     && this.setState(state => ({ members: [...state.members, value] }))
   }
 
+  changeConfigurationState = value => {
+    const { teamConfigInfo } = this.props;
+    this.setState({
+      newTeamName: value ? teamConfigInfo.data.equipos[0].nombre_equipo : '',
+      configuring: value
+    });
+  }
+
+  saveNameUpdate = () => {
+    const { newTeamName } = this.state;
+    const { fetchTeamConfig, updateTeamName, match } = this.props;
+    updateTeamName({
+      idEquipo: match.params.idTeam,
+      nombre: newTeamName
+    });
+    this.changeConfigurationState(false);
+  }
+
   render() {
-    const { classes, team, changeTeamName } = this.props;
-    const { newTeamName, newTeamLeader, values, members } = this.state;
-    return (
-      <div>
+    const { classes, changeTeamName, teamConfigInfo, fetchingTeamConfigInfo } = this.props;
+    const { newTeamName, values, members, configuring } = this.state;
+    console.log(teamConfigInfo);
+    if (fetchingTeamConfigInfo || teamConfigInfo === undefined)
+      return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
+    else
+      return (
         <div>
-          <div className="configTitle">
-            <div className="configTeamName">
-              IM IN Team
-              <InputBase
-                className="editableTeamName"
-                value={newTeamName}
-                onChange={this.changeTeamName()}
-              />
+          <div>
+            <div className="configTitle">
+              {configuring
+                ? (
+                  <div className="title">
+                    <InputBase
+                      className="editableTeamName"
+                      value={newTeamName}
+                      onChange={this.changeTeamName()}
+                    />
+                    <Tooltip title="Save name">
+                      <IconButton onClick={() => this.saveNameUpdate()}>
+                        <AcceptIcon style={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Cancel">
+                      <IconButton onClick={() => this.changeConfigurationState(false)}>
+                        <CancelIcon style={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                ) : (
+                  <div className="title">
+                    <div className="teamName">
+                      {teamConfigInfo.data.equipos[0].nombre_equipo}
+                    </div>
+                    <Tooltip title="Change team name">
+                      <IconButton onClick={() => this.changeConfigurationState(true)}>
+                        <EditIcon style={{ color: 'black' }} />
+                      </IconButton>
+                    </Tooltip>
+                  </div>
+                )
+              }
+              <div className="autocompleteTitle">
+                Select a team leader
+              </div>
+              <div className="autocompleteContainer">
+                <Select
+                  value={teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario}
+                  onChange={event => this.selectTeamLeader(event.target.value)}
+                  className="selectTeamLeader"
+                >
+                  {teamConfigInfo.data.usuarios.map(teamMember => (<MenuItem value={teamMember.idUsuario}>{teamMember.nombre_usuario}</MenuItem>))}
+                </Select>
+              </div>
             </div>
-            <div className="autocompleteTitle">
-              Select a team leader
-            </div>
-            <div className="autocompleteContainer">
-              <Select
-                value={newTeamLeader}
-                onChange={event => this.selectTeamLeader(event.target.value)}
-                className="selectTeamLeader"
-              >
-                { members.map(teamMember => (<MenuItem value={teamMember.id}>{teamMember.name}</MenuItem>)) }
-              </Select>
+            <div className="teamPhoto">
+              <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
+              <input type="file" />
             </div>
           </div>
-          <div className="teamPhoto">
-            <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
-            <input type="file" />
+          <div className="cardsContainer">
+            <ValuesList
+              values={teamConfigInfo.data.valores}
+              changeValueName={this.changeValueName}
+              changeValueActive={this.changeValueActive}
+              deleteValue={this.deleteValue}
+              addNewValue={this.addValue}
+            />
+            <TeamMembersList
+              teamLeader={teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario}
+              members={teamConfigInfo.data.usuarios}
+              deleteMember={this.deleteMember}
+              enterpriseMembers={enterpriseMembers}
+              addNewTeamMember={this.addNewTeamMember}
+            />
           </div>
         </div>
-        <div className="cardsContainer">
-          <ValuesList
-            values={values}
-            changeValueName={this.changeValueName}
-            changeValueActive={this.changeValueActive}
-            deleteValue={this.deleteValue}
-            addNewValue={this.addValue}
-          />
-          <TeamMembersList
-            teamLeader={newTeamLeader}
-            members={members}
-            deleteMember={this.deleteMember}
-            enterpriseMembers={enterpriseMembers}
-            addNewTeamMember={this.addNewTeamMember}
-          />
-        </div>
-        <div className="buttonContainers">
-          <NavLink to="/Team">
-            <Button>
-              Back
-            </Button>
-          </NavLink>
-          <NavLink to="/Team">
-            <Button>
-              Save
-            </Button>
-          </NavLink>
-        </div>
-      </div>
-    );
+      );
   }
 }
-/*
-TeamConfig.propTypes = {
-  team: PropTypes.string.isRequired,
-  teamLeader: PropTypes.number,
-  changeTeamName: PropTypes.func.isRequired
-};*/
 
 TeamConfig.propTypes = {
-  team: PropTypes.string.isRequired,
-  teamLeader: PropTypes.number,
-  changeTeamName: PropTypes.func.isRequired,
+  updateTeamName: PropTypes.func.isRequired,
+  updateTeamLeader: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  team: PropTypes.string.isRequired,
   fetchingTeamConfigInfo: PropTypes.bool.isRequired,
-  fetchTeamConfigInfo: PropTypes.func.isRequired,
+  fetchTeamConfig: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
-  })
+  }),
+  teamUpdated: PropTypes.shape({}).isRequired,
+  teamLeaderUpdated: PropTypes.shape({}).isRequired,
+  teamConfigInfo: PropTypes.shape({}).isRequired
 };
 
 

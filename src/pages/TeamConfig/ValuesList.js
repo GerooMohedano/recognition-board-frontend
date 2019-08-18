@@ -81,28 +81,28 @@ class ValuesList extends Component {
             <List component="nav">
               {values.map(value => (
                 <ListItem>
-                  <ListItemText inset primary={value.name} className="textOfList" />
+                  <ListItemText inset primary={value.nombre_valor} className="textOfList" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
-                      disabled={!value.active}
-                      onClick={() => this.toggleEditDialogState(value.id, value.name, true)}
+                      disabled={!value.estado}
+                      onClick={() => this.toggleEditDialogState(value.idValor, value.nombre_valor, true)}
                     >
                       <EditIcon style={{ color: 'black' }} />
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title={value.active ? "Desactivate" : "Activate"}>
+                  <Tooltip title={value.estado ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => changeValueActive(value.id, !value.active)}
+                      onClick={() => changeValueActive(value.idValor, !value.estado)}
                     >
-                      <ActivateIcon color={value.active ? "primary" : "secondary"} />
+                      <ActivateIcon color={value.estado ? "primary" : "secondary"} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => this.toggleDeleteDialogState(value.id, true)}
+                      onClick={() => this.toggleDeleteDialogState(value.idValor, true)}
                     >
                       <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>

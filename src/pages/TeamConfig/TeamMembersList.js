@@ -76,14 +76,14 @@ class TeamMembersList extends Component {
                   </ListItemAvatar>
                   <ListItemText
                     inset
-                    primary={member.name}
-                    secondary={member.id === teamLeader ? 'team leader' : null}
+                    primary={member.nombre_usuario}
+                    secondary={member.idUsuario === teamLeader ? 'team leader' : null}
                   />
                   <Tooltip title="Kick out">
                     <IconButton
                       aria-label="Delete"
-                      disabled={member.id === teamLeader}
-                      onClick={() => this.toggleDeleteDialogState(member.id, member.name, true)}
+                      disabled={member.idUsuario === teamLeader}
+                      onClick={() => this.toggleDeleteDialogState(member.idUsuario, member.nombre_usuario, true)}
                     >
                       <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
@@ -95,7 +95,7 @@ class TeamMembersList extends Component {
                 <ListItem>
                   <Autocomplete
                     data={enterpriseMembers.filter(enterpriseMember => (
-                      members.findIndex(member => member.id === enterpriseMember.id) === -1
+                      members.findIndex(member => member.idUsuario === enterpriseMember.id) === -1
                   ))}
                     upperFunction={this.selectNewMember}
                     placeholder="Search for a member in the enterprise"

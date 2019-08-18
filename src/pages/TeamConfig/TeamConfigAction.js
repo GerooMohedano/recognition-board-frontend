@@ -1,6 +1,6 @@
 import * as types from './TeamConfigConstants';
-import { baseUrl } from 'shared/jsUtils/Utils';
-import request from 'shared/jsUtils/request';
+import { baseUrl } from '../../shared/jsUtils/Utils';
+import request from '../../shared/jsUtils/request';
 
 export function fetchingTeamConfig() {
   return {
@@ -10,18 +10,9 @@ export function fetchingTeamConfig() {
 }
 
 export function fetchTeamConfigSuccess(data) {
-  const teams = [];
-  Object.keys(data.data).forEach(
-    (team) => {
-      const elem = {};
-      elem.index = team;
-      elem.values = data.data[team];
-      jobs.push(elem);
-    }
-  );
   return {
     type: types.FETCH_TEAMCONFIG_SUCCESS,
-    payload: { trends: teams }
+    teamConfigInfo: data
   };
 }
 
@@ -32,11 +23,71 @@ export function fetchTeamConfigFailure(error) {
   };
 }
 
-export function fetchTeamConfig() {
+export function fetchTeamConfig(idEquipo) {
   return function (dispatch) {
     dispatch(fetchingTeamConfig());
-    return request.get(`${baseUrl()}/equipoConfig`)
+    return request.get(`${baseUrl()}/equipoConfig/${idEquipo}`)
       .then(response => dispatch(fetchTeamConfigSuccess(response)))
       .catch(error => dispatch(fetchTeamConfigFailure(error)));
+  };
+}
+
+export function updatingTeamName() {
+  return {
+    type: types.UPDATING_TEAM_NAME,
+    payload: {}
+  };
+}
+
+export function updateTeamNameSuccess(data) {
+  return {
+    type: types.UPDATE_TEAM_NAME_SUCCESS,
+    teamUpdated: data
+  };
+}
+
+export function updateTeamNameFailure(error) {
+  return {
+    type: types.UPDATE_TEAM_NAME_FAILURE,
+    payload: error
+  };
+}
+
+export function updateTeamName(teamInfo) {
+  return function (dispatch) {
+    dispatch(updatingTeamName());
+    return request.post(`${baseUrl()}/modificarNombreEquipo`, teamInfo)
+      .then(response => dispatch(updateTeamNameSuccess(response)))
+      .catch(error => dispatch(updateTeamNameFailure(error)));
+  };
+}
+
+export function updatingTeamLeader() {
+  return {
+    type: types.UPDATING_TEAM_LEADER,
+    payload: {}
+  };
+}
+
+export function updateTeamLeaderSuccess(data) {
+  return {
+    type: types.UPDATE_TEAM_LEADER_SUCCESS,
+    teamLeaderUpdated: data
+  };
+}
+
+export function updateTeamLeaderFailure(error) {
+  return {
+    type: types.UPDATE_TEAM_LEADER_FAILURE,
+    payload: error
+  };
+}
+
+export function updateTeamLeader(teamInfo) {
+  return function (dispatch) {
+    dispatch(updatingTeamLeader());
+    return request.post(`${baseUrl()}/cambiarAdm`, teamInfo)
+      .then(response => dispatch(updateTeamLeaderSuccess(response)))
+      .catch(error => dispatch(updateTeamLeaderFailure(error)));
   };
 }

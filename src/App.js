@@ -7,9 +7,9 @@ import AppLayout from './layouts/AppLayout';
 import Perfil from './pages/Perfil/PerfilContainer';
 import Enterprise from './pages/Enterprise/EnterpriseContainer';
 import Team from './pages/Team/TeamContainer';
+import TeamConfig from './pages/TeamConfig/TeamConfigContainer';
 import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
-import TeamConfig from './pages/TeamConfig/TeamConfig';
 
 require('./App.css');
 
@@ -45,13 +45,7 @@ class App extends Component {
               <Switch>
                 <Route path="/Signin" component={ SignInForm } />
                 <Route path="/Perfil/:idUsuario" component={ Perfil } />
-                <Route path="/TeamConfig" render={() => {
-                  return <TeamConfig
-                    team={ teamClicked }
-                    changeTeamName={ this.updateTeamClicked }
-                    teamLeader={1}
-                  />
-                }} />
+                <Route path="/TeamConfig/:idTeam" component={ TeamConfig } />
                 <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />
                 <Route path="/Team/:idTeam" component={ Team } />
                 }} />

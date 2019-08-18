@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom';
 import TeamTable from './TeamTable';
 import SprintSelector from './SprintSelector';
 import CircularProgress from '@material-ui/core/CircularProgress';
+import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
@@ -64,19 +65,18 @@ class Team extends Component {
       createNote, deleteNote, modifySprint, createSprint, deleteSprint
     } = this.props;
     const { indexPizarra } = this.state;
-    console.log(teamInfo);
     if (fetchingTeams || teamInfo === undefined || indexPizarra === -1)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
       return (
         <div>
           <div className="title">
-            <div className="teamName"> IM IN Team {teamInfo.data.equipos[0].nombre_equipo}</div>
-            <NavLink to="/TeamConfig">
+            <div className="teamName">{teamInfo.data.equipos[0].nombre_equipo}</div>
+            <NavLink to={`/TeamConfig/${match.params.idTeam}`}>
               <Tooltip title="Edit this team configuration">
-                <Button>
-                  <Build />
-                </Button>
+                <IconButton>
+                  <Build style={{ color: 'black' }} />
+                </IconButton>
               </Tooltip>
             </NavLink>
           </div>
