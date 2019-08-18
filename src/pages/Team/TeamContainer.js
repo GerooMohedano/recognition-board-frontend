@@ -1,6 +1,9 @@
 import { connect } from 'react-redux';
 import Team from './Team';
-import { fetchTeams, getHistoricValues, getNotes, createNote, deleteNote, modifySprint } from './TeamActions';
+import {
+  fetchTeams, getHistoricValues, getNotes,
+  createNote, deleteNote, modifySprint, createSprint, deleteSprint
+} from './TeamActions';
 
 function mapStateToProps(state) {
   return {
@@ -10,6 +13,8 @@ function mapStateToProps(state) {
     creattingNote: state.team.creattingNote,
     delettingNote: state.team.delettingNote,
     modifyingSprint: state.team.modifyingSprint,
+    creattingSprint: state.team.creattingSprint,
+    delettingSprint: state.team.delettingSprint,
     teamInfo: state.team.teamInfo,
     notes: state.team.notes,
     historicValues: state.team.historicValues,
@@ -18,8 +23,13 @@ function mapStateToProps(state) {
     createNoteError: state.team.createNoteError,
     deleteNoteError: state.team.deleteNoteError,
     modifySprintError: state.team.modifySprintError,
+    createSprintError: state.team.createSprintError,
+    deleteSprintError: state.team.deleteSprintError,
     fetchError: state.team.fetchError
   };
 }
 
-export default connect(mapStateToProps, { fetchTeams, getHistoricValues, getNotes, createNote, deleteNote, modifySprint })(Team);
+export default connect(mapStateToProps, {
+  fetchTeams, getHistoricValues, getNotes,
+  createNote, deleteNote, modifySprint, createSprint, deleteSprint
+})(Team);

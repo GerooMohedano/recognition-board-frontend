@@ -94,34 +94,3 @@ export function getHistoricValues(valuesInfo) {
       .catch(error => dispatch(getHistoricValuesFailure(error)));
   };
 }
-
-export function gettingEveryAward() {
-  return {
-    type: types.GETTING_EVERY_AWARD,
-    payload: {}
-  };
-}
-
-export function getEveryAwardSucces(data) {
-  return {
-    type: types.GET_EVERY_AWARD_SUCCESS,
-    everyAward: data
-  };
-}
-
-
-export function getEveryAwardFailure(error) {
-  return {
-    type: types.GET_EVERY_AWARD_FAILURE,
-    payload: error
-  };
-}
-
-export function getEveryAward(userId) {
-  return function (dispatch) {
-    dispatch(gettingEveryAward());
-    return request.post(`${baseUrl()}/logrosUsuario`, userId)
-      .then(response => dispatch(getEveryAwardSucces(response)))
-      .catch(error => dispatch(getEveryAwardFailure(error)));
-  };
-}

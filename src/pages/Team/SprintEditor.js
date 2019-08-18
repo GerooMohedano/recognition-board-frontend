@@ -12,7 +12,6 @@ import Tooltip from '@material-ui/core/Tooltip';
 import CreateIcon from '@material-ui/icons/Add';
 import EditIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Clear';
-import SprintDialog from './SprintDialog';
 
 require('./SprintEditor.css');
 
@@ -25,17 +24,20 @@ class SprintEditor extends React.Component {
       newDialog: false,
       editDialog: false,
       deleteDialog: false,
+      newSprintName: '',
+      newBeginDate: '',
+      newEndDate: '',
       editableNewSprintName: this.props.sprintName,
       editableNewBeginDate: this.props.beginDate.split('T')[0],
       editableNewEndDate: this.props.endDate.split('T')[0]
     }
   }
 
-  hanldleDialogClose = (dialogDefinition) => {
+  hanldleDialogClose = dialogDefinition => {
     this.setState({ [dialogDefinition]: false });
   }
 
-  handleDialogOpen = (dialogDefinition) => {
+  handleDialogOpen = dialogDefinition => {
     this.setState({ [dialogDefinition]: true });
   }
 
@@ -45,21 +47,41 @@ class SprintEditor extends React.Component {
 
   saveEditableInfo = () => {
     const { editableNewSprintName, editableNewBeginDate, editableNewEndDate } = this.state;
-    const { modifySprint, sprintId } = this.props;
+    const { modifySprint, sprintId, reloadPage } = this.props;
     modifySprint({
       idPizarra: sprintId,
       titulo: editableNewSprintName,
       fechaInicio: editableNewBeginDate + TIME_FOR_DATE,
       fechaFin: editableNewEndDate + TIME_FOR_DATE
-    })
+    });
+    reloadPage();
+  }
+
+  createNewSprint = () => {
+    const { newSprintName, newBeginDate, newEndDate } = this.state;
+    const { createSprint, idEquipo, reloadPage } = this.props;
+    createSprint({
+      titulo: newSprintName,
+      idEquipo: idEquipo,
+      fechaInicio: newBeginDate + TIME_FOR_DATE,
+      fechaFin: newEndDate + TIME_FOR_DATE
+    });
+    reloadPage();
+  }
+
+  deleteSprintSelected = () => {
+    const { deleteSprint, sprintId, reloadPage } = this.props;
+    deleteSprint({ idPizarra: sprintId });
+    reloadPage();
   }
 
   render() {
     const {
       newDialog, editDialog, deleteDialog,
+      newSprintName, newBeginDate, newEndDate,
       editableNewSprintName, editableNewBeginDate, editableNewEndDate
     } = this.state;
-    const { sprintName, editSprintInformation, beginDate, endDate, modifySprint } = this.props;
+    const { sprintName } = this.props;
     return (
       <div className="sprintToolBar">
         <Tooltip title="Create a new Sprint">
@@ -67,14 +89,57 @@ class SprintEditor extends React.Component {
             <CreateIcon style={{ color: 'black' }} />
           </IconButton>
         </Tooltip>
-        <SprintDialog
-          handleClose={() => this.hanldleDialogClose('newDialog')}
+        <Dialog
           open={newDialog}
-          dialogType="newDialog"
-          editSprintInformation={editSprintInformation}
-          beginDate={beginDate}
-          endDate={endDate}
-        />
+          onClose={() => this.hanldleDialogClose('newDialog')}
+        >
+          <DialogTitle id="form-dialog-title">
+            <InputBase
+              placeholder="Sprint name"
+              defaultValue={newSprintName}
+              onChange={event => this.updateSprintInfo('newSprintName', event.target.value)}
+            />
+          </DialogTitle>
+          <DialogContent>
+            <div>
+              <form noValidate>
+                <TextField
+                  id="beginDate"
+                  label="begin Date"
+                  type="date"
+                  defaultValue={newBeginDate}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={event => this.updateSprintInfo('newBeginDate', event.target.value)}
+                />
+              </form>
+              <form noValidate>
+                <TextField
+                  id="endDdate"
+                  label="end Date"
+                  type="date"
+                  defaultValue={newEndDate}
+                  InputLabelProps={{
+                    shrink: true,
+                  }}
+                  onChange={event => this.updateSprintInfo('newEndDate', event.target.value)}
+                />
+              </form>
+            </div>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.hanldleDialogClose('newDialog')} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => this.createNewSprint()}
+              color="primary"
+            >
+              Create
+            </Button>
+          </DialogActions>
+        </Dialog>
         <Tooltip title="Edit current Sprint">
           <IconButton onClick={() => this.handleDialogOpen('editDialog')}>
             <EditIcon style={{ color: 'black' }} />
@@ -136,12 +201,28 @@ class SprintEditor extends React.Component {
             <DeleteIcon style={{ color: 'black' }} />
           </IconButton>
         </Tooltip>
-        <SprintDialog
-          handleClose={() => this.hanldleDialogClose('deleteDialog')}
+        <Dialog
           open={deleteDialog}
-          dialogType="deleteDialog"
-          sprintName={sprintName}
-        />
+          onClose={() => this.hanldleDialogClose('deleteDialog')}
+        >
+          <DialogTitle id="form-dialog-title">
+            {sprintName}
+          </DialogTitle>
+          <DialogContent>
+            Are you sure you want to delete this Sprint?
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={() => this.hanldleDialogClose('deleteDialog')} color="primary">
+              Cancel
+            </Button>
+            <Button
+              onClick={() => this.deleteSprintSelected()}
+              color="secondary"
+            >
+              Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }
@@ -149,11 +230,14 @@ class SprintEditor extends React.Component {
 
 SprintEditor.propTypes = {
   sprintId: PropTypes.number.isRequired,
+  idEquipo: PropTypes.number.isRequired,
   sprintName: PropTypes.string.isRequired,
-  editSprintInformation: PropTypes.func.isRequired,
   beginDate: PropTypes.string.isRequired,
   modifySprint: PropTypes.func.isRequired,
-  endDate: PropTypes.string.isRequired
+  createSprint: PropTypes.func.isRequired,
+  deleteSprint: PropTypes.func.isRequired,
+  endDate: PropTypes.string.isRequired,
+  reloadPage: PropTypes.func.isRequired
 };
 
 export default SprintEditor;

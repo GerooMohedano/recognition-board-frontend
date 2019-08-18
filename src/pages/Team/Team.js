@@ -53,10 +53,15 @@ class Team extends Component {
     this.setState({ indexPizarra: value });
   }
 
+  reloadPage = () => {
+    window.location.reload();
+  }
+
   render() {
     const {
-      teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
-      gettingNotes, notes, getNotes, createNote, deleteNote, modifySprint
+      match, teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
+      gettingNotes, notes, getNotes,
+      createNote, deleteNote, modifySprint, createSprint, deleteSprint
     } = this.props;
     const { indexPizarra } = this.state;
     console.log(teamInfo);
@@ -94,8 +99,12 @@ class Team extends Component {
             shiftIndexPizarra={this.shiftIndexPizarra}
             changeIndexPizarra={this.changeIndexPizarra}
             modifySprint={modifySprint}
+            createSprint={createSprint}
+            deleteSprint={deleteSprint}
             sprints={teamInfo.data.pizarras}
             indexPizarra={indexPizarra}
+            idEquipo={match.params.idTeam}
+            reloadPage={this.reloadPage}
           />
           <TeamTable
             members={teamInfo.data.usuarios}
@@ -131,12 +140,16 @@ Team.propTypes = {
   creattingNote: PropTypes.bool.isRequired,
   delettingNote: PropTypes.bool.isRequired,
   modifyingSprint: PropTypes.bool.isRequired,
+  creattingSprint: PropTypes.bool.isRequired,
+  deleteSprintError: PropTypes.bool.isRequired,
   fetchTeams: PropTypes.func.isRequired,
   getHistoricValues: PropTypes.func.isRequired,
   getNotes: PropTypes.func.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
   modifySprint: PropTypes.func.isRequired,
+  createSprint: PropTypes.func.isRequired,
+  deleteSprint: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
