@@ -81,9 +81,9 @@ class DefaultValuesList extends Component {
               Default Values
             </Typography>
             <List component="nav">
-              {values.map(value => (
+              {this.props.values.map(value => (
                 <ListItem>
-                  <ListItemText inset primary={value.name} className="textOfList" />
+                  <ListItemText inset primary={value.Valor} className="textOfList" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"

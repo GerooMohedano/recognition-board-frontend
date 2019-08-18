@@ -77,7 +77,8 @@ class TeamsList extends Component {
       openDialogEdit, openDialogDelete, openDialogAdd,
       nameToChange, idToDelete, nameOfTheNewTeam
     } = this.state;
-    const { teams, changeTeamActive, deleteTeam, addNewTeam } = this.props;
+    const { changeTeamActive, deleteTeam, addNewTeam } = this.props;
+    const {teams} = this.props;
     return (
       <div className="cardContainer">
         <Card className="cardForEnterprise">
@@ -86,17 +87,17 @@ class TeamsList extends Component {
               Teams
             </Typography>
             <List component="nav">
-              {teams.map(team => (
+              {this.props.teams.map(team => (
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={TeamCatPic} />
                   </ListItemAvatar>
-                  <ListItemText inset primary={team.name} className="memberItemText" />
+                  <ListItemText inset primary={team.nombre_equipo} className="memberItemText" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
                       disabled={!team.active}
-                      onClick={() => this.toggleEditDialogState(team.id, team.name, true)}
+                      onClick={() => this.toggleEditDialogState(team.idEquipo, team.nombre_equipo, true)}
                       className="iconListButton"
                     >
                       <EditIcon style={{ color: 'black' }} />
@@ -105,7 +106,7 @@ class TeamsList extends Component {
                   <Tooltip title={team.active ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => changeTeamActive(team.id, !team.active)}
+                      onClick={() => changeTeamActive(team.idEquipo, !team.active)}
                       className="iconListButton"
                     >
                       <ActivateIcon color={team.active ? "primary" : "secondary"} />
@@ -114,7 +115,7 @@ class TeamsList extends Component {
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => this.toggleDeleteDialogState(team.id, true)}
+                      onClick={() => this.toggleDeleteDialogState(team.idEquipo, true)}
                       className="iconListButton"
                     >
                       <DeleteIcon style={{ color: 'black' }} />

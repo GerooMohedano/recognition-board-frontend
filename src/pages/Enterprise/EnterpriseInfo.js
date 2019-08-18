@@ -20,9 +20,8 @@ class EnterpriseInfo extends React.Component {
     super(props);
     this.state = {
       newName: this.props.name,
-      newAddress: this.props.info.address,
-      newCity: this.props.info.city,
-      newTelephone: this.props.info.telephone,
+      newAddress: this.props.address,
+      newTelephone: this.props.telephone,
       openDialogDelete: false
     }
   }
@@ -32,20 +31,19 @@ class EnterpriseInfo extends React.Component {
   }
 
   saveChanges = () => {
-    const { newAddress, newCity, newTelephone, newName } = this.state;
-    const { changeInfo, updateName, changeConfiguring } = this.props;
-    changeInfo(newAddress, newCity, newTelephone);
+    const { newAddress, newTelephone, newName } = this.state;
+    const { changeAddress, updateName, changeConfiguring } = this.props;
+    changeAddress(newAddress);
     updateName(newName);
     changeConfiguring(false);
   }
 
   undoChanges = () => {
-    const { info, name } = this.props;
+    const { address, telephone, name } = this.props;
     this.setState({
       newName: name,
-      newAddress: info.address,
-      newCity: info.city,
-      newTelephone: info.telephone
+      newAddress: address,
+      newTelephone: telephone
     });
     this.props.changeConfiguring(false);
   }
@@ -55,8 +53,8 @@ class EnterpriseInfo extends React.Component {
   }
 
   render() {
-    const { newName, newAddress, newCity, newTelephone, openDialogDelete } = this.state;
-    const { configuring, name, changeConfiguring } = this.props;
+    const { newName, newAddress, newTelephone, openDialogDelete } = this.state;
+    const { configuring, name, address, telephone, changeConfiguring } = this.props;
     return (
       <Paper className="infoPaper" elevation={1}>
       {configuring
@@ -115,17 +113,6 @@ class EnterpriseInfo extends React.Component {
         ? (
           <TextField
             className="infoLine"
-            label="City"
-            value={newCity}
-            onChange={event => this.updateInfo('newCity', event.target.value)}
-          />
-        ) : (
-          <Typography className="infoLine" component="p">{newCity}</Typography>
-        )}
-        {configuring
-        ? (
-          <TextField
-            className="infoLine"
             label="Telephone"
             value={newTelephone}
             onChange={event => this.updateInfo('newTelephone', event.target.value)}
@@ -165,7 +152,7 @@ EnterpriseInfo.propTypes = {
   info: PropTypes.shape({}).isRequired,
   name: PropTypes.string.isRequired,
   updateName: PropTypes.func.isRequired,
-  changeInfo: PropTypes.func.isRequired,
+  changeAddress: PropTypes.func.isRequired,
   changeConfiguring: PropTypes.func.isRequired
 };
 
