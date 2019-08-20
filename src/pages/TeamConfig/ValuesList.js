@@ -70,7 +70,7 @@ class ValuesList extends Component {
 
   render() {
     const { openDialogEdit, openDialogDelete, openDialogAdd, nameToChange, idToDelete, nameOfTheNewValue } = this.state;
-    const { values, changeValueActive, deleteValue, addNewValue } = this.props;
+    const { idTeam, values, changeValueActive, deleteValue, addNewValue, activateValue, desactivateValue } = this.props;
     return (
       <div className="cardContainerTeam">
         <Card className="cardForTeam">
@@ -85,18 +85,26 @@ class ValuesList extends Component {
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
-                      disabled={!value.estado}
+                      disabled={value.estado === 'inactivo'}
                       onClick={() => this.toggleEditDialogState(value.idValor, value.nombre_valor, true)}
                     >
-                      <EditIcon style={{ color: 'black' }} />
+                      {
+                        value.estado === 'activo'
+                        ? (<EditIcon style={{ color: 'black' }} />)
+                        : (<EditIcon style={{ color: '#E0E0E0' }} />)
+                      }
                     </IconButton>
                   </Tooltip>
-                  <Tooltip title={value.estado ? "Desactivate" : "Activate"}>
+                  <Tooltip title={value.estado === 'activo' ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => changeValueActive(value.idValor, !value.estado)}
+                      onClick={
+                        value.estado === 'inactivo'
+                        ? () => activateValue({ idValor: value.idValor, idEquipo: idTeam })
+                        : () => desactivateValue({ idValor: value.idValor, idEquipo: idTeam })
+                      }
                     >
-                      <ActivateIcon color={value.estado ? "primary" : "secondary"} />
+                      <ActivateIcon color={value.estado === 'activo' ? "primary" : "secondary"} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete">
@@ -193,7 +201,7 @@ class ValuesList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteValue(idToDelete); this.toggleDeleteDialogState(-1, false)}}
+              onClick={() => {deleteValue({ idValor: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
               color="secondary"
             >
               Delete
@@ -206,10 +214,13 @@ class ValuesList extends Component {
 }
 
 ValuesList.propTypes = {
+  idTeam: PropTypes.number.isRequired,
   values: PropTypes.array.isRequired,
   changeValueName: PropTypes.func.isRequired,
   changeValueActive: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,
+  activateValue: PropTypes.func.isRequired,
+  desactivateValue: PropTypes.func.isRequired,
   addNewValue: PropTypes.func.isRequired
 };
 

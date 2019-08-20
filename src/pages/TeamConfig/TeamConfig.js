@@ -49,23 +49,7 @@ class TeamConfig extends Component {
     super(props);
     this.state = {
       newTeamName: '',
-      configuring: false,
-      values: [
-        { id: 1, name: 'Be Professional', active: true },
-        { id: 2, name: 'Be Proactive', active: true },
-        { id: 3, name: 'Be Collaborative', active: true },
-        { id: 4, name: 'Be Accountable', active: true },
-        { id: 5, name: 'Be Adaptable', active: true }
-      ],
-      members: [
-        { id: 1, name: 'Magui' },
-        { id: 2, name: 'Romy' },
-        { id: 3, name: 'Gero' },
-        { id: 4, name: 'Pame' },
-        { id: 5, name: 'Marcio' },
-        { id: 6, name: 'LuisMi' },
-        { id: 7, name: 'Tony' }
-      ]
+      configuring: false
     }
   }
 
@@ -75,11 +59,24 @@ class TeamConfig extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { teamUpdated, teamLeaderUpdated, fetchTeamConfig, match } = this.props;
+    const {
+      teamUpdated, teamLeaderUpdated, fetchTeamConfig,
+      valueDeleted, valueActivated, valueDesactivated,
+      match
+    } = this.props;
     if (prevProps.teamUpdated !== teamUpdated && teamUpdated && teamUpdated.data.status === 'OK') {
       fetchTeamConfig(match.params.idTeam);
     }
     if (prevProps.teamLeaderUpdated !== teamLeaderUpdated && teamLeaderUpdated && teamLeaderUpdated.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+    if (prevProps.valueDeleted !== valueDeleted && valueDeleted && valueDeleted.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+    if (prevProps.valueActivated !== valueActivated && valueActivated && valueActivated.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+    if (prevProps.valueDesactivated !== valueDesactivated && valueDesactivated && valueDesactivated.data.status === 'OK') {
       fetchTeamConfig(match.params.idTeam);
     }
   }
@@ -128,15 +125,6 @@ class TeamConfig extends Component {
     });
   }
 
-  deleteValue = valueId => {
-    this.setState(state => {
-      const valuesList = state.values.filter(value => value.id !== valueId);
-      return {
-        values: valuesList
-      };
-    });
-  }
-
   deleteMember = memberId => {
     this.setState(state => {
       const membersList = state.members.filter(member => member.id !== memberId);
@@ -175,8 +163,11 @@ class TeamConfig extends Component {
   }
 
   render() {
-    const { classes, changeTeamName, teamConfigInfo, fetchingTeamConfigInfo } = this.props;
-    const { newTeamName, values, members, configuring } = this.state;
+    const {
+      classes, match, changeTeamName, teamConfigInfo, fetchingTeamConfigInfo,
+      deleteValue, activateValue, desactivateValue
+    } = this.props;
+    const { newTeamName, configuring } = this.state;
     console.log(teamConfigInfo);
     if (fetchingTeamConfigInfo || teamConfigInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
@@ -237,10 +228,13 @@ class TeamConfig extends Component {
           </div>
           <div className="cardsContainer">
             <ValuesList
+              idTeam={match.params.idTeam}
               values={teamConfigInfo.data.valores}
               changeValueName={this.changeValueName}
               changeValueActive={this.changeValueActive}
-              deleteValue={this.deleteValue}
+              deleteValue={deleteValue}
+              activateValue={activateValue}
+              desactivateValue={desactivateValue}
               addNewValue={this.addValue}
             />
             <TeamMembersList
@@ -262,12 +256,18 @@ TeamConfig.propTypes = {
   classes: PropTypes.object.isRequired,
   fetchingTeamConfigInfo: PropTypes.bool.isRequired,
   fetchTeamConfig: PropTypes.func.isRequired,
+  deleteValue: PropTypes.func.isRequired,
+  activateValue: PropTypes.func.isRequired,
+  desactivateValue: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
   }),
   teamUpdated: PropTypes.shape({}).isRequired,
   teamLeaderUpdated: PropTypes.shape({}).isRequired,
+  valueDeleted: PropTypes.shape({}).isRequired,
+  valueActivated: PropTypes.shape({}).isRequired,
+  valueDesactivated: PropTypes.shape({}).isRequired,
   teamConfigInfo: PropTypes.shape({}).isRequired
 };
 

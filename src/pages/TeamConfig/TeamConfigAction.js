@@ -91,3 +91,93 @@ export function updateTeamLeader(teamInfo) {
       .catch(error => dispatch(updateTeamLeaderFailure(error)));
   };
 }
+
+export function delettingValue() {
+  return {
+    type: types.DELETTING_VALUE,
+    payload: {}
+  };
+}
+
+export function deleteValueSuccess(data) {
+  return {
+    type: types.DELETE_VALUE_SUCCESS,
+    valueDeleted: data
+  };
+}
+
+export function deleteValueFailure(error) {
+  return {
+    type: types.DELETE_VALUE_FAILURE,
+    payload: error
+  };
+}
+
+export function deleteValue(valueToDelete) {
+  return function (dispatch) {
+    dispatch(delettingValue());
+    return request.post(`${baseUrl()}/borrarValor`, valueToDelete)
+      .then(response => dispatch(deleteValueSuccess(response)))
+      .catch(error => dispatch(deleteValueFailure(error)));
+  };
+}
+
+export function activatingValue() {
+  return {
+    type: types.ACTIVATING_VALUE,
+    payload: {}
+  };
+}
+
+export function activateValueSuccess(data) {
+  return {
+    type: types.ACTIVATE_VALUE_SUCCESS,
+    valueActivated: data
+  };
+}
+
+export function activateValueFailure(error) {
+  return {
+    type: types.ACTIVATE_VALUE_FAILURE,
+    payload: error
+  };
+}
+
+export function activateValue(valueToActivate) {
+  return function (dispatch) {
+    dispatch(activatingValue());
+    return request.post(`${baseUrl()}/activarValor`, valueToActivate)
+      .then(response => dispatch(activateValueSuccess(response)))
+      .catch(error => dispatch(activateValueFailure(error)));
+  };
+}
+
+export function desactivatingValue() {
+  return {
+    type: types.DESACTIVATING_VALUE,
+    payload: {}
+  };
+}
+
+export function desactivateValueSuccess(data) {
+  return {
+    type: types.DESACTIVATE_VALUE_SUCCESS,
+    valueDesactivated: data
+  };
+}
+
+export function desactivateValueFailure(error) {
+  return {
+    type: types.DESACTIVATE_VALUE_FAILURE,
+    payload: error
+  };
+}
+
+export function desactivateValue(valueToDesactivate) {
+  return function (dispatch) {
+    dispatch(desactivatingValue());
+    return request.post(`${baseUrl()}/desactivarValor`, valueToDesactivate)
+      .then(response => dispatch(desactivateValueSuccess(response)))
+      .catch(error => dispatch(desactivateValueFailure(error)));
+  };
+}

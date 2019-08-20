@@ -5,6 +5,9 @@ const INITIAL_STATE = {
   fetchingTeamConfigInfo: true,
   updatingTeamName: true,
   updatingTeamLeader: true,
+  delettingValue: true,
+  activatingValue: true,
+  desactivatingValue: true,
   fetchError: {
     state: false,
     message: ''
@@ -17,9 +20,24 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  deleteValueError: {
+    state: false,
+    message: ''
+  },
+  activateValueError: {
+    state: false,
+    message: ''
+  },
+  desactivateValueError: {
+    state: false,
+    message: ''
+  },
   teamConfigInfo: {},
   teamUpdated: {},
-  teamLeaderUpdated: {}
+  teamLeaderUpdated: {},
+  valueDeleted: {},
+  valueActivated: {},
+  valueDesactivated: {}
 };
 
 const behaviors = {
@@ -49,6 +67,33 @@ const behaviors = {
   },
   [types.UPDATE_TEAM_LEADER_FAILURE](state, action) {
     return Object.assign({}, state, { updatingTeamLeader: false, updateLeaderError: { state: true, message: action.payload } });
+  },
+  [types.DELETTING_VALUE](state) {
+    return Object.assign({}, state, { delettingValue: true, deleteValueError: { state: false, message: '' } });
+  },
+  [types.DELETE_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueDeleted: action.valueDeleted, delettingValue: false, deleteValueError: { state: false, message: '' } });
+  },
+  [types.DELETE_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { delettingValue: false, deleteValueError: { state: true, message: action.payload } });
+  },
+  [types.ACTIVATING_VALUE](state) {
+    return Object.assign({}, state, { activatingValue: true, activateValueError: { state: false, message: '' } });
+  },
+  [types.ACTIVATE_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueActivated: action.valueActivated, activatingValue: false, activateValueError: { state: false, message: '' } });
+  },
+  [types.ACTIVATE_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { activatingValue: false, activateValueError: { state: true, message: action.payload } });
+  },
+  [types.DESACTIVATING_VALUE](state) {
+    return Object.assign({}, state, { desactivatingValue: true, desactivateValueError: { state: false, message: '' } });
+  },
+  [types.DESACTIVATE_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueDesactivated: action.valueDesactivated, desactivatingValue: false, desactivateValueError: { state: false, message: '' } });
+  },
+  [types.DESACTIVATE_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { desactivatingValue: false, desactivateValueError: { state: true, message: action.payload } });
   }
 };
 
