@@ -56,7 +56,7 @@ class ValuesList extends Component {
 
   saveNewValueName = () => {
     const { idToChange, newName } = this.state
-    this.props.changeValueName(idToChange, newName);
+    this.props.updateValue({ idValor: idToChange, nombre: newName });
     this.toggleEditDialogState(-1, '', false);
   }
 
@@ -70,7 +70,7 @@ class ValuesList extends Component {
 
   render() {
     const { openDialogEdit, openDialogDelete, openDialogAdd, nameToChange, idToDelete, nameOfTheNewValue } = this.state;
-    const { idTeam, values, changeValueActive, deleteValue, addNewValue, activateValue, desactivateValue } = this.props;
+    const { idTeam, values, deleteValue, addValue, activateValue, desactivateValue } = this.props;
     return (
       <div className="cardContainerTeam">
         <Card className="cardForTeam">
@@ -178,7 +178,7 @@ class ValuesList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {addNewValue(nameOfTheNewValue); this.toggleAddDialogState(false)}}
+              onClick={() => addValue({ nombre: nameOfTheNewValue, idEquipo: idTeam })}
               color="primary"
               disabled={nameOfTheNewValue === ''}
             >
@@ -216,12 +216,11 @@ class ValuesList extends Component {
 ValuesList.propTypes = {
   idTeam: PropTypes.number.isRequired,
   values: PropTypes.array.isRequired,
-  changeValueName: PropTypes.func.isRequired,
-  changeValueActive: PropTypes.func.isRequired,
+  updateValue: PropTypes.func.isRequired,
   deleteValue: PropTypes.func.isRequired,
   activateValue: PropTypes.func.isRequired,
   desactivateValue: PropTypes.func.isRequired,
-  addNewValue: PropTypes.func.isRequired
+  addValue: PropTypes.func.isRequired
 };
 
 export default ValuesList;

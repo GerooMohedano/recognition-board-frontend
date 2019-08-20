@@ -61,7 +61,7 @@ class TeamConfig extends Component {
   componentDidUpdate(prevProps) {
     const {
       teamUpdated, teamLeaderUpdated, fetchTeamConfig,
-      valueDeleted, valueActivated, valueDesactivated,
+      valueDeleted, valueActivated, valueDesactivated, valueUpdated, valueAdded,
       match
     } = this.props;
     if (prevProps.teamUpdated !== teamUpdated && teamUpdated && teamUpdated.data.status === 'OK') {
@@ -79,6 +79,12 @@ class TeamConfig extends Component {
     if (prevProps.valueDesactivated !== valueDesactivated && valueDesactivated && valueDesactivated.data.status === 'OK') {
       fetchTeamConfig(match.params.idTeam);
     }
+    if (prevProps.valueUpdated !== valueUpdated && valueUpdated && valueUpdated.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+    if (prevProps.valueAdded !== valueAdded && valueAdded && valueAdded.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
   }
 
   changeTeamName = () => event => {
@@ -94,37 +100,6 @@ class TeamConfig extends Component {
     });
   }
 
-  changeValueName = (valueId, newName) => {
-    this.setState(state => {
-      const valueList = state.values.map(value => {
-        if (value.id === valueId) {
-          return { ...value, name: newName };
-        } else {
-          return value;
-        }
-      });
-      return {
-        values: valueList
-      };
-    });
-  }
-
-  changeValueActive = (valueId, activeState) => {
-    this.setState(state => {
-      const valueList = state.values.map(value => {
-        if (value.id === valueId) {
-
-          return { ...value, active: activeState };
-        } else {
-          return value;
-        }
-      });
-      return {
-        values: valueList
-      };
-    });
-  }
-
   deleteMember = memberId => {
     this.setState(state => {
       const membersList = state.members.filter(member => member.id !== memberId);
@@ -132,11 +107,6 @@ class TeamConfig extends Component {
         members: membersList
       };
     });
-  }
-
-  addValue = value => {
-    const nextId = this.state.values[this.state.values.length];
-    this.setState(state => ({ values: [...state.values, { id: nextId, name: value, active: true }]}))
   }
 
   addNewTeamMember = value => {
@@ -165,7 +135,7 @@ class TeamConfig extends Component {
   render() {
     const {
       classes, match, changeTeamName, teamConfigInfo, fetchingTeamConfigInfo,
-      deleteValue, activateValue, desactivateValue
+      deleteValue, activateValue, desactivateValue, updateValue, addValue
     } = this.props;
     const { newTeamName, configuring } = this.state;
     console.log(teamConfigInfo);
@@ -230,12 +200,11 @@ class TeamConfig extends Component {
             <ValuesList
               idTeam={match.params.idTeam}
               values={teamConfigInfo.data.valores}
-              changeValueName={this.changeValueName}
-              changeValueActive={this.changeValueActive}
+              updateValue={updateValue}
               deleteValue={deleteValue}
               activateValue={activateValue}
               desactivateValue={desactivateValue}
-              addNewValue={this.addValue}
+              addValue={addValue}
             />
             <TeamMembersList
               teamLeader={teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario}
@@ -259,6 +228,8 @@ TeamConfig.propTypes = {
   deleteValue: PropTypes.func.isRequired,
   activateValue: PropTypes.func.isRequired,
   desactivateValue: PropTypes.func.isRequired,
+  updateValue: PropTypes.func.isRequired,
+  addValue: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
@@ -268,6 +239,8 @@ TeamConfig.propTypes = {
   valueDeleted: PropTypes.shape({}).isRequired,
   valueActivated: PropTypes.shape({}).isRequired,
   valueDesactivated: PropTypes.shape({}).isRequired,
+  valueUpdated: PropTypes.shape({}).isRequired,
+  valueAdded: PropTypes.shape({}).isRequired,
   teamConfigInfo: PropTypes.shape({}).isRequired
 };
 

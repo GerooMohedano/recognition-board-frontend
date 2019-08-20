@@ -8,6 +8,8 @@ const INITIAL_STATE = {
   delettingValue: true,
   activatingValue: true,
   desactivatingValue: true,
+  updatingValue: true,
+  addingValue: true,
   fetchError: {
     state: false,
     message: ''
@@ -32,12 +34,22 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  updateValueError: {
+    state: false,
+    message: ''
+  },
+  addValueError: {
+    state: false,
+    message: ''
+  },
   teamConfigInfo: {},
   teamUpdated: {},
   teamLeaderUpdated: {},
   valueDeleted: {},
   valueActivated: {},
-  valueDesactivated: {}
+  valueDesactivated: {},
+  valueUpdated: {},
+  valueAdded: {}
 };
 
 const behaviors = {
@@ -94,6 +106,24 @@ const behaviors = {
   },
   [types.DESACTIVATE_VALUE_FAILURE](state, action) {
     return Object.assign({}, state, { desactivatingValue: false, desactivateValueError: { state: true, message: action.payload } });
+  },
+  [types.UPDATING_VALUE](state) {
+    return Object.assign({}, state, { updatingValue: true, updateValueError: { state: false, message: '' } });
+  },
+  [types.UPDATE_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueUpdated: action.valueUpdated, updatingValue: false, updateValueError: { state: false, message: '' } });
+  },
+  [types.UPDATE_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { updatingValue: false, updateValueError: { state: true, message: action.payload } });
+  },
+  [types.ADDING_VALUE](state) {
+    return Object.assign({}, state, { addingValue: true, addValueError: { state: false, message: '' } });
+  },
+  [types.ADD_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueAdded: action.valueAdded, addingValue: false, addValueError: { state: false, message: '' } });
+  },
+  [types.ADD_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { addingValue: false, addValueError: { state: true, message: action.payload } });
   }
 };
 
