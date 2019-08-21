@@ -241,3 +241,63 @@ export function addValue(valueToAdd) {
       .catch(error => dispatch(addValueFailure(error)));
   };
 }
+
+export function addingTeamMember() {
+  return {
+    type: types.ADDING_TEAM_MEMBER,
+    payload: {}
+  };
+}
+
+export function addTeamMemberSuccess(data) {
+  return {
+    type: types.ADD_TEAM_MEMBER_SUCCESS,
+    teamMemberAdded: data
+  };
+}
+
+export function addTeamMemberFailure(error) {
+  return {
+    type: types.ADD_TEAM_MEMBER_FAILURE,
+    payload: error
+  };
+}
+
+export function addTeamMember(valueToTeamMember) {
+  return function (dispatch) {
+    dispatch(addingTeamMember());
+    return request.post(`${baseUrl()}/agregarUsuarioEnEquipo`, valueToTeamMember)
+      .then(response => dispatch(addTeamMemberSuccess(response)))
+      .catch(error => dispatch(addTeamMemberFailure(error)));
+  };
+}
+
+export function kickingTeamMember() {
+  return {
+    type: types.KICKING_TEAM_MEMBER,
+    payload: {}
+  };
+}
+
+export function kickTeamMemberSuccess(data) {
+  return {
+    type: types.KICK_TEAM_MEMBER_SUCCESS,
+    teamMemberKicked: data
+  };
+}
+
+export function kickTeamMemberFailure(error) {
+  return {
+    type: types.KICK_TEAM_MEMBER_FAILURE,
+    payload: error
+  };
+}
+
+export function kickTeamMember(teamMemberToKick) {
+  return function (dispatch) {
+    dispatch(kickingTeamMember());
+    return request.post(`${baseUrl()}/borrarUsuarioDelEquipo`, teamMemberToKick)
+      .then(response => dispatch(kickTeamMemberSuccess(response)))
+      .catch(error => dispatch(kickTeamMemberFailure(error)));
+  };
+}

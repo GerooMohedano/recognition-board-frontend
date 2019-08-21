@@ -10,6 +10,8 @@ const INITIAL_STATE = {
   desactivatingValue: true,
   updatingValue: true,
   addingValue: true,
+  addingTeamMember: true,
+  kickingTeamMember: true,
   fetchError: {
     state: false,
     message: ''
@@ -42,6 +44,14 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  addTeamMemberError: {
+    state: false,
+    message: ''
+  },
+  kickTeamMemberError: {
+    state: false,
+    message: ''
+  },
   teamConfigInfo: {},
   teamUpdated: {},
   teamLeaderUpdated: {},
@@ -49,7 +59,9 @@ const INITIAL_STATE = {
   valueActivated: {},
   valueDesactivated: {},
   valueUpdated: {},
-  valueAdded: {}
+  valueAdded: {},
+  teamMemberAdded: {},
+  teamMemberKicked: {}
 };
 
 const behaviors = {
@@ -124,6 +136,24 @@ const behaviors = {
   },
   [types.ADD_VALUE_FAILURE](state, action) {
     return Object.assign({}, state, { addingValue: false, addValueError: { state: true, message: action.payload } });
+  },
+  [types.ADDING_TEAM_MEMBER](state) {
+    return Object.assign({}, state, { addingTeamMember: true, addTeamMemberError: { state: false, message: '' } });
+  },
+  [types.ADD_TEAM_MEMBER_SUCCESS](state, action) {
+    return Object.assign({}, state, { teamMemberAdded: action.teamMemberAdded, addingTeamMember: false, addTeamMemberError: { state: false, message: '' } });
+  },
+  [types.ADD_TEAM_MEMBER_FAILURE](state, action) {
+    return Object.assign({}, state, { addingTeamMember: false, addTeamMemberError: { state: true, message: action.payload } });
+  },
+  [types.KICKING_TEAM_MEMBER](state) {
+    return Object.assign({}, state, { kickingTeamMember: true, kickTeamMemberError: { state: false, message: '' } });
+  },
+  [types.KICK_TEAM_MEMBER_SUCCESS](state, action) {
+    return Object.assign({}, state, { teamMemberKicked: action.teamMemberKicked, kickingTeamMember: false, kickTeamMemberError: { state: false, message: '' } });
+  },
+  [types.KICK_TEAM_MEMBER_FAILURE](state, action) {
+    return Object.assign({}, state, { kickingTeamMember: false, kickTeamMemberError: { state: true, message: action.payload } });
   }
 };
 

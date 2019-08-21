@@ -25,25 +25,6 @@ import TeamMembersList from './TeamMembersList';
 
 require('../../commons/Team.css');
 
-const enterpriseMembers = [
-  { id: 1, name: 'Magui' },
-  { id: 2, name: 'Romy' },
-  { id: 3, name: 'Gero' },
-  { id: 4, name: 'Pame' },
-  { id: 5, name: 'Marcio' },
-  { id: 6, name: 'LuisMi' },
-  { id: 7, name: 'Tony' },
-  { id: 8, name: 'Abel' },
-  { id: 9, name: 'Mercedes' },
-  { id: 10, name: 'Sole' },
-  { id: 11, name: 'Ricki' },
-  { id: 12, name: 'Nick' },
-  { id: 13, name: 'Shawn' },
-  { id: 14, name: 'Lali' },
-  { id: 15, name: 'Karina' },
-  { id: 16, name: 'Jimena' }
-]
-
 class TeamConfig extends Component {
   constructor(props) {
     super(props);
@@ -62,7 +43,7 @@ class TeamConfig extends Component {
     const {
       teamUpdated, teamLeaderUpdated, fetchTeamConfig,
       valueDeleted, valueActivated, valueDesactivated, valueUpdated, valueAdded,
-      match
+      teamMemberAdded, teamMemberKicked, match
     } = this.props;
     if (prevProps.teamUpdated !== teamUpdated && teamUpdated && teamUpdated.data.status === 'OK') {
       fetchTeamConfig(match.params.idTeam);
@@ -85,6 +66,12 @@ class TeamConfig extends Component {
     if (prevProps.valueAdded !== valueAdded && valueAdded && valueAdded.data.status === 'OK') {
       fetchTeamConfig(match.params.idTeam);
     }
+    if (prevProps.teamMemberAdded !== teamMemberAdded && teamMemberAdded && teamMemberAdded.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
+    if (prevProps.teamMemberKicked !== teamMemberKicked && teamMemberKicked && teamMemberKicked.data.status === 'OK') {
+      fetchTeamConfig(match.params.idTeam);
+    }
   }
 
   changeTeamName = () => event => {
@@ -98,20 +85,6 @@ class TeamConfig extends Component {
       idViejoAdmin: teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario,
       idNuevoAdmin: label
     });
-  }
-
-  deleteMember = memberId => {
-    this.setState(state => {
-      const membersList = state.members.filter(member => member.id !== memberId);
-      return {
-        members: membersList
-      };
-    });
-  }
-
-  addNewTeamMember = value => {
-    value
-    && this.setState(state => ({ members: [...state.members, value] }))
   }
 
   changeConfigurationState = value => {
@@ -135,10 +108,10 @@ class TeamConfig extends Component {
   render() {
     const {
       classes, match, changeTeamName, teamConfigInfo, fetchingTeamConfigInfo,
-      deleteValue, activateValue, desactivateValue, updateValue, addValue
+      deleteValue, activateValue, desactivateValue, updateValue, addValue,
+      addTeamMember, kickTeamMember
     } = this.props;
     const { newTeamName, configuring } = this.state;
-    console.log(teamConfigInfo);
     if (fetchingTeamConfigInfo || teamConfigInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
@@ -207,11 +180,12 @@ class TeamConfig extends Component {
               addValue={addValue}
             />
             <TeamMembersList
+              idTeam={match.params.idTeam}
               teamLeader={teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario}
               members={teamConfigInfo.data.usuarios}
-              deleteMember={this.deleteMember}
-              enterpriseMembers={enterpriseMembers}
-              addNewTeamMember={this.addNewTeamMember}
+              deleteMember={kickTeamMember}
+              enterpriseMembers={teamConfigInfo.data.usuariosEmpresa}
+              addTeamMember={addTeamMember}
             />
           </div>
         </div>
@@ -229,6 +203,8 @@ TeamConfig.propTypes = {
   activateValue: PropTypes.func.isRequired,
   desactivateValue: PropTypes.func.isRequired,
   updateValue: PropTypes.func.isRequired,
+  addTeamMember: PropTypes.func.isRequired,
+  kickTeamMember: PropTypes.func.isRequired,
   addValue: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
@@ -241,6 +217,8 @@ TeamConfig.propTypes = {
   valueDesactivated: PropTypes.shape({}).isRequired,
   valueUpdated: PropTypes.shape({}).isRequired,
   valueAdded: PropTypes.shape({}).isRequired,
+  teamMemberAdded: PropTypes.shape({}).isRequired,
+  teamMemberKicked: PropTypes.shape({}).isRequired,
   teamConfigInfo: PropTypes.shape({}).isRequired
 };
 

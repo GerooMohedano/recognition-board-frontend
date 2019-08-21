@@ -54,13 +54,20 @@ class TeamMembersList extends Component {
   }
 
   confirmAddingMember = () => {
-    this.props.addNewTeamMember(this.state.newTeamMember);
+    const { addTeamMember, idTeam } =this.props;
+    const { newTeamMember } = this.state;
+    addTeamMember({
+      idEquipo: idTeam,
+      idUsuario: newTeamMember.id,
+      rol: 0,
+      estado: 'activo'
+    });
     this.setState({ newTeamMember: { id: -1, name: '' } })
   }
 
   render() {
     const { openDialogDelete, idToDelete, nameToDelete, addingANewMember, newTeamMember } = this.state;
-    const { members, deleteMember, teamLeader, enterpriseMembers } = this.props;
+    const { members, deleteMember, teamLeader, enterpriseMembers, idTeam } = this.props;
     return (
       <div className="cardContainerTeam">
         <Card className="cardForTeam">
@@ -85,7 +92,11 @@ class TeamMembersList extends Component {
                       disabled={member.idUsuario === teamLeader}
                       onClick={() => this.toggleDeleteDialogState(member.idUsuario, member.nombre_usuario, true)}
                     >
-                      <DeleteIcon style={{ color: 'black' }} />
+                      {
+                        member.idUsuario !== teamLeader
+                        ? (<DeleteIcon style={{ color: 'black' }} />)
+                        : (<DeleteIcon style={{ color: '#E0E0E0' }} />)
+                      }
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -95,8 +106,8 @@ class TeamMembersList extends Component {
                 <ListItem>
                   <Autocomplete
                     data={enterpriseMembers.filter(enterpriseMember => (
-                      members.findIndex(member => member.idUsuario === enterpriseMember.id) === -1
-                  ))}
+                      members.findIndex(member => member.idUsuario === enterpriseMember.idUsuario) === -1
+                  )).map(enterpriseMember => ({ id: enterpriseMember.idUsuario, name: enterpriseMember.nombre_usuario }))}
                     upperFunction={this.selectNewMember}
                     placeholder="Search for a member in the enterprise"
                     labelName="name"
@@ -145,7 +156,7 @@ class TeamMembersList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteMember(idToDelete); this.toggleDeleteDialogState(-1, '', false)}}
+              onClick={() => {deleteMember({ idUsuario: idToDelete, idEquipo: idTeam }); this.toggleDeleteDialogState(-1, '', false)}}
               color="secondary"
             >
               Kick out
@@ -158,11 +169,12 @@ class TeamMembersList extends Component {
 }
 
 TeamMembersList.propTypes = {
+  idTeam: PropTypes.number.isRequired,
   members: PropTypes.array.isRequired,
   deleteMember: PropTypes.func.isRequired,
   teamLeader: PropTypes.string.isRequired,
   enterpriseMembers: PropTypes.array.isRequired,
-  addNewTeamMember: PropTypes.func.isRequired
+  addTeamMember: PropTypes.func.isRequired
 };
 
 export default TeamMembersList;
