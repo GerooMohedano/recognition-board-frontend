@@ -105,7 +105,11 @@ class AppLayout extends React.Component {
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               OnBoard
             </Typography>
-            <SearchBar />
+            <SearchBar
+              userInfo={userInfo}
+              fetchingGeneralUserInfo={fetchingGeneralUserInfo}
+              fetchGeneralUserInfo={fetchGeneralUserInfo}
+            />
             <div className={classes.grow} />
             <div>
               <NavLink to="/Perfil/1" className="linkPerfil">

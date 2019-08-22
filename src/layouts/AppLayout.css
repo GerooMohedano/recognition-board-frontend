@@ -44,3 +44,11 @@
   color: white !important;
   font-weight: bold !important;
 }
+
+.searchBarTitleCont {
+  padding: 0 !important;
+}
+
+.searchBarTitle span {
+  font-size: small;
+}

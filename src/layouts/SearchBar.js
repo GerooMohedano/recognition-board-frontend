@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import { fade } from '@material-ui/core/styles/colorManipulator';
+import { NavLink } from 'react-router-dom';
 import InputBase from '@material-ui/core/InputBase';
 import Divider from '@material-ui/core/Divider';
 import Paper from '@material-ui/core/Paper';
@@ -10,9 +11,12 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
+import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchIcon from '@material-ui/icons/Search';
 import CommonProfilePic from '../images/profilepic.jpg';
 import TeamCatPic from '../images/macri.jpg';
+
+require('./AppLayout.css');
 
 const styles = theme => ({
   search: {
@@ -63,59 +67,26 @@ const styles = theme => ({
   },
 });
 
-const teams = [
-  { id: 1, name: 'Eagles' },
-  { id: 2, name: 'Octopus' },
-  { id: 3, name: 'Turtles' },
-  { id: 4, name: 'Spiders' },
-  { id: 5, name: 'Elephants' },
-  { id: 6, name: 'Bees' },
-  { id: 7, name: 'Lions' },
-  { id: 8, name: 'Fish' },
-  { id: 9, name: 'Blowfish' },
-  { id: 10, name: 'Bears' },
-  { id: 11, name: 'Blackwidows' },
-  { id: 12, name: 'Barracudas' },
-  { id: 13, name: 'Blastoise' },
-  { id: 14, name: 'Charmeleons' },
-  { id: 15, name: 'Cats' },
-  { id: 16, name: 'Dogs' }
-];
-
-const people = [
-  { id: 1, name: 'magui.monfort', mail: 'magali.monfort@sovos.com' },
-  { id: 2, name: 'Tony Forms', mail: 'antonio.forns@sovos.com' },
-  { id: 3, name: 'GerooMohedano', mail: 'geronimo.mohedano@sovos.com' },
-  { id: 4, name: 'RomiiRuiiz', mail: 'romina.ruiz@sovos.com' },
-  { id: 5, name: 'Edgar', mail: 'edgardo.perez@sovos.com' },
-  { id: 6, name: 'Franquito Pe', mail: 'franco.perez@sovos.com' },
-  { id: 7, name: 'Matias Mendi', mail: 'matias.mendiondo@sovos.com' },
-  { id: 8, name: 'Grossi', mail: 'guillermo.rossi@sovos.com' },
-  { id: 9, name: 'Belencitah', mail: 'belen.diaz@sovos.com' },
-  { id: 10, name: 'Ernesth', mail: 'ernesto.jaimes@sovos.com' },
-  { id: 11, name: 'Bertita', mail: 'berta.romero@sovos.com' },
-  { id: 12, name: 'Blanquita', mail: 'blanca.salomon@sovos.com' },
-  { id: 13, name: 'Cahchi', mail: 'maria.salomon@sovos.com' },
-  { id: 14, name: 'Armando', mail: 'geronimo.a.mohedano@sovos.com' },
-  { id: 15, name: 'Benini', mail: 'benini.ruiz@sovos.com' },
-  { id: 16, name: 'Kia', mail: 'kia.ruiz@sovos.com' },
-  { id: 17, name: 'Marious', mail: 'marcio.bautista@sovos.com' },
-  { id: 18, name: 'Ana Pamela', mail: 'pamela.ruiz@sovos.com' },
-  { id: 19, name: 'CBSE', mail: 'yerba.mate@sovos.com' },
-];
-
 class SearchBar extends React.Component {
   state = {
     isOpen: false,
     searchedString: ''
   };
 
+  componentDidUpdate(prevProps, prevState) {
+    const { isOpen } = this.state;
+    const { userInfo, fetchGeneralUserInfo } = this.props;
+    if (prevState.isOpen !== isOpen && isOpen && (!userInfo || userInfo.length !== 0)) {
+      fetchGeneralUserInfo({ idUsuario: 2 });
+    }
+  }
+
   updateSearch = value => {
     this.setState({ searchedString: value, isOpen: value.length < 3 ? false : true });
   }
 
   render() {
-    const { classes } = this.props;
+    const { classes, fetchingGeneralUserInfo, userInfo } = this.props;
     const { isOpen, searchedString } = this.state;
     return (
       <div className={classes.search}>
@@ -135,32 +106,55 @@ class SearchBar extends React.Component {
         && (
           <Paper className={classes.paper} square>
             <List component="nav">
-              {people.filter(person => person.name.includes(searchedString)
-                || person.mail.includes(searchedString)).map(person => (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar alt="Remy Sharp" src={CommonProfilePic} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      inset
-                      primary={`${person.name} (${person.mail})`}
-                    />
-                  </ListItem>
-                ))}
+              <ListItem className="searchBarTitleCont">
+                <ListItemText
+                  inset
+                  className="searchBarTitle"
+                  primary="Users"
+                />
+              </ListItem>
+              {(fetchingGeneralUserInfo || userInfo === undefined)
+                ? (
+                  <div className="circularProgressContainer"><CircularProgress /></div>
+                ) : userInfo.data.usuariosEmpresa.filter(person => person.nombre_usuario.includes(searchedString)
+                  || person.mail.includes(searchedString)).map(person => (
+                    <ListItem button component="a" href={`/Perfil/${person.idUsuario}`}>
+                      <ListItemAvatar>
+                        <Avatar alt="Remy Sharp" src={CommonProfilePic} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        inset
+                        primary={`${person.nombre_usuario} (${person.mail})`}
+                      />
+                    </ListItem>
+                  ))
+              }
             </List>
             <Divider />
             <List component="nav">
-              {teams.filter(team => team.name.includes(searchedString)).map(team => (
-                  <ListItem>
-                    <ListItemAvatar>
-                      <Avatar alt="Remy Sharp" src={TeamCatPic} />
-                    </ListItemAvatar>
-                    <ListItemText
-                      inset
-                      primary={team.name}
-                    />
-                  </ListItem>
-                ))}
+              <ListItem className="searchBarTitleCont">
+                <ListItemText
+                  inset
+                  className="searchBarTitle"
+                  primary="Teams"
+                />
+              </ListItem>
+              {(fetchingGeneralUserInfo || userInfo === undefined)
+                ? (
+                  <div className="circularProgressContainer"><CircularProgress /></div>
+                ) : userInfo.data.equiposDeEmpresa.filter(team => team.nombre_equipo
+                  .includes(searchedString)).map(team => (
+                    <ListItem button component="a" href={`/Team/${team.idEquipo}`}>
+                      <ListItemAvatar>
+                        <Avatar alt="Remy Sharp" src={TeamCatPic} />
+                      </ListItemAvatar>
+                      <ListItemText
+                        inset
+                        primary={team.nombre_equipo}
+                      />
+                    </ListItem>
+                  ))
+              }
             </List>
           </Paper>
         )}
@@ -171,6 +165,9 @@ class SearchBar extends React.Component {
 
 SearchBar.propTypes = {
   classes: PropTypes.object.isRequired,
+  userInfo: PropTypes.shape({}).isRequired,
+  fetchingGeneralUserInfo: PropTypes.bool.isRequired,
+  fetchGeneralUserInfo: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SearchBar);
