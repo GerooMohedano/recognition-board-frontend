@@ -85,10 +85,6 @@ class ViewNotes extends React.Component {
     }
   }
 
-  componentDidUpdate(){
-    console.log(this.props.notes);
-  }
-
   createNewBlankNote = () => {
     this.setState({ creatingNote: true });
   }
@@ -122,7 +118,6 @@ class ViewNotes extends React.Component {
       notes, gettingNotes
     } = this.props;
     const { creatingNote, newNoteMessage, newNotePuntuation } = this.state;
-    console.log(notes);
     return (
       <Dialog
         key="dialog"

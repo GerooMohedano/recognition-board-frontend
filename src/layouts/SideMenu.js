@@ -40,15 +40,7 @@ class SideMenu extends React.Component {
     newEnterprise: { name: '', address: '', city: '', telephone: '' }
   };
 
-  onTeamNavLinkClick = team => {
-    this.props.updateTeamClicked(team);
-  }
-
-  onEnterpriseNavLinkClick = enterprise => {
-    this.props.updateEnterpriseClicked(enterprise);
-  }
-
-  toggleDrawer = (side, open) => () => {
+  toggleDrawer = (side, open) => {
     this.setState({
       [side]: open,
     });
@@ -63,51 +55,66 @@ class SideMenu extends React.Component {
     this.setState(state => ({ newEnterprise: { ...state.newEnterprise, [stateAtr]: newValue }}));
   }
 
-  render() {
-    const { classes } = this.props;
-    const { newEnterprise, enterpriseDialogState } = this.state;
-    const empresas = [{name: 'SOVOS', equipos: [{id: 1, name: 'Octopus'}, {id: 2, name: 'Elephants'}]}, {name: 'SCANIA', equipos: ['Managers']}];
+  openDrawer = () => {
+    const { fetchGeneralUserInfo } = this.props;
+    this.toggleDrawer('left', true);
+    fetchGeneralUserInfo({ idUsuario: 2 });
+  }
+
+  renderSideMenuList = () => {
+    const { userInfo } = this.props;
     const sideMenuList = [];
-    empresas.forEach((empresa) => {
+    userInfo.data.empresas.forEach((empresa) => {
       const sideMenuSubList = [];
-      empresa.equipos.forEach((equipo) => {
-        sideMenuSubList.push(
-          <NavLink
-            className="commonLink"
-            key={`NavLink${equipo.name}`}
-            to={`/Team/${equipo.id}`}
-            onClick={() => this.onTeamNavLinkClick(equipo.name)}
-          >
-            <ListItem key={`ListItem${equipo.name}`} button>
-              <ListItemText key={`ListItemText${equipo.name}`} primary={equipo.name} className="textOfListSideMenu" />
-            </ListItem>
-          </NavLink>
-        );
+      userInfo.data.equipos.forEach((equipo) => {
+        if (empresa.idEmpresa === equipo.idEmpresa) {
+          sideMenuSubList.push(
+            <NavLink
+              className="commonLink"
+              key={`NavLink${equipo.nombre_equipo}`}
+              to={`/Team/${equipo.idEquipo}`}
+            >
+              <ListItem key={`ListItem${equipo.nombre_equipo}`} button>
+                <ListItemText key={`ListItemText${equipo.nombre_equipo}`} primary={equipo.nombre_equipo} className="textOfListSideMenu" />
+              </ListItem>
+            </NavLink>
+          );
+        }
       });
       sideMenuList.push(
         <NavLink
           className="commonLink"
-          key={`NavLink${empresa.name}`}
-          to="/Enterprise"
-          onClick={() => this.onEnterpriseNavLinkClick(empresa.name)}
+          key={`NavLink${empresa.nombre}`}
+          to={`/Enterprise/${empresa.idEmpresa}`}
         >
-          <ListItem key={`ListItem${empresa.name}`} button>
-            <ListItemText key={`ListItemText${empresa.name}`} primary={empresa.name} className="textOfListSideMenu" />
+          <ListItem key={`ListItem${empresa.nombre}`} button>
+            <ListItemText key={`ListItemText${empresa.nombre}`} primary={empresa.nombre} className="textOfListSideMenu" />
           </ListItem>
         </NavLink>
       );
       sideMenuList.push(
-        <ListItem key={`FatherListItem${empresa.name}`}>
-          <List key={`List${empresa.name}`} className="subList">
+        <ListItem key={`FatherListItem${empresa.nombre}`}>
+          <List key={`List${empresa.nombre}`} className="subList">
             { sideMenuSubList }
           </List>
         </ListItem>
       );
     });
-    const sideList = (
+    return sideMenuList;
+  }
+
+  render() {
+    const { classes, userInfo, fetchingGeneralUserInfo } = this.props;
+    const { newEnterprise, enterpriseDialogState } = this.state;
+    const sideList = (fetchingGeneralUserInfo || userInfo === undefined)
+    ? (
+      <div style={{ color: 'white' }}>
+        Loading info...
+      </div>
+    ) : (
       <div className={classes.list}>
         <List>
-          { sideMenuList }
+          { this.renderSideMenuList() }
           <ListItem>
             <InputLabel className="textOfInputLabel">Add a new Enterprise</InputLabel>
             <IconButton
@@ -122,20 +129,20 @@ class SideMenu extends React.Component {
     );
     return (
       <div>
-        <Button onClick={this.toggleDrawer('left', true)}>
+        <Button onClick={() => this.openDrawer()}>
           <MenuIcon style={{ color: 'white' }} />
         </Button>
         <SwipeableDrawer
           open={this.state.left}
-          onClose={this.toggleDrawer('left', false)}
-          onOpen={this.toggleDrawer('left', true)}
+          onClose={() => this.toggleDrawer('left', false)}
+          onOpen={() => this.openDrawer()}
         >
           <div
             className={classes.sideBar}
             tabIndex={0}
             role="button"
-            onClick={this.toggleDrawer('left', false)}
-            onKeyDown={this.toggleDrawer('left', false)}
+            onClick={() => this.toggleDrawer('left', false)}
+            onKeyDown={() => this.toggleDrawer('left', false)}
           >
             { sideList }
           </div>
@@ -189,8 +196,9 @@ class SideMenu extends React.Component {
 
 SideMenu.propTypes = {
   classes: PropTypes.object.isRequired,
-  updateTeamClicked: PropTypes.func.isRequired,
-  updateEnterpriseClicked: PropTypes.func.isRequired
+  userInfo: PropTypes.shape({}).isRequired,
+  fetchingGeneralUserInfo: PropTypes.bool.isRequired,
+  fetchGeneralUserInfo: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SideMenu);

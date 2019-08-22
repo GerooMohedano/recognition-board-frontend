@@ -90,15 +90,17 @@ const styles = theme => ({
 });
 
 class AppLayout extends React.Component {
+
   render() {
-    const { classes, updateTeamClicked, updateEnterpriseClicked } = this.props;
+    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
           <Toolbar className={classes.toolbar}>
             <SideMenu
-              updateTeamClicked={ updateTeamClicked }
-              updateEnterpriseClicked={ updateEnterpriseClicked }
+              userInfo={userInfo}
+              fetchingGeneralUserInfo={fetchingGeneralUserInfo}
+              fetchGeneralUserInfo={fetchGeneralUserInfo}
             />
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               OnBoard
@@ -125,8 +127,9 @@ class AppLayout extends React.Component {
 
 AppLayout.propTypes = {
   classes: PropTypes.object.isRequired,
-  updateTeamClicked: PropTypes.func.isRequired,
-  updateEnterpriseClicked: PropTypes.func.isRequired
+  fetchGeneralUserInfo: PropTypes.func.isRequired,
+  userInfo: PropTypes.shape({}).isRequired,
+  fetchingGeneralUserInfo: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(AppLayout);

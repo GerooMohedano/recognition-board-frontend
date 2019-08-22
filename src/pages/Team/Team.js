@@ -30,11 +30,14 @@ class Team extends Component {
     fetchTeams(match.params.idTeam);
   }
 
-  componentDidUpdate() {
-    const { teamInfo } = this.props;
+  componentDidUpdate(prevProps) {
+    const { teamInfo, fetchTeams, match } = this.props;
     const { indexPizarra } = this.state;
     if (teamInfo && teamInfo.data && indexPizarra === -1) {
       this.setState({ indexPizarra: teamInfo.data.pizarras.length - 1 });
+    }
+    if (prevProps.match.params.idTeam !== match.params.idTeam) {
+      fetchTeams(match.params.idTeam);
     }
   }
 
@@ -109,6 +112,7 @@ class Team extends Component {
           <TeamTable
             members={teamInfo.data.usuarios}
             values={teamInfo.data.evaluacion}
+            enterpriseValues={teamInfo.data.valoresEmpresa}
             gettingNotes={gettingNotes}
             notes={notes}
             getNotes={getNotes}

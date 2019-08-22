@@ -52,7 +52,7 @@ class TeamTable extends React.Component {
   }
 
   createRows = () => {
-    const { classes, values, members } = this.props;
+    const { classes, values, enterpriseValues, members } = this.props;
     const rows = [];
     values.forEach(value => {
       rows.push(<TableRow key={ value.nombre_valor }>
@@ -69,6 +69,23 @@ class TeamTable extends React.Component {
         ))}
       </TableRow>);
     });
+    enterpriseValues.forEach(value => {
+      if (values.findIndex(teamValue => teamValue.idValor === value.idValor) === -1) {
+        rows.push(<TableRow key={ value.Valor }>
+          <TableCell className={classes.firstColumn}>{ value.Valor }</TableCell>
+          {members.map(persona => (
+            <TableCell align="right">
+            <Button
+            key={"button" + value.Valor + persona.nombre_usuario}
+            onClick={() => this.handleCreateNoteButtonEnterprise(value, persona)}
+            >
+            <ThumbsUpDown />
+            </Button>
+            </TableCell>
+          ))}
+        </TableRow>);
+      }
+    });
     return rows;
   }
 
@@ -77,6 +94,18 @@ class TeamTable extends React.Component {
     this.setState({
       openCreateNote: true,
       valueName: value.nombre_valor,
+      userName: persona.nombre_usuario,
+      userId: persona.idUsuario,
+      valueId: value.idValor
+    });
+    this.props.getNotes({ idUsuario: persona.idUsuario, idValor: value.idValor, idPizarra: indexPizarra });
+  }
+
+  handleCreateNoteButtonEnterprise = (value, persona) => {
+    const { indexPizarra } = this.props;
+    this.setState({
+      openCreateNote: true,
+      valueName: value.Valor,
       userName: persona.nombre_usuario,
       userId: persona.idUsuario,
       valueId: value.idValor
@@ -123,6 +152,7 @@ TeamTable.propTypes = {
   classes: PropTypes.object.isRequired,
   members: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
+  enterpriseValues: PropTypes.array.isRequired,
   gettingNotes: PropTypes.bool.isRequired,
   notes: PropTypes.shape({}).isRequired,
   indexPizarra: PropTypes.number.isRequired,
