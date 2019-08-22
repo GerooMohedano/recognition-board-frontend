@@ -117,6 +117,8 @@ class Team extends Component {
             notes={notes}
             getNotes={getNotes}
             indexPizarra={teamInfo.data.pizarras[indexPizarra].idPizarra}
+            endDate={teamInfo.data.pizarras[indexPizarra].fechaFin}
+            beginDate={teamInfo.data.pizarras[indexPizarra].fechaInicio}
             createNote={createNote}
             deleteNote={deleteNote}
           />

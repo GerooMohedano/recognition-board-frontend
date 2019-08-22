@@ -66,7 +66,7 @@ class ViewNotes extends React.Component {
                 && (
                   <Button
                     className="noteDeleteButton"
-                    onClick={() => {deleteNote({ idNota: note.idNota }); handleCloseDialog()}}
+                    onClick={() => {deleteNote({ idNota: note.idNota }); this.decreateNewBlankNote(); handleCloseDialog()}}
                   >
                     <DeleteIcon style={{ color: 'white' }} />
                   </Button>
@@ -87,6 +87,10 @@ class ViewNotes extends React.Component {
 
   createNewBlankNote = () => {
     this.setState({ creatingNote: true });
+  }
+
+  decreateNewBlankNote = () => {
+    this.setState({ creatingNote: false });
   }
 
   handleBlankNoteWriting = () => event => {
@@ -110,19 +114,20 @@ class ViewNotes extends React.Component {
     });
     this.setState({ newNoteMessage: '', newNotePuntuation: 1 });
     handleCloseDialog();
+    this.decreateNewBlankNote();
   }
 
   render() {
     const {
       classes, value, user, openCreateNote, handleCloseDialog,
-      notes, gettingNotes
+      notes, gettingNotes, beginDate, endDate
     } = this.props;
     const { creatingNote, newNoteMessage, newNotePuntuation } = this.state;
     return (
       <Dialog
         key="dialog"
         open={openCreateNote}
-        onClose={() => handleCloseDialog()}
+        onClose={() => {handleCloseDialog(); this.decreateNewBlankNote()}}
       >
         <DialogTitle id="form-dialog-title">{value.name + ' - ' + user.name}</DialogTitle>
           <DialogContent className="notesContainer">
@@ -160,7 +165,7 @@ class ViewNotes extends React.Component {
                   </CardContent>
                 </Card>
                 <DialogActions>
-                  <Button onClick={() => handleCloseDialog()} color="primary">
+                  <Button onClick={() => {handleCloseDialog(); this.decreateNewBlankNote()}} color="primary">
                     Cancel
                   </Button>
                   <Button disabled={newNoteMessage === ''} onClick={() => this.createNewNoteWithContext()} color="primary">
@@ -170,8 +175,16 @@ class ViewNotes extends React.Component {
               </div>
             ) : (
               <Card>
-                <CardActionArea className="addNewCard" onClick={() => this.createNewBlankNote()}>
-                  <AddCircleOutline />
+                <CardActionArea
+                  className="addNewCard"
+                  onClick={() => this.createNewBlankNote()}
+                  disabled={Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)}
+                >
+                  {
+                    Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)
+                    ? (<AddCircleOutline style={{ color: '#E0E0E0' }} />)
+                    : (<AddCircleOutline style={{ color: 'black' }} />)
+                  }
                 </CardActionArea>
               </Card>
             )
@@ -189,6 +202,8 @@ ViewNotes.propTypes = {
   openCreateNote: PropTypes.bool.isRequired,
   gettingNotes: PropTypes.bool.isRequired,
   indexPizarra: PropTypes.number.isRequired,
+  endDate: PropTypes.string.isRequired,
+  beginDate: PropTypes.string.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
   notes: PropTypes.shape({}).isRequired

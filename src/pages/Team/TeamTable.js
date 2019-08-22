@@ -117,7 +117,10 @@ class TeamTable extends React.Component {
 
   render() {
     const { openCreateNote, valueName, userName, userId, valueId } = this.state;
-    const { classes, gettingNotes, notes, indexPizarra, createNote, deleteNote } = this.props;
+    const {
+      classes, gettingNotes, notes, createNote, deleteNote,
+      indexPizarra, beginDate, endDate
+    } = this.props;
     const columns = this.createColumns();
     const rows = this.createRows();
     return (
@@ -139,6 +142,8 @@ class TeamTable extends React.Component {
           handleCloseDialog={this.handleCloseDialog}
           gettingNotes={gettingNotes}
           indexPizarra={indexPizarra}
+          endDate={endDate}
+          beginDate={beginDate}
           notes={notes}
           createNote={createNote}
           deleteNote={deleteNote}
@@ -156,6 +161,8 @@ TeamTable.propTypes = {
   gettingNotes: PropTypes.bool.isRequired,
   notes: PropTypes.shape({}).isRequired,
   indexPizarra: PropTypes.number.isRequired,
+  endDate: PropTypes.string.isRequired,
+  beginDate: PropTypes.string.isRequired,
   getNotes: PropTypes.func.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired
