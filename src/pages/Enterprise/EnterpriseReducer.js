@@ -56,6 +56,18 @@ const INITIAL_STATE = {
     message: ''
   },
   defaultValueDeleted: {},
+  updatingValue: true,
+  updateValueError: {
+    state: false,
+    message: ''
+  },
+  valueUpdated: {},
+  addingValue: true,
+  valueAdded: {},
+  addValueError: {
+    state: false,
+    message: ''
+  },
   //modifyEnterprise
   modifyingEnterprise: true,
   modifyEnterpriseError: {
@@ -140,6 +152,24 @@ const behaviors = {
   },
   [types.DELETE_DEFAULTVALUE_FAILURE](state, action) {
     return Object.assign({}, state, { delettingDefaultValue: false, deleteDefaultValueError: { state: true, message: action.payload } });
+  },
+  [types.UPDATING_VALUE](state) {
+    return Object.assign({}, state, { updatingValue: true, updateValueError: { state: false, message: '' } });
+  },
+  [types.UPDATE_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueUpdated: action.valueUpdated, updatingValue: false, updateValueError: { state: false, message: '' } });
+  },
+  [types.UPDATE_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { updatingValue: false, updateValueError: { state: true, message: action.payload } });
+  },
+  [types.ADDING_VALUE](state) {
+    return Object.assign({}, state, { addingValue: true, addValueError: { state: false, message: '' } });
+  },
+  [types.ADD_VALUE_SUCCESS](state, action) {
+    return Object.assign({}, state, { valueAdded: action.valueAdded, addingValue: false, addValueError: { state: false, message: '' } });
+  },
+  [types.ADD_VALUE_FAILURE](state, action) {
+    return Object.assign({}, state, { addingValue: false, addValueError: { state: true, message: action.payload } });
   },
   ///////////////Awards!!
   [types.DELETTING_AWARD](state) {

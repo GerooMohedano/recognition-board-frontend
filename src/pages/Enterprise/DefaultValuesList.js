@@ -56,7 +56,7 @@ class DefaultValuesList extends Component {
 
   saveNewValueName = () => {
     const { idToChange, newName } = this.state
-    this.props.changeValueName(idToChange, newName);
+    this.props.updateValue ({ idValor : idToChange, nombre : newName });
     this.toggleEditDialogState(-1, '', false);
   }
 
@@ -73,7 +73,8 @@ class DefaultValuesList extends Component {
       openDialogEdit, openDialogDelete, openDialogAdd,
       nameToChange, idToDelete, nameOfTheNewValue
     } = this.state;
-    const { values, deleteDefaultValue, addNewValue } = this.props;
+    const { values, deleteDefaultValue, addValue, enterpriseId } = this.props;
+    console.log("ID EMPRESA PARA DEFAULT VALUES: ", enterpriseId);
     return (
       <div className="cardContainer">
         <Card className="cardForEnterprise">
@@ -88,7 +89,7 @@ class DefaultValuesList extends Component {
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => this.toggleEditDialogState(value.id, value.name, true)}
+                      onClick={() => this.toggleEditDialogState(value.idValor, value.nombre_valor, true)}
                       className="iconListButton"
                     >
                       <EditIcon style={{ color: 'black' }} />
@@ -125,7 +126,7 @@ class DefaultValuesList extends Component {
           <DialogTitle id="form-dialog-title">
             <TextField
               className="fieldInputOnDialog"
-              placeholder="Change the name of the value"
+              placeholder="Change value name"
               defaultValue={nameToChange}
               onChange={event => this.changeNewValueName(event.target.value)}
             />
@@ -161,14 +162,14 @@ class DefaultValuesList extends Component {
             />
           </DialogContent>
           <DialogActions>
-            <Button
+          <Button
               onClick={() => this.toggleAddDialogState(false)}
               color="primary"
             >
               Cancel
             </Button>
             <Button
-              onClick={() => {addNewValue(nameOfTheNewValue); this.toggleAddDialogState(false)}}
+              onClick={() => addValue({ nombre: nameOfTheNewValue, idEmpresa: enterpriseId })}
               color="primary"
               disabled={nameOfTheNewValue === ''}
             >
@@ -205,10 +206,12 @@ class DefaultValuesList extends Component {
 
 DefaultValuesList.propTypes = {
   values: PropTypes.array.isRequired,
-  changeValueName: PropTypes.func.isRequired,
+  updateValue: PropTypes.func.isRequired,
+  addValue: PropTypes.func.isRequired,
   //deleteValue: PropTypes.func.isRequired,
   addNewValue: PropTypes.func.isRequired,
-  deleteDefaultValue:PropTypes.func.isRequired
+  deleteDefaultValue:PropTypes.func.isRequired,
+  enterpriseId: PropTypes.number.isRequired
 };
 
 export default DefaultValuesList;

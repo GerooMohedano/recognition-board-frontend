@@ -129,11 +129,14 @@ class MembersList extends Component {
                   <Tooltip title="Edit member">
                     <IconButton
                       aria-label="Delete"
+                      disabled={member.estado === 'inactivo'}
                       onClick={() => this.openEditDialogState(member)}
-                      disabled={!member.active}
-                      className="iconListButton"
                     >
-                      <EditIcon style={{ color: 'black' }} />
+                        {
+                        member.estado === 'activo'
+                        ? (<EditIcon style={{ color: 'black' }} />)
+                        : (<EditIcon style={{ color: '#E0E0E0' }} />)
+                      }
                       </IconButton>
                     </Tooltip>
                   <Tooltip title={member.estado === 'activo' ? "Desactivate" : "Activate"}>

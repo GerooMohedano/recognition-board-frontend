@@ -60,7 +60,7 @@ class Enterprise extends Component {
       fetchEnterpriseInfo,
       teamActivated, teamDesactivated, teamDeleted,
       memberActivated, memberDesactivated, memberDeleted,
-      defaultValueDeleted, awardDeleted,
+      defaultValueDeleted, awardDeleted, valueUpdated, valueAdded,
       match
     } = this.props;
     //teams
@@ -85,6 +85,12 @@ class Enterprise extends Component {
     }
     //defaultValues
     if (prevProps.defaultValueDeleted !== defaultValueDeleted && defaultValueDeleted && defaultValueDeleted.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.valueUpdated !== valueUpdated && valueUpdated && valueUpdated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.valueAdded !== valueAdded && valueAdded && valueAdded.data.status === 'OK') {
       fetchEnterpriseInfo(match.params.idEmpresa);
     }
     //awards
@@ -125,7 +131,7 @@ class Enterprise extends Component {
     const { fetchingEnterpriseInfo, enterpriseInfo, 
             deleteTeam, activateTeam, desactivateTeam, 
             deleteMember, activateMember, desactivateMember,
-            deleteDefaultValue, deleteAward, modifyEnterprise } = this.props;
+            deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
     return (<CircularProgress />);
@@ -178,6 +184,9 @@ class Enterprise extends Component {
             deleteMember={deleteMember}
             //defaultValues
             deleteDefaultValue={deleteDefaultValue}
+            updateValue={updateValue}
+            addValue={addValue}
+            enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
             //awards
             deleteAward={deleteAward}
           />
@@ -218,6 +227,8 @@ Enterprise.propTypes = {
   //defaultValues
   deleteDefaultValue: PropTypes.func.isRequired,
   defaultValueDeleted: PropTypes.shape({}).isRequired,
+  updateValue: PropTypes.func.isRequired,
+  addValue: PropTypes.func.isRequired,
   //awards
   deleteAward: PropTypes.func.isRequired,
   awardDeleted: PropTypes.shape({}).isRequired,

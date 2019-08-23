@@ -309,35 +309,96 @@ export function modifyEnterprise(newEnterpriseInfo) {
             .catch(error => dispatch(deleteDefaultValueFailure(error)));
         };     
       }
+
+      export function updatingValue() {
+        return {
+          type: types.UPDATING_VALUE,
+          payload: {}
+        };
+      }
+      
+      export function updateValueSuccess(data) {
+        return {
+          type: types.UPDATE_VALUE_SUCCESS,
+          valueUpdated: data
+        };
+      }
+      
+      export function updateValueFailure(error) {
+        return {
+          type: types.UPDATE_VALUE_FAILURE,
+          payload: error
+        };
+      }
+      
+      export function updateValue(valueToUpdate) {
+        return function (dispatch) {
+          dispatch(updatingValue());
+          return request.post(`${baseUrl()}/modificarValor`, valueToUpdate)
+            .then(response => dispatch(updateValueSuccess(response)))
+            .catch(error => dispatch(updateValueFailure(error)));
+        };
+      }
+      
+      
+        export function addingValue() {
+          return {
+            type: types.ADDING_VALUE,
+            payload: {}
+          };
+        }
+
+        export function addValueSuccess(data) {
+          return {
+            type: types.ADD_VALUE_SUCCESS,
+            valueAdded: data
+          };
+        }
+
+        export function addValueFailure(error) {
+          return {
+            type: types.ADD_VALUE_FAILURE,
+            payload: error
+          };
+        }
+
+        export function addValue(valueToAdd) {
+          return function (dispatch) {
+            dispatch(addingValue());
+            return request.post(`${baseUrl()}/altaValorSolo`, valueToAdd)
+              .then(response => dispatch(addValueSuccess(response)))
+              .catch(error => dispatch(addValueFailure(error)));
+          };
+        }
 //awards
-export function delettingAward() {
-  return {
-    type: types.DELETTING_AWARD,
-    payload: {}
-  };
-}
+      export function delettingAward() {
+        return {
+          type: types.DELETTING_AWARD,
+          payload: {}
+        };
+      }
 
-export function deleteAwardSuccess(data) {
-  return {
-    type: types.DELETE_AWARD_SUCCESS,
-    awardDeleted: data
-  };
-}
+      export function deleteAwardSuccess(data) {
+        return {
+          type: types.DELETE_AWARD_SUCCESS,
+          awardDeleted: data
+        };
+      }
 
-export function deleteAwardFailure(error) {
-  return {
-    type: types.DELETE_AWARD_FAILURE,
-    payload: error
-  };
-}
+      export function deleteAwardFailure(error) {
+        return {
+          type: types.DELETE_AWARD_FAILURE,
+          payload: error
+        };
+      }
 
-export function deleteAward(awardToDelete) {
-  return function (dispatch) {
-    dispatch(delettingAward());
-    return request.post(`${baseUrl()}/borrarLogro`, awardToDelete)
-      .then(response => dispatch(deleteAwardSuccess(response)))
-      .catch(error => dispatch(deleteAwardFailure(error)));
-  };
-}
+      export function deleteAward(awardToDelete) {
+        return function (dispatch) {
+          dispatch(delettingAward());
+          return request.post(`${baseUrl()}/borrarLogro`, awardToDelete)
+            .then(response => dispatch(deleteAwardSuccess(response)))
+            .catch(error => dispatch(deleteAwardFailure(error)));
+        };
+      }
 
 

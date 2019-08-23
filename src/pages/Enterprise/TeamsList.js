@@ -96,11 +96,15 @@ class TeamsList extends Component {
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
-                      disabled={!team.active}
+                      disabled={team.estado === 'inactivo'}
                       onClick={() => this.toggleEditDialogState(team.idEquipo, team.nombre_equipo, true)}
                       className="iconListButton"
                     >
-                      <EditIcon style={{ color: 'black' }} />
+                     {
+                        team.estado === 'activo'
+                        ? (<EditIcon style={{ color: 'black' }} />)
+                        : (<EditIcon style={{ color: '#E0E0E0' }} />)
+                      }
                     </IconButton>
                     </Tooltip>
                   <Tooltip title={team.estado === 'activo' ? "Desactivate" : "Activate"}>

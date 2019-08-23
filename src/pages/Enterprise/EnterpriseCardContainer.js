@@ -236,7 +236,7 @@ class EnterpriseCardContainer extends Component {
     const { teams, enterpriseMembers, defaultValues, values, awards} = this.state;
     const { activateTeam, desactivateTeam, deleteTeam, 
             activateMember, desactivateMember, deleteMember,
-            deleteDefaultValue, deleteAward } = this.props;
+            deleteDefaultValue, deleteAward, updateValue, addValue, enterpriseId } = this.props;
     return (
       <div className="cardsContainer">
         <TeamsList
@@ -260,10 +260,11 @@ class EnterpriseCardContainer extends Component {
         />
         <DefaultValuesList
           values={this.props.values}
-          changeValueName={this.changeValueName}
+          updateValue={updateValue}
           //deleteValue={this.deleteValue}
           deleteDefaultValue={deleteDefaultValue}
-          addNewValue={this.addNewValue}
+          addValue={addValue}
+          enterpriseId={enterpriseId}
         />
         <AwardsList
           values={values}
@@ -299,9 +300,13 @@ EnterpriseCardContainer.propTypes = {
   //defaultValues
   deleteDefaultValue: PropTypes.func.isRequired,
   defaultValueDeleted: PropTypes.shape({}).isRequired,
+  updateValue: PropTypes.func.isRequired,
+  addValue: PropTypes.func.isRequired,
+  enterpriseId: PropTypes.number.isRequired,
   //award
   deleteAward: PropTypes.func.isRequired,
   awardDeleted: PropTypes.shape({}).isRequired,
+
 };
 
 export default EnterpriseCardContainer;

@@ -3,7 +3,7 @@ import Enterprise from './Enterprise';
 import { fetchEnterpriseInfo, modifyAddress, 
         deleteTeam, activateTeam, desactivateTeam ,
         deleteMember, activateMember, desactivateMember,
-        deleteDefaultValue, deleteAward, modifyEnterprise
+        deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue
        
        } from './EnterpriseAction';
 
@@ -34,10 +34,17 @@ function mapStateToProps(state) {
     desactivatingDefaultValue: state.enterprise.desactivatingDefaultValue,
     defaultValueDeleted: state.enterprise.defaultValueDeleted,
     deleteDefaultValueError: state.enterprise.deleteDefaultValueError,
+    updatingValue: state.teamConfig.updatingValue,
+    valueUpdated: state.teamConfig.valueUpdated,
+    updateValueError: state.teamConfig.updateValueError,
+    valueAdded: state.teamConfig.valueAdded,
+    addingValue: state.teamConfig.addingValue,
+    addValueError: state.teamConfig.addValueError,
     //Award
     desactivatingAward: state.enterprise.desactivatingAward,
     awardDeleted: state.enterprise.awardDeleted,
     deleteAwardError: state.enterprise.deleteAwardError,
+    valueUpdated: state.teamConfig.valueUpdated,
     //Enterprise modify
     modifyingSprint: state.team.modifyingSprint,
     modifySprintError: state.team.modifySprintError,
@@ -49,5 +56,5 @@ export default connect(mapStateToProps, {
   activateTeam, desactivateTeam, deleteTeam,
   activateMember, desactivateMember, deleteMember,
   deleteDefaultValue,
-  deleteAward, modifyEnterprise
+  deleteAward, modifyEnterprise, updateValue, addValue
 })(Enterprise);
