@@ -103,7 +103,8 @@ class MembersList extends Component {
       idToDelete, nameToDelete, newTeamMember, updatedData
     } = this.state;
     const {
-      changeEnterpriseMemberActive, deleteEnterpriseMember
+      changeEnterpriseMemberActive,
+      deleteMember, activateMember, desactivateMember
     } = this.props;
     const {members} = this.props;
     return (
@@ -133,22 +134,25 @@ class MembersList extends Component {
                       className="iconListButton"
                     >
                       <EditIcon style={{ color: 'black' }} />
-                    </IconButton>
-                  </Tooltip>
-                  <Tooltip title={member.active ? "Desactivate" : "Activate"}>
+                      </IconButton>
+                    </Tooltip>
+                  <Tooltip title={member.estado === 'activo' ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => changeEnterpriseMemberActive(member.id, !member.active)}
-                      className="iconListButton"
+                      onClick={
+                        member.estado === 'inactivo'
+                        ? () => activateMember({ idUsuario: member.idUsuario})
+                        : () => desactivateMember({ idUsuario: member.idUsuario})
+                      }
                     >
-                      <ActivateIcon color={member.active ? "primary" : "secondary"} />
+                      <ActivateIcon color={member.estado === 'activo' ? "primary" : "secondary"} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Kick out">
                     <IconButton
                       aria-label="Delete"
                       disabled={member.rol === 1}
-                      onClick={() => this.toggleDeleteDialogState(member.id, member.userName, true)}
+                      onClick={() => this.toggleDeleteDialogState(member.idUsuario, member.nombre_usuario, true)}
                       className="iconListButton"
                     >
                       <DeleteIcon style={{ color: 'black' }} />
@@ -184,11 +188,12 @@ class MembersList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteEnterpriseMember(idToDelete); this.toggleDeleteDialogState(-1, '', false)}}
+              onClick={() => {deleteMember( {idUsuario: idToDelete} ); this.toggleDeleteDialogState(-1, '', false)}}
               color="secondary"
             >
               Delete
             </Button>
+            
           </DialogActions>
         </Dialog>
         <Dialog
@@ -324,8 +329,13 @@ MembersList.propTypes = {
   members: PropTypes.array.isRequired,
   updateEnterpriseMember: PropTypes.func.isRequired,
   changeEnterpriseMemberActive: PropTypes.func.isRequired,
-  deleteEnterpriseMember: PropTypes.func.isRequired,
-  addNewEnterpriseMember: PropTypes.func.isRequired
+  //deleteEnterpriseMember: PropTypes.func.isRequired,
+  addNewEnterpriseMember: PropTypes.func.isRequired,
+  addNewMember: PropTypes.func.isRequired,
+
+  deleteMember: PropTypes.func.isRequired,
+  activateMember: PropTypes.func.isRequired,
+  desactivateMember: PropTypes.func.isRequired
 };
 
 export default MembersList;

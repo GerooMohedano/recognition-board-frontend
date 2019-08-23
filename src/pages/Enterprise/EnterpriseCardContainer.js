@@ -95,7 +95,7 @@ class EnterpriseCardContainer extends Component {
       };
     });
   }
-
+/*
   deleteTeam = teamId => {
     this.setState(state => {
       const teamsList = state.teams.filter(team => team.id !== teamId);
@@ -103,7 +103,7 @@ class EnterpriseCardContainer extends Component {
         teams: teamsList
       };
     });
-  }
+  }*/
 
   addNewTeam = team => {
     const nextId = this.state.teams[this.state.teams.length];
@@ -233,34 +233,43 @@ class EnterpriseCardContainer extends Component {
   }
 
   render() {
-    const { teams, enterpriseMembers, defaultValues, values, awards } = this.state;
+    const { teams, enterpriseMembers, defaultValues, values, awards} = this.state;
+    const { activateTeam, desactivateTeam, deleteTeam, 
+            activateMember, desactivateMember, deleteMember,
+            deleteDefaultValue, deleteAward } = this.props;
     return (
       <div className="cardsContainer">
         <TeamsList
           teams={this.props.teams}
           changeTeamName={this.changeTeamName}
-          changeTeamActive={this.changeTeamActive}
-          deleteTeam={this.deleteTeam}
-          addNewTeam={this.addNewTeam}
+          //changeTeamActive={this.changeTeamActive}
+          activateTeam={activateTeam}
+          desactivateTeam={desactivateTeam}
+          deleteTeam={deleteTeam}
+          addNewTeam={this.addNewTeam}//cambiar
         />
         <MembersList
           members={this.props.members}
           updateEnterpriseMember={this.updateEnterpriseMember}
-          changeEnterpriseMemberActive={this.changeEnterpriseMemberActive}
-          deleteEnterpriseMember={this.deleteEnterpriseMember}
+         // changeEnterpriseMemberActive={this.changeEnterpriseMemberActive}
+          activateMember={activateMember}
+          desactivateMember={desactivateMember}
+          deleteMember={deleteMember}
+         // deleteEnterpriseMember={this.deleteEnterpriseMember}
           addNewEnterpriseMember={this.addNewEnterpriseMember}
         />
         <DefaultValuesList
           values={this.props.values}
           changeValueName={this.changeValueName}
-          deleteValue={this.deleteValue}
+          //deleteValue={this.deleteValue}
+          deleteDefaultValue={deleteDefaultValue}
           addNewValue={this.addNewValue}
         />
         <AwardsList
           values={values}
           awards={this.props.awards}
           updateAward={this.updateAward}
-          deleteAward={this.deleteAward}
+          deleteAward={deleteAward}
           addNewAward={this.addNewAward}
         />
       </div>
@@ -272,7 +281,27 @@ EnterpriseCardContainer.propTypes = {
   teams: PropTypes.array.isRequired, 
   members: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
-  awards: PropTypes.array.isRequired
+  awards: PropTypes.array.isRequired,
+  //teams
+  activateTeam: PropTypes.func.isRequired,
+  desactivateTeam: PropTypes.func.isRequired,
+  teamActivated: PropTypes.shape({}).isRequired,
+  teamDesactivated: PropTypes.shape({}).isRequired,
+  deleteTeam: PropTypes.func.isRequired,
+  teamDeleted: PropTypes.shape({}).isRequired,
+  //members
+  activateMember: PropTypes.func.isRequired,
+  desactivateMember: PropTypes.func.isRequired,
+  memberActivated: PropTypes.shape({}).isRequired,
+  memberDesactivated: PropTypes.shape({}).isRequired,
+  deleteMember: PropTypes.func.isRequired,
+  memberDeleted: PropTypes.shape({}).isRequired,
+  //defaultValues
+  deleteDefaultValue: PropTypes.func.isRequired,
+  defaultValueDeleted: PropTypes.shape({}).isRequired,
+  //award
+  deleteAward: PropTypes.func.isRequired,
+  awardDeleted: PropTypes.shape({}).isRequired,
 };
 
 export default EnterpriseCardContainer;

@@ -12,6 +12,8 @@ import Build from '@material-ui/icons/Build';
 import Accept from '@material-ui/icons/Done';
 import Cancel from '@material-ui/icons/Clear';
 import Delete from '@material-ui/icons/Delete';
+import { modifyEnterprise } from './EnterpriseAction';
+import Enterprise from './Enterprise';
 
 require('./Enterprise.css');
 
@@ -32,9 +34,17 @@ class EnterpriseInfo extends React.Component {
 
   saveChanges = () => {
     const { newAddress, newTelephone, newName } = this.state;
-    const { changeAddress, updateName, changeConfiguring } = this.props;
-    changeAddress(newAddress);
+    const { enterpriseId, modifyEnterprise, changeAddress, updateName, changeConfiguring } = this.props;
+   // changeAddress(newAddress);
     updateName(newName);
+    console.log("IDEMPRESAAAAAAAAAAAA",enterpriseId);
+    console.log("DIREC",newAddress);
+    console.log("TEL",newTelephone);
+    modifyEnterprise({
+    idEmpresa: enterpriseId,
+    direccion: newAddress,
+    telefono: newTelephone
+    });
     changeConfiguring(false);
   }
 
@@ -54,7 +64,7 @@ class EnterpriseInfo extends React.Component {
 
   render() {
     const { newName, newAddress, newTelephone, openDialogDelete } = this.state;
-    const { configuring, name, address, telephone, changeConfiguring } = this.props;
+    const { configuring, name, address, telephone, modifyEnterprise, changeConfiguring } = this.props;
     return (
       <Paper className="infoPaper" elevation={1}>
       {configuring
@@ -153,7 +163,9 @@ EnterpriseInfo.propTypes = {
   name: PropTypes.string.isRequired,
   updateName: PropTypes.func.isRequired,
   changeAddress: PropTypes.func.isRequired,
-  changeConfiguring: PropTypes.func.isRequired
+  changeConfiguring: PropTypes.func.isRequired,
+  modifyEnterprise: PropTypes.func.isRequired,
+  enterpriseId: PropTypes.number.isRequired
 };
 
 export default EnterpriseInfo;

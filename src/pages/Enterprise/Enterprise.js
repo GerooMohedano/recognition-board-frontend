@@ -55,6 +55,43 @@ class Enterprise extends Component {
     fetchEnterpriseInfo(match.params.idEmpresa);
   }
 
+  componentDidUpdate(prevProps) {
+    const {
+      fetchEnterpriseInfo,
+      teamActivated, teamDesactivated, teamDeleted,
+      memberActivated, memberDesactivated, memberDeleted,
+      defaultValueDeleted, awardDeleted,
+      match
+    } = this.props;
+    //teams
+    if (prevProps.teamActivated !== teamActivated && teamActivated && teamActivated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.teamDesactivated !== teamDesactivated && teamDesactivated && teamDesactivated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.teamDeleted !== teamDeleted && teamDeleted && teamDeleted.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    //members
+    if (prevProps.memberActivated !== memberActivated && memberActivated && memberActivated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.memberDesactivated !== memberDesactivated && memberDesactivated && memberDesactivated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.memberDeleted !== memberDeleted && memberDeleted && memberDeleted.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    //defaultValues
+    if (prevProps.defaultValueDeleted !== defaultValueDeleted && defaultValueDeleted && defaultValueDeleted.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    //awards
+    if (prevProps.awardDeleted !== awardDeleted && awardDeleted && awardDeleted.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+  }
   changeConfiguring = value => {
     this.setState({ configuring: value});
   }
@@ -85,7 +122,10 @@ class Enterprise extends Component {
     const {
       newName, configuring, openHistoricDialog, enterpriseInfoState, teams
     } = this.state;
-    const { fetchingEnterpriseInfo, enterpriseInfo } = this.props;
+    const { fetchingEnterpriseInfo, enterpriseInfo, 
+            deleteTeam, activateTeam, desactivateTeam, 
+            deleteMember, activateMember, desactivateMember,
+            deleteDefaultValue, deleteAward, modifyEnterprise } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
     return (<CircularProgress />);
@@ -106,8 +146,10 @@ class Enterprise extends Component {
               address={enterpriseInfo.data.empresas[0].direccion}
               telephone={enterpriseInfo.data.empresas[0].telefono}
               updateName={this.updateName}
-              changeAddress={this.changeAddress}
+              //changeAddress={this.changeAddress}
               changeConfiguring={this.changeConfiguring}
+              modifyEnterprise={modifyEnterprise}
+              enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
             />
             <div className="chartContainer">
               <ChartPolygon data={enterpriseInfo.data.valores.map(valor => ({
@@ -126,6 +168,18 @@ class Enterprise extends Component {
             members={enterpriseInfo.data.usuarios}
             values={enterpriseInfo.data.valores}
             awards={enterpriseInfo.data.logros}
+            //teams
+            activateTeam={activateTeam}
+            desactivateTeam={desactivateTeam}
+            deleteTeam={deleteTeam}
+            //member
+            activateMember={activateMember}
+            desactivateMember={desactivateMember}
+            deleteMember={deleteMember}
+            //defaultValues
+            deleteDefaultValue={deleteDefaultValue}
+            //awards
+            deleteAward={deleteAward}
           />
           <HistoricDialog
             open={openHistoricDialog}
@@ -150,6 +204,25 @@ Enterprise.propTypes = {
     message: PropTypes.object
   }),
   enterpriseInfo: PropTypes.shape({}).isRequired,
-  modifyAddress: PropTypes.func.isRequired
+  modifyAddress: PropTypes.func.isRequired,
+  //team
+  activateTeam: PropTypes.func.isRequired,
+  desactivateTeam: PropTypes.func.isRequired,
+  deleteTeam: PropTypes.func.isRequired,
+  teamDeleted: PropTypes.shape({}).isRequired,
+  //members
+  activateMember: PropTypes.func.isRequired,
+  desactivateMember: PropTypes.func.isRequired,
+  deleteMember: PropTypes.func.isRequired,
+  memberDeleted: PropTypes.shape({}).isRequired,
+  //defaultValues
+  deleteDefaultValue: PropTypes.func.isRequired,
+  defaultValueDeleted: PropTypes.shape({}).isRequired,
+  //awards
+  deleteAward: PropTypes.func.isRequired,
+  awardDeleted: PropTypes.shape({}).isRequired,
+  //enterprise modify
+  modifyingEnterprise: PropTypes.bool.isRequired,
+  modifyEnterprise: PropTypes.func.isRequired,
 };
 export default Enterprise;
