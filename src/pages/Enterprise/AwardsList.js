@@ -149,7 +149,7 @@ class AwardsList extends Component {
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => this.toggleDeleteDialogState(award.id, award.name, true)}
+                      onClick={() => this.toggleDeleteDialogState(award.idLogro, award.nombre_logro, true)}
                       className="iconListButton"
                     >
                       <DeleteIcon style={{ color: 'black' }} />
@@ -186,7 +186,7 @@ class AwardsList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteAward(idToDelete); this.toggleDeleteDialogState(-1, '', false)}}
+              onClick={() => {deleteAward({ idLogro: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
               color="secondary"
             >
               Delete
@@ -399,8 +399,8 @@ AwardsList.propTypes = {
   values: PropTypes.array.isRequired,
   awards: PropTypes.array.isRequired,
   updateAward: PropTypes.func.isRequired,
-  deleteAward: PropTypes.func.isRequired,
   addNewAward: PropTypes.func.isRequired,
+  deleteAward: PropTypes.func.isRequired
 };
 
 export default AwardsList;

@@ -77,7 +77,7 @@ class TeamsList extends Component {
       openDialogEdit, openDialogDelete, openDialogAdd,
       nameToChange, idToDelete, nameOfTheNewTeam
     } = this.state;
-    const { changeTeamActive, deleteTeam, addNewTeam } = this.props;
+    const { changeTeamActive, deleteTeam, addNewTeam, activateTeam, desactivateTeam } = this.props;
     const {teams} = this.props;
     return (
       <div className="cardContainer">
@@ -102,21 +102,23 @@ class TeamsList extends Component {
                     >
                       <EditIcon style={{ color: 'black' }} />
                     </IconButton>
-                  </Tooltip>
-                  <Tooltip title={team.active ? "Desactivate" : "Activate"}>
+                    </Tooltip>
+                  <Tooltip title={team.estado === 'activo' ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => changeTeamActive(team.idEquipo, !team.active)}
-                      className="iconListButton"
+                      onClick={
+                        team.estado === 'inactivo'
+                        ? () => activateTeam({ idEquipo: team.idEquipo})
+                        : () => desactivateTeam({ idEquipo: team.idEquipo})
+                      }
                     >
-                      <ActivateIcon color={team.active ? "primary" : "secondary"} />
+                      <ActivateIcon color={team.estado === 'activo' ? "primary" : "secondary"} />
                     </IconButton>
                   </Tooltip>
                   <Tooltip title="Delete">
-                    <IconButton
+                  <IconButton
                       aria-label="Delete"
                       onClick={() => this.toggleDeleteDialogState(team.idEquipo, true)}
-                      className="iconListButton"
                     >
                       <DeleteIcon style={{ color: 'black' }} />
                     </IconButton>
@@ -219,7 +221,7 @@ class TeamsList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteTeam(idToDelete); this.toggleDeleteDialogState(-1, false)}}
+              onClick={() => {deleteTeam({ idEquipo: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
               color="secondary"
             >
               Delete
@@ -234,9 +236,11 @@ class TeamsList extends Component {
 TeamsList.propTypes = {
   teams: PropTypes.array.isRequired,
   changeTeamName: PropTypes.func.isRequired,
-  changeTeamActive: PropTypes.func.isRequired,
+  //changeTeamActive: PropTypes.func.isRequired,
   deleteTeam: PropTypes.func.isRequired,
-  addNewTeam: PropTypes.func.isRequired
+  addNewTeam: PropTypes.func.isRequired,
+  activateTeam: PropTypes.func.isRequired,
+  desactivateTeam: PropTypes.func.isRequired
 };
 
 export default TeamsList;

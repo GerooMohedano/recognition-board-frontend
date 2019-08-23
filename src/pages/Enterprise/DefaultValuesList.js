@@ -18,6 +18,7 @@ import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import CreateIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+//import { deleteDefaultValue } from './EnterpriseAction';
 
 require('../../commons/Team.css');
 
@@ -72,7 +73,7 @@ class DefaultValuesList extends Component {
       openDialogEdit, openDialogDelete, openDialogAdd,
       nameToChange, idToDelete, nameOfTheNewValue
     } = this.state;
-    const { values, deleteValue, addNewValue } = this.props;
+    const { values, deleteDefaultValue, addNewValue } = this.props;
     return (
       <div className="cardContainer">
         <Card className="cardForEnterprise">
@@ -96,7 +97,7 @@ class DefaultValuesList extends Component {
                   <Tooltip title="Delete">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => this.toggleDeleteDialogState(value.id, true)}
+                      onClick={() => this.toggleDeleteDialogState(value.idValor, true)}
                       className="iconListButton"
                     >
                       <DeleteIcon style={{ color: 'black' }} />
@@ -190,7 +191,7 @@ class DefaultValuesList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteValue(idToDelete); this.toggleDeleteDialogState(-1, false)}}
+              onClick={() => {deleteDefaultValue({ idValor: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
               color="secondary"
             >
               Delete
@@ -205,8 +206,9 @@ class DefaultValuesList extends Component {
 DefaultValuesList.propTypes = {
   values: PropTypes.array.isRequired,
   changeValueName: PropTypes.func.isRequired,
-  deleteValue: PropTypes.func.isRequired,
-  addNewValue: PropTypes.func.isRequired
+  //deleteValue: PropTypes.func.isRequired,
+  addNewValue: PropTypes.func.isRequired,
+  deleteDefaultValue:PropTypes.func.isRequired
 };
 
 export default DefaultValuesList;
