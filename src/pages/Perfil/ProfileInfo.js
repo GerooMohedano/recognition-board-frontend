@@ -77,7 +77,7 @@ class ProfileInfo extends React.Component {
         ? (
           <TextField
             className="infoLine"
-            label="First Name"
+            label="Mail"
             value={newMail}
             onChange={event => this.updateInfo('newMail', event.target.value)}
           />

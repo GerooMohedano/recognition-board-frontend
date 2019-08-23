@@ -37,7 +37,7 @@ class SideMenu extends React.Component {
   state = {
     left: false,
     enterpriseDialogState: false,
-    newEnterprise: { name: '', address: '', city: '', telephone: '' }
+    newEnterprise: { name: '', address: '', telephone: '' }
   };
 
   toggleDrawer = (side, open) => {
@@ -48,7 +48,7 @@ class SideMenu extends React.Component {
 
   toggleEnterpriseDialogState = newState => {
     this.setState({ enterpriseDialogState: newState,
-      newEnterprise: { name: '', address: '', city: '', telephone: '' } });
+      newEnterprise: { name: '', address: '', telephone: '' } });
   }
 
   updateNewEnterpriseInfo = (newValue, stateAtr) => {
@@ -103,6 +103,17 @@ class SideMenu extends React.Component {
     return sideMenuList;
   }
 
+  confirmEnterpriseCreation = () => {
+    const { createEnterprise } = this.props;
+    const { newEnterprise } = this.state;
+    createEnterprise({
+      nombre: newEnterprise.name,
+      direccion: newEnterprise.address,
+      telefono: parseInt(newEnterprise.telephone)
+    });
+    this.toggleEnterpriseDialogState(false);
+  }
+
   render() {
     const { classes, userInfo, fetchingGeneralUserInfo } = this.props;
     const { newEnterprise, enterpriseDialogState } = this.state;
@@ -153,26 +164,27 @@ class SideMenu extends React.Component {
         >
           <DialogTitle>Add a new enterprise</DialogTitle>
           <DialogContent>
-            <TextField
-              label="Name"
-              defaultValue={newEnterprise.name}
-              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'name')}
-            />
-            <TextField
-              label="Address"
-              defaultValue={newEnterprise.address}
-              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'address')}
-            />
-            <TextField
-              label="City"
-              defaultValue={newEnterprise.city}
-              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'city')}
-            />
-            <TextField
-              label="Telephone"
-              defaultValue={newEnterprise.telephone}
-              onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'telephone')}
-            />
+            <div>
+              <TextField
+                label="Name"
+                defaultValue={newEnterprise.name}
+                onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'name')}
+              />
+            </div>
+            <div>
+              <TextField
+                label="Address"
+                defaultValue={newEnterprise.address}
+                onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'address')}
+              />
+            </div>
+            <div>
+              <TextField
+                label="Telephone"
+                defaultValue={newEnterprise.telephone}
+                onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'telephone')}
+              />
+            </div>
           </DialogContent>
           <DialogActions>
             <Button
@@ -182,7 +194,7 @@ class SideMenu extends React.Component {
               Cancel
             </Button>
             <Button
-              onClick={() => this.toggleEnterpriseDialogState(false)}
+              onClick={() => this.confirmEnterpriseCreation()}
               color="primary"
             >
               Add
@@ -198,7 +210,8 @@ SideMenu.propTypes = {
   classes: PropTypes.object.isRequired,
   userInfo: PropTypes.shape({}).isRequired,
   fetchingGeneralUserInfo: PropTypes.bool.isRequired,
-  fetchGeneralUserInfo: PropTypes.func.isRequired
+  fetchGeneralUserInfo: PropTypes.func.isRequired,
+  createEnterprise: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(SideMenu);

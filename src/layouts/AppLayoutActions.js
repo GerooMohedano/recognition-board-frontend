@@ -31,3 +31,33 @@ export function fetchGeneralUserInfo(idUser) {
       .catch(error => dispatch(fetchGeneralUserInfoFailure(error)));
   };
 }
+
+export function creattingEnterprise() {
+  return {
+    type: types.CREATTING_ENTERPRISE,
+    payload: {}
+  };
+}
+
+export function createEnterpriseSuccess(data) {
+  return {
+    type: types.CREATE_ENTERPRISE_SUCCESS,
+    enterpriseCreated: data
+  };
+}
+
+export function createEnterpriseFailure(error) {
+  return {
+    type: types.CREATE_ENTERPRISE_FAILURE,
+    payload: error
+  };
+}
+
+export function createEnterprise(enterpriseToCreate) {
+  return function (dispatch) {
+    dispatch(creattingEnterprise());
+    return request.post(`${baseUrl()}/altaEmpresa`, enterpriseToCreate)
+      .then(response => dispatch(createEnterpriseSuccess(response)))
+      .catch(error => dispatch(createEnterpriseFailure(error)));
+  };
+}
