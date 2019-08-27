@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import { BrowserRouter as Router, Route, Link, NavLink, Switch } from 'react-router-dom';
 import store from './routeStore';
+import { baseUrl } from './shared/jsUtils/Utils';
+import request from './shared/jsUtils/request';
 import SignInForm from './pages/SignInForm/SignInForm';
 import AppLayout from './layouts/AppLayoutContainer';
 import Perfil from './pages/Perfil/PerfilContainer';
@@ -14,16 +16,46 @@ import PageNotFound from './pages/Errors/PageNotFound';
 require('./App.css');
 
 class App extends Component {
+  state = {
+    isLoggedIn: false,
+    userInfo: {},
+    error: {}
+  }
+
+  login = (loginInfo) => {
+    return request.post(`${baseUrl()}/tercerLogin`, loginInfo)
+      .then(response => this.setState({ userInfo: response }))
+      .catch(error => this.setState({ error: error }));
+  }
+
+  logout = () => this.setState({ userInfo: {}, error: {}, isLoggedIn: false })
+
+  componentDidUpdate(prevProps, prevState) {
+    const { userInfo, error } = this.state;
+    console.log(userInfo);
+    if (prevState.userInfo !== userInfo
+      && userInfo !== undefined
+      && Object.entries(userInfo).length !== 0
+      && Object.entries(error).length === 0
+      && userInfo.data.data.length !== 0) {
+      this.setState({ isLoggedIn: true });
+    }
+  }
 
   render() {
-    const isLoggedIn = true;
+    const { isLoggedIn } = this.state;
     return (
       <Provider store={ store }>
         <Router>
           { (isLoggedIn) ?
           (
             <div>
-              <Route path="/" component={ AppLayout } />
+              <Route path="/" render={() => {
+                return <AppLayout
+                  logout={this.logout}
+                  userInfo={this.userInfo}
+                />
+              }} />
               <Switch>
                 <Route path="/Signin" component={ SignInForm } />
                 <Route path="/Perfil/:idUsuario" component={ Perfil } />
@@ -36,7 +68,11 @@ class App extends Component {
           )
           :
           (
-            <Route path="/sign-in" component={ SignInForm } />
+            <Route path="/" render={() => {
+              return <SignInForm
+                login={this.login}
+              />
+            }} />
           )
           }
         </Router>

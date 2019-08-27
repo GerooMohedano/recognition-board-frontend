@@ -128,9 +128,9 @@ class Enterprise extends Component {
     const {
       newName, configuring, openHistoricDialog, enterpriseInfoState, teams
     } = this.state;
-    const { fetchingEnterpriseInfo, enterpriseInfo, 
-            deleteTeam, activateTeam, desactivateTeam, 
-            deleteMember, activateMember, desactivateMember,
+    const { fetchingEnterpriseInfo, enterpriseInfo,
+            deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
+            deleteMember, activateMember, desactivateMember, getNotes, notes,
             deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
@@ -161,7 +161,7 @@ class Enterprise extends Component {
               <ChartPolygon data={enterpriseInfo.data.valores.map(valor => ({
                   id: valor.idValor, subject: valor.Valor, A: valor.Total
                 }))}
-                 width={500} 
+                 width={500}
                  height={300}
                />
             </div>
@@ -178,10 +178,14 @@ class Enterprise extends Component {
             activateTeam={activateTeam}
             desactivateTeam={desactivateTeam}
             deleteTeam={deleteTeam}
+            getTeamNotes={getTeamNotes}
+            teamNotes={teamNotes}
             //member
             activateMember={activateMember}
             desactivateMember={desactivateMember}
             deleteMember={deleteMember}
+            getNotes={getNotes}
+            notes={notes}
             //defaultValues
             deleteDefaultValue={deleteDefaultValue}
             updateValue={updateValue}
@@ -219,11 +223,15 @@ Enterprise.propTypes = {
   desactivateTeam: PropTypes.func.isRequired,
   deleteTeam: PropTypes.func.isRequired,
   teamDeleted: PropTypes.shape({}).isRequired,
+  getTeamNotes: PropTypes.func.isRequired,
+  teamNotes: PropTypes.shape({}).isRequired,
   //members
   activateMember: PropTypes.func.isRequired,
   desactivateMember: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
   memberDeleted: PropTypes.shape({}).isRequired,
+  getNotes: PropTypes.func.isRequired,
+  notes: PropTypes.shape({}).isRequired,
   //defaultValues
   deleteDefaultValue: PropTypes.func.isRequired,
   defaultValueDeleted: PropTypes.shape({}).isRequired,

@@ -1,10 +1,10 @@
 import { connect } from 'react-redux';
 import Enterprise from './Enterprise';
-import { fetchEnterpriseInfo, modifyAddress, 
-        deleteTeam, activateTeam, desactivateTeam ,
-        deleteMember, activateMember, desactivateMember,
+import { fetchEnterpriseInfo, modifyAddress,
+        deleteTeam, activateTeam, desactivateTeam, getTeamNotes,
+        deleteMember, activateMember, desactivateMember, getNotes,
         deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue
-       
+
        } from './EnterpriseAction';
 
 function mapStateToProps(state) {
@@ -21,6 +21,9 @@ function mapStateToProps(state) {
     desactivatingTeam: state.enterprise.desactivatingTeam,
     teamDeleted: state.enterprise.teamDeleted,
     deleteTeamError: state.enterprise.deleteTeamError,
+    gettingTeamNotes: state.team.gettingTeamNotes,
+    getTeamNotesError: state.team.getTeamNotesError,
+    teamNotes: state.team.teamNotes,
     //MEMBER
     memberActivated: state.enterprise.memberActivated,
     memberDesactivated: state.enterprise.memberDesactivated,
@@ -30,6 +33,9 @@ function mapStateToProps(state) {
     desactivatingMember: state.enterprise.desactivatingMember,
     memberDeleted: state.enterprise.memberDeleted,
     deleteMemberError: state.enterprise.deleteMemberError,
+    gettingNotes: state.team.gettingNotes,
+    getNotesError: state.team.getNotesError,
+    notes: state.team.notes,
     //DefaultValue
     desactivatingDefaultValue: state.enterprise.desactivatingDefaultValue,
     defaultValueDeleted: state.enterprise.defaultValueDeleted,
@@ -51,10 +57,10 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { 
+export default connect(mapStateToProps, {
   fetchEnterpriseInfo, modifyAddress,
-  activateTeam, desactivateTeam, deleteTeam,
-  activateMember, desactivateMember, deleteMember,
+  activateTeam, desactivateTeam, deleteTeam, getTeamNotes,
+  activateMember, desactivateMember, deleteMember, getNotes,
   deleteDefaultValue,
   deleteAward, modifyEnterprise, updateValue, addValue
 })(Enterprise);

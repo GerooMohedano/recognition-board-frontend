@@ -30,8 +30,19 @@ const INITIAL_STATE = {
     message: ''
   },
   teamDeleted: {},
-
+  gettingNotes: true,
+  getNotesError: {
+    state: false,
+    message: ''
+  },
+  notes: {},
   //member
+  gettingTeamNotes: true,
+  getTeamNotesError: {
+    state: false,
+    message: ''
+  },
+  teamNotes: {},
   desactivateMemberError: {
     state: false,
     message: ''
@@ -115,6 +126,15 @@ const behaviors = {
   [types.DELETE_TEAM_FAILURE](state, action) {
     return Object.assign({}, state, { delettingTeam: false, deleteTeamError: { state: true, message: action.payload } });
   },
+  [types.GETTING_TEAM_NOTES](state) {
+    return Object.assign({}, state, { gettingTeamNotes: true, getTeamNotesError: { state: false, message: '' } });
+  },
+  [types.GET_TEAM_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { teamNotes: action.teamNotes, gettingTeamNotes: false, getTeamNotesError: { state: false, message: '' } });
+  },
+  [types.GET_TEAM_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingTeamNotes: false, getTeamNotesError: { state: true, message: action.payload } });
+  },
   ///////////////members!!
   [types.ACTIVATING_MEMBER](state) {
     return Object.assign({}, state, { activatingMember: true, activateMemberError: { state: false, message: '' } });
@@ -142,6 +162,15 @@ const behaviors = {
   },
   [types.DELETE_MEMBER_FAILURE](state, action) {
     return Object.assign({}, state, { delettingMember: false, deleteMemberError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_NOTES](state) {
+    return Object.assign({}, state, { gettingNotes: true, getNotesError: { state: false, message: '' } });
+  },
+  [types.GET_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { notes: action.notes, gettingNotes: false, getNotesError: { state: false, message: '' } });
+  },
+  [types.GET_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingNotes: false, getNotesError: { state: true, message: action.payload } });
   },
   ///////////////DefaultValues!!
   [types.DELETTING_DEFAULTVALUE](state) {

@@ -234,8 +234,8 @@ class EnterpriseCardContainer extends Component {
 
   render() {
     const { teams, enterpriseMembers, defaultValues, values, awards} = this.state;
-    const { activateTeam, desactivateTeam, deleteTeam, 
-            activateMember, desactivateMember, deleteMember,
+    const { activateTeam, desactivateTeam, deleteTeam, getTeamNotes, teamNotes,
+            activateMember, desactivateMember, deleteMember, getNotes, notes,
             deleteDefaultValue, deleteAward, updateValue, addValue, enterpriseId } = this.props;
     return (
       <div className="cardsContainer">
@@ -247,6 +247,8 @@ class EnterpriseCardContainer extends Component {
           desactivateTeam={desactivateTeam}
           deleteTeam={deleteTeam}
           addNewTeam={this.addNewTeam}//cambiar
+          getTeamNotes={getTeamNotes}
+          teamNotes={teamNotes}
         />
         <MembersList
           members={this.props.members}
@@ -255,6 +257,8 @@ class EnterpriseCardContainer extends Component {
           activateMember={activateMember}
           desactivateMember={desactivateMember}
           deleteMember={deleteMember}
+          getNotes={getNotes}
+          notes={notes}
          // deleteEnterpriseMember={this.deleteEnterpriseMember}
           addNewEnterpriseMember={this.addNewEnterpriseMember}
         />
@@ -279,7 +283,7 @@ class EnterpriseCardContainer extends Component {
 }
 
 EnterpriseCardContainer.propTypes = {
-  teams: PropTypes.array.isRequired, 
+  teams: PropTypes.array.isRequired,
   members: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
   awards: PropTypes.array.isRequired,
@@ -290,6 +294,8 @@ EnterpriseCardContainer.propTypes = {
   teamDesactivated: PropTypes.shape({}).isRequired,
   deleteTeam: PropTypes.func.isRequired,
   teamDeleted: PropTypes.shape({}).isRequired,
+  getTeamNotes: PropTypes.func.isRequired,
+  teamNotes: PropTypes.shape({}).isRequired,
   //members
   activateMember: PropTypes.func.isRequired,
   desactivateMember: PropTypes.func.isRequired,
@@ -297,6 +303,8 @@ EnterpriseCardContainer.propTypes = {
   memberDesactivated: PropTypes.shape({}).isRequired,
   deleteMember: PropTypes.func.isRequired,
   memberDeleted: PropTypes.shape({}).isRequired,
+  getNotes: PropTypes.func.isRequired,
+  notes: PropTypes.shape({}).isRequired,
   //defaultValues
   deleteDefaultValue: PropTypes.func.isRequired,
   defaultValueDeleted: PropTypes.shape({}).isRequired,

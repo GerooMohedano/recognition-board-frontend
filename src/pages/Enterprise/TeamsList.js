@@ -19,6 +19,8 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import ActivateIcon from '@material-ui/icons/PowerSettingsNew';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import CreateIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
 import TeamCatPic from '../../images/macri.jpg';
@@ -33,6 +35,7 @@ class TeamsList extends Component {
       openDialogEdit: false,
       openDialogDelete: false,
       openDialogAdd: false,
+      undeletableTeam: false,
       nameToChange: '',
       idToChange: -1,
       idToDelete: -1,
@@ -65,6 +68,9 @@ class TeamsList extends Component {
   }
 
   toggleDeleteDialogState = (teamId, state) => {
+    if (state) {
+      this.props.getTeamNotes({ idEquipo: teamId });
+    }
     this.setState({ idToDelete: teamId, openDialogDelete: state });
   }
 
@@ -72,10 +78,21 @@ class TeamsList extends Component {
     this.setState({ openDialogAdd: state, nameOfTheNewTeam: '' });
   }
 
+  deleteConfirmation = () => {
+    const { idToDelete } = this.state;
+    const { teamNotes, deleteTeam } = this.props;
+    if (teamNotes === undefined || teamNotes.data.data.length !== 0) {
+      this.setState({ undeletableTeam: true });
+    } else {
+      deleteTeam({ idEquipo: idToDelete });
+      this.toggleDeleteDialogState(-1, false);
+    }
+  }
+
   render() {
     const {
       openDialogEdit, openDialogDelete, openDialogAdd,
-      nameToChange, idToDelete, nameOfTheNewTeam
+      nameToChange, idToDelete, nameOfTheNewTeam, undeletableTeam
     } = this.state;
     const { changeTeamActive, deleteTeam, addNewTeam, activateTeam, desactivateTeam } = this.props;
     const {teams} = this.props;
@@ -225,13 +242,37 @@ class TeamsList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteTeam({ idEquipo: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
+              onClick={() => this.deleteConfirmation()}
               color="secondary"
             >
               Delete
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          variant="error"
+          open={undeletableTeam}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ undeletableTeam: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Can't delete a team with notes</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ undeletableTeam: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </div>
     );
   }
@@ -244,7 +285,9 @@ TeamsList.propTypes = {
   deleteTeam: PropTypes.func.isRequired,
   addNewTeam: PropTypes.func.isRequired,
   activateTeam: PropTypes.func.isRequired,
-  desactivateTeam: PropTypes.func.isRequired
+  desactivateTeam: PropTypes.func.isRequired,
+  getTeamNotes: PropTypes.func.isRequired,
+  teamNotes: PropTypes.shape({}).isRequired
 };
 
 export default TeamsList;

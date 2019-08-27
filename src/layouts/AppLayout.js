@@ -135,7 +135,7 @@ class AppLayout extends React.Component {
 
   render() {
     const { anchor, changePasswordDialog, password, newPassword1, newPassword2, wrongPassword } = this.state;
-    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, createEnterprise } = this.props;
+    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, createEnterprise, logout } = this.props;
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -179,7 +179,7 @@ class AppLayout extends React.Component {
             <MenuItem>Profile</MenuItem>
           </NavLink>
           <MenuItem onClick={() => this.setState({ changePasswordDialog: true })}>Change Password</MenuItem>
-          <MenuItem onClick={() => this.setState({ anchor: null })}>Log out</MenuItem>
+          <MenuItem onClick={() => logout()}>Log out</MenuItem>
         </Menu>
         <Dialog
           open={changePasswordDialog}
@@ -263,7 +263,8 @@ AppLayout.propTypes = {
   fetchGeneralUserInfo: PropTypes.func.isRequired,
   userInfo: PropTypes.shape({}).isRequired,
   createEnterprise: PropTypes.func.isRequired,
-  fetchingGeneralUserInfo: PropTypes.bool.isRequired
+  fetchingGeneralUserInfo: PropTypes.bool.isRequired,
+  logout: PropTypes.func.isRequired
 };
 
 export default withStyles(styles)(AppLayout);

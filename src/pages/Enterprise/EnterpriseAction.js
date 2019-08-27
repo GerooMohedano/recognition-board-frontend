@@ -102,21 +102,21 @@ export function modifyEnterprise(newEnterpriseInfo) {
           payload: {}
         };
       }
-      
+
       export function deleteTeamSuccess(data) {
         return {
           type: types.DELETE_TEAM_SUCCESS,
           teamDeleted: data
         };
       }
-      
+
       export function deleteTeamFailure(error) {
         return {
           type: types.DELETE_TEAM_FAILURE,
           payload: error
         };
       }
-      
+
       export function deleteTeam(teamToDelete) {
         return function (dispatch) {
           dispatch(delettingTeam());
@@ -125,7 +125,7 @@ export function modifyEnterprise(newEnterpriseInfo) {
             .catch(error => dispatch(deleteTeamFailure(error)));
         };
       }
-      
+
     export function activatingTeam() {
       return {
         type: types.ACTIVATING_TEAM,
@@ -195,21 +195,21 @@ export function modifyEnterprise(newEnterpriseInfo) {
           payload: {}
         };
       }
-      
+
       export function deleteMemberSuccess(data) {
         return {
           type: types.DELETE_MEMBER_SUCCESS,
           memberDeleted: data
         };
       }
-      
+
       export function deleteMemberFailure(error) {
         return {
           type: types.DELETE_MEMBER_FAILURE,
           payload: error
         };
       }
-      
+
       export function deleteMember(memberToDelete) {
         return function (dispatch) {
           dispatch(delettingMember());
@@ -218,7 +218,7 @@ export function modifyEnterprise(newEnterpriseInfo) {
             .catch(error => dispatch(deleteMemberFailure(error)));
         };
       }
-      
+
     export function activatingMember() {
       return {
         type: types.ACTIVATING_MEMBER,
@@ -304,10 +304,10 @@ export function modifyEnterprise(newEnterpriseInfo) {
       export function deleteDefaultValue(defaultValueToDelete) {
         return function (dispatch) {
           dispatch(delettingDefaultValue());
-          return request.post(`${baseUrl()}/eliminarEmpresaValor`, defaultValueToDelete) 
+          return request.post(`${baseUrl()}/eliminarEmpresaValor`, defaultValueToDelete)
             .then(response => dispatch(deleteDefaultValueSuccess(response)))
             .catch(error => dispatch(deleteDefaultValueFailure(error)));
-        };     
+        };
       }
 
       export function updatingValue() {
@@ -316,21 +316,21 @@ export function modifyEnterprise(newEnterpriseInfo) {
           payload: {}
         };
       }
-      
+
       export function updateValueSuccess(data) {
         return {
           type: types.UPDATE_VALUE_SUCCESS,
           valueUpdated: data
         };
       }
-      
+
       export function updateValueFailure(error) {
         return {
           type: types.UPDATE_VALUE_FAILURE,
           payload: error
         };
       }
-      
+
       export function updateValue(valueToUpdate) {
         return function (dispatch) {
           dispatch(updatingValue());
@@ -339,8 +339,8 @@ export function modifyEnterprise(newEnterpriseInfo) {
             .catch(error => dispatch(updateValueFailure(error)));
         };
       }
-      
-      
+
+
         export function addingValue() {
           return {
             type: types.ADDING_VALUE,
@@ -401,4 +401,64 @@ export function modifyEnterprise(newEnterpriseInfo) {
         };
       }
 
+      export function gettingNotes() {
+        return {
+          type: types.GETTING_NOTES,
+          payload: {}
+        };
+      }
 
+      export function getNotesSuccess(data) {
+        return {
+          type: types.GET_NOTES_SUCCESS,
+          notes: data
+        };
+      }
+
+
+      export function getNotesFailure(error) {
+        return {
+          type: types.GET_NOTES_FAILURE,
+          payload: error
+        };
+      }
+
+      export function getNotes(notesRequested) {
+        return function (dispatch) {
+          dispatch(gettingNotes());
+          return request.post(`${baseUrl()}/todasNotasUsuario`, notesRequested)
+            .then(response => dispatch(getNotesSuccess(response)))
+            .catch(error => dispatch(getNotesFailure(error)));
+        };
+      }
+
+      export function gettingTeamNotes() {
+        return {
+          type: types.GETTING_TEAM_NOTES,
+          payload: {}
+        };
+      }
+
+      export function getTeamNotesSuccess(data) {
+        return {
+          type: types.GET_TEAM_NOTES_SUCCESS,
+          teamNotes: data
+        };
+      }
+
+
+      export function getTeamNotesFailure(error) {
+        return {
+          type: types.GET_TEAM_NOTES_FAILURE,
+          payload: error
+        };
+      }
+
+      export function getTeamNotes(notesRequested) {
+        return function (dispatch) {
+          dispatch(gettingTeamNotes());
+          return request.post(`${baseUrl()}/todasNotasEquipo`, notesRequested)
+            .then(response => dispatch(getTeamNotesSuccess(response)))
+            .catch(error => dispatch(getTeamNotesFailure(error)));
+        };
+      }

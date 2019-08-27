@@ -18,6 +18,8 @@ import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import Checkbox from '@material-ui/core/Checkbox';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Create';
 import CreateIcon from '@material-ui/icons/Add';
@@ -36,6 +38,7 @@ class MembersList extends Component {
       openDialogDelete: false,
       openDialogAdd: false,
       openDialogEdit: false,
+      undeletableMember: false,
       nameToDelete: '',
       idToDelete: -1,
       newTeamMember: { userName: '', firstName: '',
@@ -46,6 +49,9 @@ class MembersList extends Component {
   }
 
   toggleDeleteDialogState = (memberId, userName, state) => {
+    if (state) {
+      this.props.getNotes({ idUsuario: memberId });
+    }
     this.setState({
       idToDelete: memberId,
       nameToDelete: userName,
@@ -97,10 +103,21 @@ class MembersList extends Component {
     this.setState(state => ({ [stateAtr]: { ...state[stateAtr], [subStateAtr]: value } }));
   }
 
+  deleteConfirmation = () => {
+    const { idToDelete } = this.state;
+    const { notes, deleteMember } = this.props;
+    if (notes === undefined || notes.data.data.length !== 0) {
+      this.setState({ undeletableMember: true });
+    } else {
+      deleteMember({idUsuario: idToDelete});
+      this.toggleDeleteDialogState(-1, '', false);
+    }
+  }
+
   render() {
     const {
       openDialogDelete, openDialogAdd, openDialogEdit,
-      idToDelete, nameToDelete, newTeamMember, updatedData
+      idToDelete, nameToDelete, newTeamMember, updatedData, undeletableMember
     } = this.state;
     const {
       changeEnterpriseMemberActive,
@@ -191,12 +208,12 @@ class MembersList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteMember( {idUsuario: idToDelete} ); this.toggleDeleteDialogState(-1, '', false)}}
+              onClick={() => this.deleteConfirmation()}
               color="secondary"
             >
               Delete
             </Button>
-            
+
           </DialogActions>
         </Dialog>
         <Dialog
@@ -323,6 +340,30 @@ class MembersList extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          variant="error"
+          open={undeletableMember}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ undeletableMember: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Can't delete a member with notes</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ undeletableMember: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </div>
     );
   }
@@ -335,7 +376,8 @@ MembersList.propTypes = {
   //deleteEnterpriseMember: PropTypes.func.isRequired,
   addNewEnterpriseMember: PropTypes.func.isRequired,
   addNewMember: PropTypes.func.isRequired,
-
+  getNotes: PropTypes.func.isRequired,
+  notes: PropTypes.shape({}).isRequired,
   deleteMember: PropTypes.func.isRequired,
   activateMember: PropTypes.func.isRequired,
   desactivateMember: PropTypes.func.isRequired
