@@ -1,15 +1,18 @@
 import { connect } from 'react-redux';
 import AppLayout from './AppLayout';
-import { fetchGeneralUserInfo, createEnterprise } from './AppLayoutActions';
+import { fetchGeneralUserInfo, createEnterprise, changePassword } from './AppLayoutActions';
 
 function mapStateToProps(state) {
   return {
     fetchingGeneralUserInfo: state.appLayout.fetchingGeneralUserInfo,
     creattingEnterprise: state.appLayout.creattingEnterprise,
+    changingPassword: state.appLayout.changingPassword,
     userInfo: state.appLayout.userInfo,
     enterpriseCreated: state.appLayout.enterpriseCreated,
-    fetchError: state.appLayout.fetchError
+    passwordChanged: state.appLayout.passwordChanged,
+    fetchError: state.appLayout.fetchError,
+    changePasswordError: state.appLayout.changePasswordError
   };
 }
 
-export default connect(mapStateToProps, { fetchGeneralUserInfo, createEnterprise })(AppLayout);
+export default connect(mapStateToProps, { fetchGeneralUserInfo, createEnterprise, changePassword })(AppLayout);

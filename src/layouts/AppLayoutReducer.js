@@ -4,7 +4,12 @@ import * as types from './AppLayoutConstants';
 const INITIAL_STATE = {
   fetchingGeneralUserInfo: true,
   creattingEnterprise: true,
+  changingPassword: true,
   fetchError: {
+    state: false,
+    message: ''
+  },
+  changePasswordError: {
     state: false,
     message: ''
   },
@@ -13,7 +18,8 @@ const INITIAL_STATE = {
     message: ''
   },
   userInfo: {},
-  enterpriseCreated: {}
+  enterpriseCreated: {},
+  passwordChanged: {}
 };
 
 const behaviors = {
@@ -34,6 +40,15 @@ const behaviors = {
   },
   [types.CREATE_ENTERPRISE_FAILURE](state, action) {
     return Object.assign({}, state, { creattingEnterprise: false, createEnterpriseError: { state: true, message: action.payload } });
+  },
+  [types.CHANGING_PASSWORD](state) {
+    return Object.assign({}, state, { changingPassword: true, changePasswordError: { state: false, message: '' } });
+  },
+  [types.CHANGE_PASSWORD_SUCCESS](state, action) {
+    return Object.assign({}, state, { passwordChanged: action.passwordChanged, changingPassword: false, changePasswordError: { state: false, message: '' } });
+  },
+  [types.CHANGE_PASSWORD_FAILURE](state, action) {
+    return Object.assign({}, state, { changingPassword: false, changePasswordError: { state: true, message: action.payload } });
   }
 };
 

@@ -42,6 +42,13 @@ class Perfil extends React.Component {
     fetchUserInfo(match.params.idUsuario);
   }
 
+  componentDidUpdate(prevProps) {
+    const { fetchUserInfo, match } = this.props;
+    if (prevProps.match !== match) {
+      fetchUserInfo(match.params.idUsuario);
+    }
+  }
+
   changeHistoricDialogState = value => {
     this.setState({ openHistoricDialog: value });
   }

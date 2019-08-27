@@ -43,7 +43,7 @@ class App extends Component {
   }
 
   render() {
-    const { isLoggedIn } = this.state;
+    const { isLoggedIn, userInfo } = this.state;
     return (
       <Provider store={ store }>
         <Router>
@@ -53,11 +53,10 @@ class App extends Component {
               <Route path="/" render={() => {
                 return <AppLayout
                   logout={this.logout}
-                  userInfo={this.userInfo}
+                  loginInfo={userInfo}
                 />
               }} />
               <Switch>
-                <Route path="/Signin" component={ SignInForm } />
                 <Route path="/Perfil/:idUsuario" component={ Perfil } />
                 <Route path="/TeamConfig/:idTeam" component={ TeamConfig } />
                 <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />

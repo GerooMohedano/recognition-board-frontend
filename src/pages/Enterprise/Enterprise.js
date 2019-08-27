@@ -63,6 +63,9 @@ class Enterprise extends Component {
       defaultValueDeleted, awardDeleted, valueUpdated, valueAdded,
       match
     } = this.props;
+    if (prevProps.match !== match) {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
     //teams
     if (prevProps.teamActivated !== teamActivated && teamActivated && teamActivated.data.status === 'OK') {
       fetchEnterpriseInfo(match.params.idEmpresa);

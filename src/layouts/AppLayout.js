@@ -104,8 +104,16 @@ class AppLayout extends React.Component {
     wrongPassword: false,
     password: '',
     newPassword1: '',
-    newPassword2: ''
+    newPassword2: '',
+    changePasswordSuccess: false
   };
+
+  componentDidUpdate(prevProps) {
+    const { passwordChanged } = this.props;
+    if (prevProps.passwordChanged !== passwordChanged && passwordChanged && passwordChanged.data.status === 'OK') {
+      this.setState({ changePasswordSuccess: true });
+    }
+  }
 
   handleOpenProfileMenu = event => {
     this.setState({ anchor: event.currentTarget });
@@ -125,8 +133,14 @@ class AppLayout extends React.Component {
   }
 
   checkPassword = () => {
-    const { newPassword1, newPassword2 } = this.state;
+    const { password, newPassword1, newPassword2 } = this.state;
+    const { loginInfo, changePassword } = this.props;
     if (newPassword1 === newPassword2) {
+      changePassword({
+        idUsuario: loginInfo.data.data[0].idUsuario,
+        contraseniaactual: password,
+        contrasenianueva: newPassword1
+      });
       this.handleClosePasswordDialog();
     } else {
       this.setState({ wrongPassword: true })
@@ -134,8 +148,9 @@ class AppLayout extends React.Component {
   }
 
   render() {
-    const { anchor, changePasswordDialog, password, newPassword1, newPassword2, wrongPassword } = this.state;
-    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, createEnterprise, logout } = this.props;
+    const { anchor, changePasswordDialog, password, newPassword1, newPassword2, wrongPassword, changePasswordSuccess } = this.state;
+    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, createEnterprise, logout, loginInfo } = this.props;
+    console.log(loginInfo);
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -145,6 +160,8 @@ class AppLayout extends React.Component {
               fetchingGeneralUserInfo={fetchingGeneralUserInfo}
               fetchGeneralUserInfo={fetchGeneralUserInfo}
               createEnterprise={createEnterprise}
+              idUser={loginInfo.data.data[0].idUsuario}
+              adminGeneral={loginInfo.data.data[0].adminGeneral}
             />
             <Typography className={classes.title} variant="h6" color="inherit" noWrap>
               OnBoard
@@ -175,7 +192,7 @@ class AppLayout extends React.Component {
           open={Boolean(anchor)}
           onClose={() => this.setState({ anchor: null })}
         >
-          <NavLink to="/Perfil/1" className="linkPerfil">
+          <NavLink to={`/Perfil/${loginInfo.data.data[0].idUsuario}`} className="linkPerfil">
             <MenuItem>Profile</MenuItem>
           </NavLink>
           <MenuItem onClick={() => this.setState({ changePasswordDialog: true })}>Change Password</MenuItem>
@@ -247,7 +264,32 @@ class AppLayout extends React.Component {
               aria-label="Close"
               color="secondary"
               className={classes.close}
-              onClick={() => this.setState({ wrongPassword: false})}
+              onClick={() => this.setState({ wrongPassword: false })}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'bottom',
+            horizontal: 'left',
+          }}
+          variant="success"
+          open={changePasswordSuccess}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ changePasswordSuccess: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">The password has been updated correctly</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              className={classes.close}
+              onClick={() => this.setState({ changePasswordSuccess: false })}
             >
               <CloseIcon />
             </IconButton>
@@ -261,9 +303,12 @@ class AppLayout extends React.Component {
 AppLayout.propTypes = {
   classes: PropTypes.object.isRequired,
   fetchGeneralUserInfo: PropTypes.func.isRequired,
+  changePassword: PropTypes.func.isRequired,
   userInfo: PropTypes.shape({}).isRequired,
+  passwordChanged: PropTypes.shape({}).isRequired,
   createEnterprise: PropTypes.func.isRequired,
   fetchingGeneralUserInfo: PropTypes.bool.isRequired,
+  loginInfo: PropTypes.shape({}).isRequired,
   logout: PropTypes.func.isRequired
 };
 

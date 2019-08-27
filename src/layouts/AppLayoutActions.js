@@ -61,3 +61,33 @@ export function createEnterprise(enterpriseToCreate) {
       .catch(error => dispatch(createEnterpriseFailure(error)));
   };
 }
+
+export function changingPassword() {
+  return {
+    type: types.CHANGING_PASSWORD,
+    payload: {}
+  };
+}
+
+export function changePasswordSuccess(data) {
+  return {
+    type: types.CHANGE_PASSWORD_SUCCESS,
+    passwordChanged: data
+  };
+}
+
+export function changePasswordFailure(error) {
+  return {
+    type: types.CHANGE_PASSWORD_FAILURE,
+    payload: error
+  };
+}
+
+export function changePassword(newPassword) {
+  return function (dispatch) {
+    dispatch(changingPassword());
+    return request.post(`${baseUrl()}/cambioContrasenia`, newPassword)
+      .then(response => dispatch(changePasswordSuccess(response)))
+      .catch(error => dispatch(changePasswordFailure(error)));
+  };
+}

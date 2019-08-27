@@ -56,9 +56,9 @@ class SideMenu extends React.Component {
   }
 
   openDrawer = () => {
-    const { fetchGeneralUserInfo } = this.props;
+    const { fetchGeneralUserInfo, idUser, adminGeneral } = this.props;
     this.toggleDrawer('left', true);
-    fetchGeneralUserInfo({ idUsuario: 2 });
+    fetchGeneralUserInfo({ idUsuario: idUser });
   }
 
   renderSideMenuList = () => {
@@ -115,7 +115,7 @@ class SideMenu extends React.Component {
   }
 
   render() {
-    const { classes, userInfo, fetchingGeneralUserInfo } = this.props;
+    const { classes, userInfo, fetchingGeneralUserInfo, adminGeneral } = this.props;
     const { newEnterprise, enterpriseDialogState } = this.state;
     const sideList = (fetchingGeneralUserInfo || userInfo === undefined)
     ? (
@@ -126,15 +126,17 @@ class SideMenu extends React.Component {
       <div className={classes.list}>
         <List>
           { this.renderSideMenuList() }
-          <ListItem>
-            <InputLabel className="textOfInputLabel">Add a new Enterprise</InputLabel>
-            <IconButton
-              aria-label="Delete"
-              onClick={() => this.toggleEnterpriseDialogState(true)}
-            >
-              <CreateIcon style={{ color: 'white' }} />
-            </IconButton>
-          </ListItem>
+          {adminGeneral &&
+            (<ListItem>
+              <InputLabel className="textOfInputLabel">Add a new Enterprise</InputLabel>
+              <IconButton
+                aria-label="Delete"
+                onClick={() => this.toggleEnterpriseDialogState(true)}
+              >
+                <CreateIcon style={{ color: 'white' }} />
+              </IconButton>
+            </ListItem>)
+        }
         </List>
       </div>
     );
@@ -211,7 +213,9 @@ SideMenu.propTypes = {
   userInfo: PropTypes.shape({}).isRequired,
   fetchingGeneralUserInfo: PropTypes.bool.isRequired,
   fetchGeneralUserInfo: PropTypes.func.isRequired,
-  createEnterprise: PropTypes.func.isRequired
+  createEnterprise: PropTypes.func.isRequired,
+  idUser: PropTypes.number.isRequired,
+  adminGeneral: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(SideMenu);

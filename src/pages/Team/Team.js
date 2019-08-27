@@ -36,6 +36,9 @@ class Team extends Component {
     if (teamInfo && teamInfo.data && indexPizarra === -1) {
       this.setState({ indexPizarra: teamInfo.data.pizarras.length - 1 });
     }
+    if (prevProps.match !== match) {
+      fetchTeams(match.params.idTeam);
+    }
     if (prevProps.match.params.idTeam !== match.params.idTeam) {
       fetchTeams(match.params.idTeam);
     }
