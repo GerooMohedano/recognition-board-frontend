@@ -31,7 +31,7 @@ class Team extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { teamInfo, fetchTeams, match } = this.props;
+    const { teamInfo, fetchTeams, match, sprintCreated, sprintModified, note0s, noteCreated } = this.props;
     const { indexPizarra } = this.state;
     if (teamInfo && teamInfo.data && indexPizarra === -1) {
       this.setState({ indexPizarra: teamInfo.data.pizarras.length - 1 });
@@ -40,6 +40,15 @@ class Team extends Component {
       fetchTeams(match.params.idTeam);
     }
     if (prevProps.match.params.idTeam !== match.params.idTeam) {
+      fetchTeams(match.params.idTeam);
+    }
+    if (prevProps.sprintCreated !== sprintCreated && sprintCreated && sprintCreated.data.status === 'OK') {
+      fetchTeams(match.params.idTeam);
+    }
+    if (prevProps.sprintModified !== sprintModified && sprintModified && sprintModified.data.status === 'OK') {
+      fetchTeams(match.params.idTeam);
+    }
+    if (prevProps.noteCreated !== noteCreated && noteCreated && noteCreated.data.status === 'OK') {
       fetchTeams(match.params.idTeam);
     }
   }
@@ -60,14 +69,15 @@ class Team extends Component {
     this.setState({ indexPizarra: value });
   }
 
-  reloadPage = () => {
-    window.location.reload();
+  isUserTeamAdmin = () => {
+    const { loginInfo, teamInfo } = this.props;
+    return teamInfo.data.usuarios.find(user => user.idUsuario === loginInfo.data.data[0].idUsuario).rol;
   }
 
   render() {
     const {
       match, teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
-      gettingNotes, notes, getNotes, loginInfo,
+      gettingNotes, notes, getNotes, loginInfo, sprintChecked, checkSprint, checkingSprint,
       createNote, deleteNote, modifySprint, createSprint, deleteSprint
     } = this.props;
     const { indexPizarra } = this.state;
@@ -78,13 +88,14 @@ class Team extends Component {
         <div>
           <div className="title">
             <div className="teamName">{teamInfo.data.equipos[0].nombre_equipo}</div>
-            <NavLink to={`/TeamConfig/${match.params.idTeam}`}>
+            {this.isUserTeamAdmin() &&
+              <NavLink to={`/TeamConfig/${match.params.idTeam}`}>
               <Tooltip title="Edit this team configuration">
                 <IconButton>
                   <Build style={{ color: 'black' }} />
                 </IconButton>
               </Tooltip>
-            </NavLink>
+            </NavLink>}
           </div>
           <div className="teamDescription">
             <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
@@ -110,7 +121,10 @@ class Team extends Component {
             sprints={teamInfo.data.pizarras}
             indexPizarra={indexPizarra}
             idEquipo={match.params.idTeam}
-            reloadPage={this.reloadPage}
+            isUserTeamAdmin={this.isUserTeamAdmin()}
+            sprintChecked={sprintChecked}
+            checkSprint={checkSprint}
+            checkingSprint={checkingSprint}
           />
           <TeamTable
             members={teamInfo.data.usuarios}
@@ -160,6 +174,7 @@ Team.propTypes = {
   modifySprint: PropTypes.func.isRequired,
   createSprint: PropTypes.func.isRequired,
   deleteSprint: PropTypes.func.isRequired,
+  checkSprint: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
@@ -167,7 +182,12 @@ Team.propTypes = {
   historicValues: PropTypes.shape({}).isRequired,
   teamInfo: PropTypes.shape({}).isRequired,
   notes: PropTypes.shape({}).isRequired,
-  loginInfo: PropTypes.shape({}).isRequired
+  loginInfo: PropTypes.shape({}).isRequired,
+  checkingSprint: PropTypes.bool.isRequired,
+  sprintChecked: PropTypes.shape({}).isRequired,
+  sprintCreated: PropTypes.shape({}).isRequired,
+  sprintModified: PropTypes.shape({}).isRequired,
+  noteCreated: PropTypes.shape({}).isRequired
 };
 
 export default Team;

@@ -251,8 +251,8 @@ class AppLayout extends React.Component {
         </Dialog>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: 'top',
+            horizontal: 'center',
           }}
           variant="error"
           open={wrongPassword}
@@ -276,8 +276,8 @@ class AppLayout extends React.Component {
         />
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: 'top',
+            horizontal: 'center',
           }}
           variant="success"
           open={changePasswordSuccess}

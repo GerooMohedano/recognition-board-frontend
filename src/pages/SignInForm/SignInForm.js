@@ -65,8 +65,8 @@ class SignInForm extends Component {
         </div>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: 'top',
+            horizontal: 'center',
           }}
           variant="error"
           open={wrongPassword}

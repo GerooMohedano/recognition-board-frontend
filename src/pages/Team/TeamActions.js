@@ -213,7 +213,7 @@ export function createSprint(newSprintInfo) {
   return function (dispatch) {
     dispatch(creattingSprint());
     return request.post(`${baseUrl()}/altaPizarra`, newSprintInfo)
-      .then(response => dispatch(modifySprintSuccess(response)))
+      .then(response => dispatch(createSprintSuccess(response)))
       .catch(error => dispatch(createSprintFailure(error)));
   };
 }
@@ -246,5 +246,36 @@ export function deleteSprint(sprintToDelete) {
     return request.post(`${baseUrl()}/BorrarPizarra`, sprintToDelete)
       .then(response => dispatch(deleteSprintSuccess(response)))
       .catch(error => dispatch(deleteSprintFailure(error)));
+  };
+}
+
+export function checkingSprint() {
+  return {
+    type: types.CHECKING_SPRINT,
+    payload: {}
+  };
+}
+
+export function checkSprintSuccess(data) {
+  return {
+    type: types.CHECK_SPRINT_SUCCESS,
+    sprintChecked: data
+  };
+}
+
+
+export function checkSprintFailure(error) {
+  return {
+    type: types.CHECK_SPRINT_FAILURE,
+    payload: error
+  };
+}
+
+export function checkSprint(datesToCheck) {
+  return function (dispatch) {
+    dispatch(checkingSprint());
+    return request.post(`${baseUrl()}/consultarPizarraCoincidentes`, datesToCheck)
+      .then(response => dispatch(checkSprintSuccess(response)))
+      .catch(error => dispatch(checkSprintFailure(error)));
   };
 }

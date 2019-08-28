@@ -342,8 +342,8 @@ class MembersList extends Component {
         </Dialog>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: 'top',
+            horizontal: 'center',
           }}
           variant="error"
           open={undeletableMember}

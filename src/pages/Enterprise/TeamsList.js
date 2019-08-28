@@ -251,8 +251,8 @@ class TeamsList extends Component {
         </Dialog>
         <Snackbar
           anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'left',
+            vertical: 'top',
+            horizontal: 'center',
           }}
           variant="error"
           open={undeletableTeam}

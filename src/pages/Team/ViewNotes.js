@@ -39,14 +39,12 @@ class ViewNotes extends React.Component {
     this.state = {
       creatingNote: false,
       newNoteMessage: '',
-      author: 4,
       newNotePuntuation: 1
     };
   }
 
   createCardsWithNotes = () => {
-    const { notes, gettingNotes, deleteNote, handleCloseDialog } = this.props;
-    const { author } = this.state;
+    const { notes, gettingNotes, deleteNote, handleCloseDialog, loginInfo } = this.props;
     const cards = [];
     if (notes !== undefined && notes.data !== undefined  && notes.data.data !== undefined && !gettingNotes) {
       notes.data.data.forEach(note => {
@@ -62,7 +60,7 @@ class ViewNotes extends React.Component {
                   ? (<Mood className="noteCardIcon" />)
                   : (<MoodBad className="noteCardIcon" />)
                 }
-                {note.idUsuario === author
+                {note.idUsuario === loginInfo.data.data[0].idUsuario
                 && (
                   <Button
                     className="noteDeleteButton"
@@ -102,7 +100,7 @@ class ViewNotes extends React.Component {
   }
 
   createNewNoteWithContext = () => {
-    const { newNoteMessage, newNotePuntuation, author } = this.state;
+    const { newNoteMessage, newNotePuntuation } = this.state;
     const { user, value, indexPizarra, createNote, handleCloseDialog, loginInfo } = this.props;
     createNote({
       nombre: indexPizarra,
@@ -130,66 +128,70 @@ class ViewNotes extends React.Component {
         onClose={() => {handleCloseDialog(); this.decreateNewBlankNote()}}
       >
         <DialogTitle id="form-dialog-title">{value.name + ' - ' + user.name}</DialogTitle>
-          <DialogContent className="notesContainer">
-            {this.createCardsWithNotes()}
-            {(creatingNote)
-            ? (
-              <div>
-                <Card>
-                  <CardContent>
-                    <TextField
-                      id="filled-multiline-flexible"
-                      multiline
-                      rowsMax="10"
-                      value={newNoteMessage}
-                      onChange={this.handleBlankNoteWriting()}
-                      margin="normal"
-                      helperText="Write here your feedback"
-                      variant="outlined"
-                    />
-                    <div>
-                      <Mood
-                        className={classes.moodIcon}
-                        color={(newNotePuntuation === 1) ? "primary" : "disabled"}
-                      />
-                      <Switch
-                        checked={newNotePuntuation !== 1}
-                        onChange={this.handlePuntuationChange()}
-                        color="default"
-                      />
-                      <MoodBad
-                        className={classes.moodIcon}
-                        color={(newNotePuntuation !== 1) ? "secondary" : "disabled"}
-                      />
-                    </div>
-                  </CardContent>
-                </Card>
-                <DialogActions>
-                  <Button onClick={() => {handleCloseDialog(); this.decreateNewBlankNote()}} color="primary">
-                    Cancel
-                  </Button>
-                  <Button disabled={newNoteMessage === ''} onClick={() => this.createNewNoteWithContext()} color="primary">
-                    Create
-                  </Button>
-                </DialogActions>
-              </div>
-            ) : (
+        {Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)
+          && <DialogTitle id="form-dialog-subtitle">This Sprint is already over</DialogTitle>}
+        <DialogContent className="notesContainer">
+          {this.createCardsWithNotes()}
+          {(creatingNote)
+          ? (
+            <div>
               <Card>
-                <CardActionArea
-                  className="addNewCard"
-                  onClick={() => this.createNewBlankNote()}
-                  disabled={Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)}
-                >
-                  {
-                    Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)
-                    ? (<AddCircleOutline style={{ color: '#E0E0E0' }} />)
-                    : (<AddCircleOutline style={{ color: 'black' }} />)
-                  }
-                </CardActionArea>
+                <CardContent>
+                  <TextField
+                    id="filled-multiline-flexible"
+                    multiline
+                    rowsMax="10"
+                    value={newNoteMessage}
+                    onChange={this.handleBlankNoteWriting()}
+                    margin="normal"
+                    helperText="Write here your feedback"
+                    variant="outlined"
+                  />
+                  <div>
+                    <Mood
+                      className={classes.moodIcon}
+                      color={(newNotePuntuation === 1) ? "primary" : "disabled"}
+                    />
+                    <Switch
+                      checked={newNotePuntuation !== 1}
+                      onChange={this.handlePuntuationChange()}
+                      color="default"
+                    />
+                    <MoodBad
+                      className={classes.moodIcon}
+                      color={(newNotePuntuation !== 1) ? "secondary" : "disabled"}
+                    />
+                  </div>
+                </CardContent>
               </Card>
-            )
-          }
-          </DialogContent>
+              <DialogActions>
+                <Button onClick={() => {handleCloseDialog(); this.decreateNewBlankNote()}} color="primary">
+                  Cancel
+                </Button>
+                <Button disabled={newNoteMessage === ''} onClick={() => this.createNewNoteWithContext()} color="primary">
+                  Create
+                </Button>
+              </DialogActions>
+            </div>
+          ) : (
+            <Card>
+              <CardActionArea
+                className="addNewCard"
+                onClick={() => this.createNewBlankNote()}
+                disabled={Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)}
+              >
+                {
+                  Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)
+                  ? (
+                    <AddCircleOutline style={{ color: '#E0E0E0' }} />
+                  )
+                  : (<AddCircleOutline style={{ color: 'black' }} />)
+                }
+              </CardActionArea>
+            </Card>
+          )
+        }
+        </DialogContent>
       </Dialog>
     );
   }

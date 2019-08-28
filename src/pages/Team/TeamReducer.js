@@ -10,6 +10,7 @@ const INITIAL_STATE = {
   modifyingSprint: true,
   creattingSprint: true,
   delettingSprint: true,
+  checkingSprint: true,
   fetchError: {
     state: false,
     message: ''
@@ -42,9 +43,17 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  checkSprintError: {
+    state: false,
+    message: ''
+  },
   historicValues: {},
   teamInfo: {},
-  notes: {}
+  notes: {},
+  sprintChecked: {},
+  sprintCreated: {},
+  sprintModified: {},
+  noteCreated: {}
 };
 
 const behaviors = {
@@ -79,7 +88,7 @@ const behaviors = {
     return Object.assign({}, state, { creattingNote: true, createNoteError: { state: false, message: '' } });
   },
   [types.CREATE_NOTE_SUCCESS](state, action) {
-    return Object.assign({}, state, { creattingNote: false, createNoteError: { state: false, message: '' } });
+    return Object.assign({}, state, { noteCreated: action.noteCreated, creattingNote: false, createNoteError: { state: false, message: '' } });
   },
   [types.CREATE_NOTE_FAILURE](state, action) {
     return Object.assign({}, state, { creattingNote: false, createNoteError: { state: true, message: action.payload } });
@@ -97,7 +106,7 @@ const behaviors = {
     return Object.assign({}, state, { modifyingSprint: true, modifySprintError: { state: false, message: '' } });
   },
   [types.MODIFY_SPRINT_SUCCESS](state, action) {
-    return Object.assign({}, state, { modifyingSprint: false, modifySprintError: { state: false, message: '' } });
+    return Object.assign({}, state, { sprintModified: action.sprintModified, modifyingSprint: false, modifySprintError: { state: false, message: '' } });
   },
   [types.MODIFY_SPRINT_FAILURE](state, action) {
     return Object.assign({}, state, { modifyingSprint: false, modifySprintError: { state: true, message: action.payload } });
@@ -106,7 +115,7 @@ const behaviors = {
     return Object.assign({}, state, { creattingSprint: true, createSprintError: { state: false, message: '' } });
   },
   [types.CREATE_SPRINT_SUCCESS](state, action) {
-    return Object.assign({}, state, { creattingSprint: false, createSprintError: { state: false, message: '' } });
+    return Object.assign({}, state, { sprintCreated: action.sprintCreated, creattingSprint: false, createSprintError: { state: false, message: '' } });
   },
   [types.CREATE_SPRINT_FAILURE](state, action) {
     return Object.assign({}, state, { creattingSprint: false, createSprintError: { state: true, message: action.payload } });
@@ -119,6 +128,15 @@ const behaviors = {
   },
   [types.DELETE_SPRINT_FAILURE](state, action) {
     return Object.assign({}, state, { delettingSprint: false, deleteSprintError: { state: true, message: action.payload } });
+  },
+  [types.CHECKING_SPRINT](state) {
+    return Object.assign({}, state, { checkingSprint: true, checkSprintError: { state: false, message: '' } });
+  },
+  [types.CHECK_SPRINT_SUCCESS](state, action) {
+    return Object.assign({}, state, { sprintChecked: action.sprintChecked, checkingSprint: false, checkSprintError: { state: false, message: '' } });
+  },
+  [types.CHECK_SPRINT_FAILURE](state, action) {
+    return Object.assign({}, state, { checkingSprint: false, checkSprintError: { state: true, message: action.payload } });
   }
 };
 
