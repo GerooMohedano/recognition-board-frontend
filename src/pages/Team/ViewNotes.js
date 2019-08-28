@@ -103,10 +103,10 @@ class ViewNotes extends React.Component {
 
   createNewNoteWithContext = () => {
     const { newNoteMessage, newNotePuntuation, author } = this.state;
-    const { user, value, indexPizarra, createNote, handleCloseDialog } = this.props;
+    const { user, value, indexPizarra, createNote, handleCloseDialog, loginInfo } = this.props;
     createNote({
       nombre: indexPizarra,
-      idAutor: author,
+      idAutor: loginInfo.data.data[0].idUsuario,
       idDestinatario: user.id,
       idValor: value.id,
       descripcion: newNoteMessage,
@@ -206,7 +206,8 @@ ViewNotes.propTypes = {
   beginDate: PropTypes.string.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
-  notes: PropTypes.shape({}).isRequired
+  notes: PropTypes.shape({}).isRequired,
+  loginInfo: PropTypes.shape({}).isRequired
 };
 
 export default withStyles(styles)(ViewNotes);

@@ -75,9 +75,13 @@ class SearchBar extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { isOpen } = this.state;
-    const { userInfo, fetchGeneralUserInfo } = this.props;
+    const { userInfo, fetchGeneralUserInfo, fetchGeneralAdminInfo, idUser, adminGeneral } = this.props;
     if (prevState.isOpen !== isOpen && isOpen && (!userInfo || userInfo.length !== 0)) {
-      fetchGeneralUserInfo({ idUsuario: 2 });
+      if (adminGeneral) {
+        fetchGeneralAdminInfo();
+      } else {
+        fetchGeneralUserInfo({ idUsuario: idUser });
+      }
     }
   }
 
@@ -118,15 +122,17 @@ class SearchBar extends React.Component {
                   <div className="circularProgressContainer"><CircularProgress /></div>
                 ) : userInfo.data.usuariosEmpresa.filter(person => person.nombre_usuario.includes(searchedString)
                   || person.mail.includes(searchedString)).map(person => (
-                    <ListItem button component="a" href={`/Perfil/${person.idUsuario}`}>
-                      <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={CommonProfilePic} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        inset
-                        primary={`${person.nombre_usuario} (${person.mail})`}
-                      />
-                    </ListItem>
+                    <NavLink to={`/Perfil/${person.idUsuario}`} className="linkPerfil">
+                      <ListItem button onClick={() => this.updateSearch('')}>
+                        <ListItemAvatar>
+                          <Avatar alt="Remy Sharp" src={CommonProfilePic} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          inset
+                          primary={`${person.nombre_usuario} (${person.mail})`}
+                        />
+                      </ListItem>
+                    </NavLink>
                   ))
               }
             </List>
@@ -144,15 +150,17 @@ class SearchBar extends React.Component {
                   <div className="circularProgressContainer"><CircularProgress /></div>
                 ) : userInfo.data.equiposDeEmpresa.filter(team => team.nombre_equipo
                   .includes(searchedString)).map(team => (
-                    <ListItem button component="a" href={`/Team/${team.idEquipo}`}>
-                      <ListItemAvatar>
-                        <Avatar alt="Remy Sharp" src={TeamCatPic} />
-                      </ListItemAvatar>
-                      <ListItemText
-                        inset
-                        primary={team.nombre_equipo}
-                      />
-                    </ListItem>
+                    <NavLink to={`/Team/${team.idEquipo}`} className="linkPerfil">
+                      <ListItem button onClick={() => this.updateSearch('')}>
+                        <ListItemAvatar>
+                          <Avatar alt="Remy Sharp" src={TeamCatPic} />
+                        </ListItemAvatar>
+                        <ListItemText
+                          inset
+                          primary={team.nombre_equipo}
+                        />
+                      </ListItem>
+                    </NavLink>
                   ))
               }
             </List>
@@ -167,7 +175,10 @@ SearchBar.propTypes = {
   classes: PropTypes.object.isRequired,
   userInfo: PropTypes.shape({}).isRequired,
   fetchingGeneralUserInfo: PropTypes.bool.isRequired,
-  fetchGeneralUserInfo: PropTypes.func.isRequired
+  fetchGeneralUserInfo: PropTypes.func.isRequired,
+  fetchGeneralAdminInfo: PropTypes.func.isRequired,
+  idUser: PropTypes.number.isRequired,
+  adminGeneral: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(SearchBar);

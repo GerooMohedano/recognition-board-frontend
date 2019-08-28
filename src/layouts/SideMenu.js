@@ -56,9 +56,13 @@ class SideMenu extends React.Component {
   }
 
   openDrawer = () => {
-    const { fetchGeneralUserInfo, idUser, adminGeneral } = this.props;
+    const { fetchGeneralUserInfo, fetchGeneralAdminInfo, idUser, adminGeneral } = this.props;
     this.toggleDrawer('left', true);
-    fetchGeneralUserInfo({ idUsuario: idUser });
+    if (adminGeneral) {
+      fetchGeneralAdminInfo();
+    } else {
+      fetchGeneralUserInfo({ idUsuario: idUser });
+    }
   }
 
   renderSideMenuList = () => {
@@ -213,6 +217,7 @@ SideMenu.propTypes = {
   userInfo: PropTypes.shape({}).isRequired,
   fetchingGeneralUserInfo: PropTypes.bool.isRequired,
   fetchGeneralUserInfo: PropTypes.func.isRequired,
+  fetchGeneralAdminInfo: PropTypes.func.isRequired,
   createEnterprise: PropTypes.func.isRequired,
   idUser: PropTypes.number.isRequired,
   adminGeneral: PropTypes.bool.isRequired

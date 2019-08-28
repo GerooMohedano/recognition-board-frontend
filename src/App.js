@@ -60,7 +60,12 @@ class App extends Component {
                 <Route path="/Perfil/:idUsuario" component={ Perfil } />
                 <Route path="/TeamConfig/:idTeam" component={ TeamConfig } />
                 <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />
-                <Route path="/Team/:idTeam" component={ Team } />
+                <Route path="/Team/:idTeam" render={(routeProps) => {
+                  return <Team
+                    {...routeProps}
+                    loginInfo={userInfo}
+                  />
+                }} />
                 <Route component={ PageNotFound } />
               </Switch>
             </div>
@@ -70,6 +75,7 @@ class App extends Component {
             <Route path="/" render={() => {
               return <SignInForm
                 login={this.login}
+                loginInfo={userInfo}
               />
             }} />
           )

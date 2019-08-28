@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import AppLayout from './AppLayout';
-import { fetchGeneralUserInfo, createEnterprise, changePassword } from './AppLayoutActions';
+import { fetchGeneralUserInfo, fetchGeneralAdminInfo, createEnterprise, changePassword } from './AppLayoutActions';
 
 function mapStateToProps(state) {
   return {
@@ -15,4 +15,4 @@ function mapStateToProps(state) {
   };
 }
 
-export default connect(mapStateToProps, { fetchGeneralUserInfo, createEnterprise, changePassword })(AppLayout);
+export default connect(mapStateToProps, { fetchGeneralUserInfo, fetchGeneralAdminInfo, createEnterprise, changePassword })(AppLayout);

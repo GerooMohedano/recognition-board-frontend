@@ -19,13 +19,15 @@ class SignInForm extends Component {
       };
   }
 
-  handleChange = (value, field) => {
-      this.setState({ [field]: value });
+  componentDidUpdate(prevProps) {
+    const { loginInfo } = this.props;
+    if (prevProps.loginInfo !== loginInfo && loginInfo && loginInfo.data.status === "OK") {
+      this.setState({ wrongPassword: true });
+    }
   }
 
-  signIn = () => {
-      console.log('The form was submitted with the following data:');
-      console.log(this.state);
+  handleChange = (value, field) => {
+      this.setState({ [field]: value });
   }
 
   render() {
@@ -73,7 +75,7 @@ class SignInForm extends Component {
           ContentProps={{
             'aria-describedby': 'message-id',
           }}
-          message={<span id="message-id">Wrond user name or password!</span>}
+          message={<span id="message-id">Wrong user name or password!</span>}
           action={[
             <IconButton
               key="close"
@@ -91,7 +93,8 @@ class SignInForm extends Component {
 }
 
 SignInForm.propTypes = {
-  login: PropTypes.func.isRequired
+  login: PropTypes.func.isRequired,
+  loginInfo: PropTypes.shape({}).isRequired
 };
 
 export default SignInForm;

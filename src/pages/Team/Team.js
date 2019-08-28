@@ -67,7 +67,7 @@ class Team extends Component {
   render() {
     const {
       match, teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
-      gettingNotes, notes, getNotes,
+      gettingNotes, notes, getNotes, loginInfo,
       createNote, deleteNote, modifySprint, createSprint, deleteSprint
     } = this.props;
     const { indexPizarra } = this.state;
@@ -124,6 +124,7 @@ class Team extends Component {
             beginDate={teamInfo.data.pizarras[indexPizarra].fechaInicio}
             createNote={createNote}
             deleteNote={deleteNote}
+            loginInfo={loginInfo}
           />
           <HistoricDialog
             open={this.state.openHistoricDialog}
@@ -165,7 +166,8 @@ Team.propTypes = {
   }),
   historicValues: PropTypes.shape({}).isRequired,
   teamInfo: PropTypes.shape({}).isRequired,
-  notes: PropTypes.shape({}).isRequired
+  notes: PropTypes.shape({}).isRequired,
+  loginInfo: PropTypes.shape({}).isRequired
 };
 
 export default Team;

@@ -149,7 +149,7 @@ class AppLayout extends React.Component {
 
   render() {
     const { anchor, changePasswordDialog, password, newPassword1, newPassword2, wrongPassword, changePasswordSuccess } = this.state;
-    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, createEnterprise, logout, loginInfo } = this.props;
+    const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, fetchGeneralAdminInfo, createEnterprise, logout, loginInfo } = this.props;
     console.log(loginInfo);
     return (
       <div className={classes.root}>
@@ -159,6 +159,7 @@ class AppLayout extends React.Component {
               userInfo={userInfo}
               fetchingGeneralUserInfo={fetchingGeneralUserInfo}
               fetchGeneralUserInfo={fetchGeneralUserInfo}
+              fetchGeneralAdminInfo={fetchGeneralAdminInfo}
               createEnterprise={createEnterprise}
               idUser={loginInfo.data.data[0].idUsuario}
               adminGeneral={loginInfo.data.data[0].adminGeneral}
@@ -170,6 +171,9 @@ class AppLayout extends React.Component {
               userInfo={userInfo}
               fetchingGeneralUserInfo={fetchingGeneralUserInfo}
               fetchGeneralUserInfo={fetchGeneralUserInfo}
+              fetchGeneralAdminInfo={fetchGeneralAdminInfo}
+              idUser={loginInfo.data.data[0].idUsuario}
+              adminGeneral={loginInfo.data.data[0].adminGeneral}
             />
             <div className={classes.grow} />
             <div>
@@ -303,6 +307,7 @@ class AppLayout extends React.Component {
 AppLayout.propTypes = {
   classes: PropTypes.object.isRequired,
   fetchGeneralUserInfo: PropTypes.func.isRequired,
+  fetchGeneralAdminInfo: PropTypes.func.isRequired,
   changePassword: PropTypes.func.isRequired,
   userInfo: PropTypes.shape({}).isRequired,
   passwordChanged: PropTypes.shape({}).isRequired,

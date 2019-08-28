@@ -32,6 +32,36 @@ export function fetchGeneralUserInfo(idUser) {
   };
 }
 
+export function fetchingGeneralAmdinInfo() {
+  return {
+    type: types.FETCHING_GENERAL_ADMIN_INFO,
+    payload: {}
+  };
+}
+
+export function fetchGeneralAdminInfoSuccess(data) {
+  return {
+    type: types.FETCH_GENERAL_ADMIN_INFO_SUCCESS,
+    userInfo: data
+  };
+}
+
+export function fetchGeneralAdminInfoFailure(error) {
+  return {
+    type: types.FETCH_GENERAL_ADMIN_INFO_FAILURE,
+    payload: error
+  };
+}
+
+export function fetchGeneralAdminInfo() {
+  return function (dispatch) {
+    dispatch(fetchingGeneralAmdinInfo());
+    return request.get(`${baseUrl()}/sideMenuAdminInfo`)
+      .then(response => dispatch(fetchGeneralAdminInfoSuccess(response)))
+      .catch(error => dispatch(fetchGeneralAdminInfoFailure(error)));
+  };
+}
+
 export function creattingEnterprise() {
   return {
     type: types.CREATTING_ENTERPRISE,
