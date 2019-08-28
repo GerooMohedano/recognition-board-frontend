@@ -5,12 +5,12 @@ import store from './routeStore';
 import { baseUrl } from './shared/jsUtils/Utils';
 import request from './shared/jsUtils/request';
 import SignInForm from './pages/SignInForm/SignInForm';
+import Welcome from './pages/Welcome';
 import AppLayout from './layouts/AppLayoutContainer';
 import Perfil from './pages/Perfil/PerfilContainer';
 import Enterprise from './pages/Enterprise/EnterpriseContainer';
 import Team from './pages/Team/TeamContainer';
 import TeamConfig from './pages/TeamConfig/TeamConfigContainer';
-import RememberPasswordForm from './pages/RememberPasswordForm/RememberPasswordForm';
 import PageNotFound from './pages/Errors/PageNotFound';
 
 require('./App.css');
@@ -32,7 +32,6 @@ class App extends Component {
 
   componentDidUpdate(prevProps, prevState) {
     const { userInfo, error } = this.state;
-    console.log(userInfo);
     if (prevState.userInfo !== userInfo
       && userInfo !== undefined
       && Object.entries(userInfo).length !== 0
@@ -57,6 +56,7 @@ class App extends Component {
                 />
               }} />
               <Switch>
+                <Route path="/" exact component={ Welcome } />
                 <Route path="/Perfil/:idUsuario" component={ Perfil } />
                 <Route path="/TeamConfig/:idTeam" component={ TeamConfig } />
                 <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />

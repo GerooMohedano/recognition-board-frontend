@@ -150,7 +150,6 @@ class AppLayout extends React.Component {
   render() {
     const { anchor, changePasswordDialog, password, newPassword1, newPassword2, wrongPassword, changePasswordSuccess } = this.state;
     const { classes, userInfo, fetchingGeneralUserInfo, fetchGeneralUserInfo, fetchGeneralAdminInfo, createEnterprise, logout, loginInfo } = this.props;
-    console.log(loginInfo);
     return (
       <div className={classes.root}>
         <AppBar position="static">
@@ -200,7 +199,9 @@ class AppLayout extends React.Component {
             <MenuItem>Profile</MenuItem>
           </NavLink>
           <MenuItem onClick={() => this.setState({ changePasswordDialog: true })}>Change Password</MenuItem>
-          <MenuItem onClick={() => logout()}>Log out</MenuItem>
+          <NavLink to="/" className="linkPerfil">
+            <MenuItem onClick={() => logout()}>Log out</MenuItem>
+          </NavLink>
         </Menu>
         <Dialog
           open={changePasswordDialog}

@@ -53,21 +53,24 @@ class TeamTable extends React.Component {
 
   createRows = () => {
     const { classes, values, enterpriseValues, members } = this.props;
+    console.log(values);
     const rows = [];
     values.forEach(value => {
-      rows.push(<TableRow key={ value.nombre_valor }>
-        <TableCell className={classes.firstColumn}>{ value.nombre_valor }</TableCell>
-        {members.map(persona => (
-          <TableCell align="right">
+      if (value.estado === 'activo') {
+        rows.push(<TableRow key={ value.nombre_valor }>
+          <TableCell className={classes.firstColumn}>{ value.nombre_valor }</TableCell>
+          {members.map(persona => (
+            <TableCell align="right">
             <Button
-              key={"button" + value.nombre_valor + persona.nombre_usuario}
-              onClick={() => this.handleCreateNoteButton(value, persona)}
+            key={"button" + value.nombre_valor + persona.nombre_usuario}
+            onClick={() => this.handleCreateNoteButton(value, persona)}
             >
-              <ThumbsUpDown />
+            <ThumbsUpDown />
             </Button>
-          </TableCell>
-        ))}
-      </TableRow>);
+            </TableCell>
+          ))}
+        </TableRow>);
+      }
     });
     enterpriseValues.forEach(value => {
       if (values.findIndex(teamValue => teamValue.idValor === value.idValor) === -1) {

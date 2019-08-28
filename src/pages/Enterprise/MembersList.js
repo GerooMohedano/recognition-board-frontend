@@ -38,9 +38,12 @@ class MembersList extends Component {
       openDialogDelete: false,
       openDialogAdd: false,
       openDialogEdit: false,
+      openDialogActivate: false,
       undeletableMember: false,
       nameToDelete: '',
       idToDelete: -1,
+      idToActive: -1,
+      activateStatus: '',
       newTeamMember: { userName: '', firstName: '',
         lastName: '', mail: '', rol: 0, active: true },
       updatedData: { id: -1, userName: '', firstName: '',
@@ -81,6 +84,10 @@ class MembersList extends Component {
         lastName: '', mail: '', rol: 0, active: true } })
   }
 
+  toggleActiveDialogState = (valueId, state, active) => {
+    this.setState({ idToActive: valueId, openDialogActivate: state, activateStatus: active });
+  }
+
   confirmAddMember = () => {
     const { newTeamMember } = this.state;
     this.props.addNewEnterpriseMember(newTeamMember.userName, newTeamMember.firstName,
@@ -116,8 +123,8 @@ class MembersList extends Component {
 
   render() {
     const {
-      openDialogDelete, openDialogAdd, openDialogEdit,
-      idToDelete, nameToDelete, newTeamMember, updatedData, undeletableMember
+      openDialogDelete, openDialogAdd, openDialogEdit, openDialogActivate,
+      idToDelete, idToActive, nameToDelete, newTeamMember, updatedData, undeletableMember, activateStatus
     } = this.state;
     const {
       changeEnterpriseMemberActive,
@@ -159,11 +166,7 @@ class MembersList extends Component {
                   <Tooltip title={member.estado === 'activo' ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={
-                        member.estado === 'inactivo'
-                        ? () => activateMember({ idUsuario: member.idUsuario})
-                        : () => desactivateMember({ idUsuario: member.idUsuario})
-                      }
+                      onClick={() => this.toggleActiveDialogState(member.idUsuario, true, member.estado)}
                     >
                       <ActivateIcon color={member.estado === 'activo' ? "primary" : "secondary"} />
                     </IconButton>
@@ -364,6 +367,35 @@ class MembersList extends Component {
             </IconButton>
           ]}
         />
+        <Dialog
+          open={openDialogActivate}
+          onClose={() => this.toggleActiveDialogState(-1, false, '')}
+        >
+          <DialogTitle id="form-dialog-title">
+            Are you sure you want to change the status of this user?
+          </DialogTitle>
+          <DialogActions>
+            <Button
+              onClick={() => this.toggleActiveDialogState(-1, false, '')}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                if (activateStatus === 'inactivo')
+                  activateMember({ idUsuario: idToActive })
+                else
+                  desactivateMember({ idUsuario: idToActive });
+                this.toggleActiveDialogState(-1, false, '')}}
+              color="secondary"
+            >
+              {activateStatus === 'inactivo'
+                ? 'Activate'
+                : 'Desactivate'}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }

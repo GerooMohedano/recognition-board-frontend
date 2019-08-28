@@ -35,10 +35,12 @@ class TeamsList extends Component {
       openDialogEdit: false,
       openDialogDelete: false,
       openDialogAdd: false,
+      openDialogActivate: false,
       undeletableTeam: false,
       nameToChange: '',
       idToChange: -1,
       idToDelete: -1,
+      idToActive: -1,
       newName: '',
       nameOfTheNewTeam: ''
     };
@@ -78,6 +80,10 @@ class TeamsList extends Component {
     this.setState({ openDialogAdd: state, nameOfTheNewTeam: '' });
   }
 
+  toggleActiveDialogState = (valueId, state, active) => {
+    this.setState({ idToActive: valueId, openDialogActivate: state, activateStatus: active });
+  }
+
   deleteConfirmation = () => {
     const { idToDelete } = this.state;
     const { teamNotes, deleteTeam } = this.props;
@@ -91,8 +97,8 @@ class TeamsList extends Component {
 
   render() {
     const {
-      openDialogEdit, openDialogDelete, openDialogAdd,
-      nameToChange, idToDelete, nameOfTheNewTeam, undeletableTeam
+      openDialogEdit, openDialogDelete, openDialogAdd, openDialogActivate,
+      nameToChange, idToDelete, idToActive, nameOfTheNewTeam, undeletableTeam, activateStatus
     } = this.state;
     const { changeTeamActive, deleteTeam, addNewTeam, activateTeam, desactivateTeam } = this.props;
     const {teams} = this.props;
@@ -127,11 +133,7 @@ class TeamsList extends Component {
                   <Tooltip title={team.estado === 'activo' ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={
-                        team.estado === 'inactivo'
-                        ? () => activateTeam({ idEquipo: team.idEquipo})
-                        : () => desactivateTeam({ idEquipo: team.idEquipo})
-                      }
+                      onClick={() => this.toggleActiveDialogState(team.idEquipo, true, team.estado)}
                     >
                       <ActivateIcon color={team.estado === 'activo' ? "primary" : "secondary"} />
                     </IconButton>
@@ -273,6 +275,35 @@ class TeamsList extends Component {
             </IconButton>
           ]}
         />
+        <Dialog
+          open={openDialogActivate}
+          onClose={() => this.toggleActiveDialogState(-1, false, '')}
+        >
+        <DialogTitle id="form-dialog-title">
+          Are you sure you want to change the status of this team?
+        </DialogTitle>
+          <DialogActions>
+            <Button
+              onClick={() => this.toggleActiveDialogState(-1, false, '')}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                if (activateStatus === 'inactivo')
+                  activateTeam({ idEquipo: idToActive })
+                else
+                  desactivateTeam({ idEquipo: idToActive });
+                this.toggleActiveDialogState(-1, false, '')}}
+              color="secondary"
+            >
+              {activateStatus === 'inactivo'
+                ? 'Activate'
+                : 'Desactivate'}
+            </Button>
+          </DialogActions>
+        </Dialog>
       </div>
     );
   }

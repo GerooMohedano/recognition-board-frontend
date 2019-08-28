@@ -29,10 +29,13 @@ class ValuesList extends Component {
       openDialogEdit: false,
       openDialogDelete: false,
       openDialogAdd: false,
+      openDialogActivate: false,
       nameToChange: '',
       idToChange: -1,
       idToDelete: -1,
+      idToActive: -1,
       newName: '',
+      activateStatus: '',
       nameOfTheNewValue: ''
     };
   }
@@ -64,12 +67,19 @@ class ValuesList extends Component {
     this.setState({ idToDelete: valueId, openDialogDelete: state });
   }
 
+  toggleActiveDialogState = (valueId, state, active) => {
+    this.setState({ idToActive: valueId, openDialogActivate: state, activateStatus: active });
+  }
+
   toggleAddDialogState = state => {
     this.setState({ openDialogAdd: state, nameOfTheNewValue: '' });
   }
 
   render() {
-    const { openDialogEdit, openDialogDelete, openDialogAdd, nameToChange, idToDelete, nameOfTheNewValue } = this.state;
+    const {
+      openDialogEdit, openDialogDelete, openDialogAdd, openDialogActivate,
+      nameToChange, idToDelete, idToActive, nameOfTheNewValue, activateStatus
+    } = this.state;
     const { idTeam, values, deleteValue, addValue, activateValue, desactivateValue } = this.props;
     return (
       <div className="cardContainerTeam">
@@ -98,11 +108,7 @@ class ValuesList extends Component {
                   <Tooltip title={value.estado === 'activo' ? "Desactivate" : "Activate"}>
                     <IconButton
                       aria-label="Delete"
-                      onClick={
-                        value.estado === 'inactivo'
-                        ? () => activateValue({ idValor: value.idValor, idEquipo: idTeam })
-                        : () => desactivateValue({ idValor: value.idValor, idEquipo: idTeam })
-                      }
+                      onClick={() => this.toggleActiveDialogState(value.idValor, true, value.estado)}
                     >
                       <ActivateIcon color={value.estado === 'activo' ? "primary" : "secondary"} />
                     </IconButton>
@@ -205,6 +211,35 @@ class ValuesList extends Component {
               color="secondary"
             >
               Delete
+            </Button>
+          </DialogActions>
+        </Dialog>
+        <Dialog
+          open={openDialogActivate}
+          onClose={() => this.toggleActiveDialogState(-1, false, '')}
+        >
+        <DialogTitle id="form-dialog-title">
+          Are you sure you want to change the status of this value?
+        </DialogTitle>
+          <DialogActions>
+            <Button
+              onClick={() => this.toggleActiveDialogState(-1, false, '')}
+              color="primary"
+            >
+              Cancel
+            </Button>
+            <Button
+              onClick={() => {
+                if (activateStatus === 'inactivo')
+                  activateValue({ idValor: idToActive, idEquipo: idTeam })
+                else
+                  desactivateValue({ idValor: idToActive, idEquipo: idTeam });
+                this.toggleActiveDialogState(-1, false, '')}}
+              color="secondary"
+            >
+              {activateStatus === 'inactivo'
+                ? 'Activate'
+                : 'Desactivate'}
             </Button>
           </DialogActions>
         </Dialog>
