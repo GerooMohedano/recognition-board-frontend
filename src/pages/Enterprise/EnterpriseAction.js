@@ -32,6 +32,38 @@ export function fetchEnterpriseInfo(idEmpresa) {
       .catch(error => dispatch(fetchEnterpriseInfoFailure(error)));
   };
 }
+
+export function gettingHistoricValues() {
+  return {
+    type: types.GETTING_HISTORIC_VALUES,
+    payload: {}
+  };
+}
+
+export function getHistoricValuesSuccess(data) {
+  return {
+    type: types.GET_HISTORIC_VALUES_SUCCESS,
+    historicValues: data
+  };
+}
+
+
+export function getHistoricValuesFailure(error) {
+  return {
+    type: types.GET_HISTORIC_VALUES_FAILURE,
+    payload: error
+  };
+}
+
+export function getHistoricValues(valuesInfo) {
+  return function (dispatch) {
+    dispatch(gettingHistoricValues());
+    return request.post(`${baseUrl()}/HistoricoValorEmpresa`, valuesInfo)
+      .then(response => dispatch(getHistoricValuesSuccess(response)))
+      .catch(error => dispatch(getHistoricValuesFailure(error)));
+  };
+}
+
 export function modifyingAddress() {
   return {
     type: types.MODIFYING_ADDRESS,

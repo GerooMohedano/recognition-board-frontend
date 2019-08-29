@@ -24,7 +24,7 @@ class TeamsList extends Component {
   }
 
   render() {
-    const { teams } = this.props;
+    const { teams, adminGeneral } = this.props;
     return (
       <div className="cardContainerTeams">
         <Card className="cardForTeam">
@@ -43,20 +43,29 @@ class TeamsList extends Component {
                     primary={team.nombre_equipo}
                     className="memberItemText"
                   />
-                  <Tooltip title="Go to the board of this team">
-                    <NavLink
-                      className="commonLink"
-                      key={`NavLink${team.idEquipo}`}
-                      to={`/Team/${team.idEquipo}`}
+                  {(team.estado === 'inactivo' && !adminGeneral)
+                    ? (<IconButton
+                      aria-label="Delete"
+                      className="iconListButtonTeams"
+                      disabled
                     >
-                      <IconButton
-                        aria-label="Delete"
-                        className="iconListButtonTeams"
+                      <TableChartIcon style={{ color: '#E0E0E0' }} />
+                    </IconButton>)
+                    : (<Tooltip title="Go to the board of this team">
+                      <NavLink
+                        className="commonLink"
+                        key={`NavLink${team.idEquipo}`}
+                        to={`/Team/${team.idEquipo}`}
                       >
-                        <TableChartIcon style={{ color: 'black' }} />
-                      </IconButton>
-                    </NavLink>
-                  </Tooltip>
+                        <IconButton
+                          aria-label="Delete"
+                          className="iconListButtonTeams"
+                        >
+                          <TableChartIcon style={{ color: 'black' }} />
+                        </IconButton>
+                      </NavLink>
+                    </Tooltip>)
+                  }
                 </ListItem>
               ))}
             </List>
@@ -68,7 +77,8 @@ class TeamsList extends Component {
 }
 
 TeamsList.propTypes = {
-  teams: PropTypes.array.isRequired
+  teams: PropTypes.array.isRequired,
+  adminGeneral: PropTypes.bool.isRequired
 };
 
 export default TeamsList;

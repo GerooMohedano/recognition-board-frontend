@@ -160,7 +160,10 @@ class TeamConfig extends Component {
                   onChange={event => this.selectTeamLeader(event.target.value)}
                   className="selectTeamLeader"
                 >
-                  {teamConfigInfo.data.usuarios.map(teamMember => (<MenuItem value={teamMember.idUsuario}>{teamMember.nombre_usuario}</MenuItem>))}
+                  {teamConfigInfo.data.usuarios.map(teamMember => {
+                    if (teamMember.estado === 'activo' || (teamMember.estado === 'inactivo' && teamMember.rol))
+                    return (<MenuItem value={teamMember.idUsuario}>{teamMember.nombre_usuario}</MenuItem>)
+                  })}
                 </Select>
               </div>
             </div>

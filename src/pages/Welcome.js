@@ -10,8 +10,7 @@ const Welcome = () => {
 
   return (
     <div style={{ textAlign:'center' }}>
-      <h1>Welcome to</h1>
-      <div style={style404}>OnBoard</div>
+      <h1 style={style404}>Welcome to</h1>
       <img alt="error" src={Onboard} />
     </div>
   );

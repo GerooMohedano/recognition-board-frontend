@@ -90,7 +90,7 @@ class SearchBar extends React.Component {
   }
 
   render() {
-    const { classes, fetchingGeneralUserInfo, userInfo } = this.props;
+    const { classes, fetchingGeneralUserInfo, userInfo, adminGeneral } = this.props;
     const { isOpen, searchedString } = this.state;
     return (
       <div className={classes.search}>
@@ -120,8 +120,9 @@ class SearchBar extends React.Component {
               {(fetchingGeneralUserInfo || userInfo === undefined)
                 ? (
                   <div className="circularProgressContainer"><CircularProgress /></div>
-                ) : userInfo.data.usuariosEmpresa.filter(person => person.nombre_usuario.includes(searchedString)
-                  || person.mail.includes(searchedString)).map(person => (
+                ) : userInfo.data.usuariosEmpresa.filter(person => (person.nombre_usuario.includes(searchedString)
+                  || person.mail.includes(searchedString)) && (adminGeneral || person.estado === 'activo')).map(person => {
+                    return (
                     <NavLink to={`/Perfil/${person.idUsuario}`} className="linkPerfil">
                       <ListItem button onClick={() => this.updateSearch('')}>
                         <ListItemAvatar>
@@ -133,7 +134,7 @@ class SearchBar extends React.Component {
                         />
                       </ListItem>
                     </NavLink>
-                  ))
+                  )})
               }
             </List>
             <Divider />
@@ -148,8 +149,8 @@ class SearchBar extends React.Component {
               {(fetchingGeneralUserInfo || userInfo === undefined)
                 ? (
                   <div className="circularProgressContainer"><CircularProgress /></div>
-                ) : userInfo.data.equiposDeEmpresa.filter(team => team.nombre_equipo
-                  .includes(searchedString)).map(team => (
+                ) : userInfo.data.equiposDeEmpresa.filter(team => (team.nombre_equipo
+                  .includes(searchedString) && (adminGeneral || team.estado === 'activo'))).map(team => (
                     <NavLink to={`/Team/${team.idEquipo}`} className="linkPerfil">
                       <ListItem button onClick={() => this.updateSearch('')}>
                         <ListItemAvatar>

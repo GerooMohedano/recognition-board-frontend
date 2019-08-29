@@ -46,29 +46,33 @@ class TeamTable extends React.Component {
     const { classes, members } = this.props;
     const columns = [<TableCell className={classes.header}>Valores</TableCell>];
     members.forEach(person => {
-      columns.push(<TableCell className={classes.header} align="right">{ person.nombre_usuario }</TableCell>);
+      if (person.estado === 'activo') {
+        columns.push(<TableCell className={classes.header} align="right">{ person.nombre_usuario }</TableCell>);
+      }
     });
     return columns;
   }
 
   createRows = () => {
     const { classes, values, enterpriseValues, members } = this.props;
-    console.log(values);
     const rows = [];
     values.forEach(value => {
       if (value.estado === 'activo') {
         rows.push(<TableRow key={ value.nombre_valor }>
           <TableCell className={classes.firstColumn}>{ value.nombre_valor }</TableCell>
-          {members.map(persona => (
-            <TableCell align="right">
-            <Button
-            key={"button" + value.nombre_valor + persona.nombre_usuario}
-            onClick={() => this.handleCreateNoteButton(value, persona)}
-            >
-            <ThumbsUpDown />
-            </Button>
-            </TableCell>
-          ))}
+          {members.map(persona => {
+            if (persona.estado === 'activo')
+            return (
+              <TableCell align="right">
+              <Button
+              key={"button" + value.nombre_valor + persona.nombre_usuario}
+              onClick={() => this.handleCreateNoteButton(value, persona)}
+              >
+              <ThumbsUpDown />
+              </Button>
+              </TableCell>
+            )
+          })}
         </TableRow>);
       }
     });

@@ -78,7 +78,7 @@ class SideMenu extends React.Component {
               key={`NavLink${equipo.nombre_equipo}`}
               to={`/Team/${equipo.idEquipo}`}
             >
-              <ListItem key={`ListItem${equipo.nombre_equipo}`} button>
+              <ListItem key={`ListItem${equipo.nombre_equipo}`} button disabled={equipo.estado === 'inactivo'}>
                 <ListItemText key={`ListItemText${equipo.nombre_equipo}`} primary={equipo.nombre_equipo} className="textOfListSideMenu" />
               </ListItem>
             </NavLink>

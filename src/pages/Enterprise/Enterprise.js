@@ -127,17 +127,30 @@ class Enterprise extends Component {
     this.setState({ newName: value });
   }
 
+  isEnterpriseAdmin = () => {
+    const { enterpriseInfo, loginInfo } = this.props;
+    const userIndex = enterpriseInfo.data.usuarios.findIndex(user =>
+      user.idUsuario === loginInfo.data.data[0].idUsuario
+    );
+    return userIndex === -1 ? false : enterpriseInfo.data.usuarios[userIndex].rol;
+  }
+
+  selectValueForHistoric = value => {
+    this.props.getHistoricValues({ idEmpresa: this.props.match.params.idEmpresa, idValor: value })
+  }
+
   render() {
     const {
       newName, configuring, openHistoricDialog, enterpriseInfoState, teams
     } = this.state;
-    const { fetchingEnterpriseInfo, enterpriseInfo,
-            deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
-            deleteMember, activateMember, desactivateMember, getNotes, notes,
-            deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue } = this.props;
+    const { fetchingEnterpriseInfo, enterpriseInfo, loginInfo,
+      historicValues, gettingHistoricValues,
+      deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
+      deleteMember, activateMember, desactivateMember, getNotes, notes,
+      deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
-    return (<CircularProgress />);
+      return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
       return (
         <div>
@@ -159,10 +172,11 @@ class Enterprise extends Component {
               changeConfiguring={this.changeConfiguring}
               modifyEnterprise={modifyEnterprise}
               enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
+              canConfigure={loginInfo.data.data[0].adminGeneral || this.isEnterpriseAdmin()}
             />
             <div className="chartContainer">
-              <ChartPolygon data={enterpriseInfo.data.valores.map(valor => ({
-                  id: valor.idValor, subject: valor.Valor, A: valor.Total
+              <ChartPolygon data={enterpriseInfo.data.evaluacion.map(valor => ({
+                  id: valor.idValor, subject: valor.nombre, A: valor.Total
                 }))}
                  width={500}
                  height={300}
@@ -172,7 +186,8 @@ class Enterprise extends Component {
               <HistoricChart />
             </Button>
           </div>
-          <EnterpriseCardContainer
+          {(loginInfo.data.data[0].adminGeneral || this.isEnterpriseAdmin()) &&
+            (<EnterpriseCardContainer
             teams={enterpriseInfo.data.equipos}
             members={enterpriseInfo.data.usuarios}
             values={enterpriseInfo.data.valores}
@@ -196,11 +211,14 @@ class Enterprise extends Component {
             enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
             //awards
             deleteAward={deleteAward}
-          />
+          />)}
           <HistoricDialog
             open={openHistoricDialog}
             handleClose={() => this.changeHistoricDialogState(false)}
-            selectValues={data.map(value => ({ id: value.id, name: value.subject}))}
+            selectValues={enterpriseInfo.data.evaluacion.map(value => ({ id: value.idValor, name: value.nombre}))}
+            historicValues={historicValues}
+            getHistoricValues={this.selectValueForHistoric}
+            isLoading={gettingHistoricValues}
           />
         </div>
       );
@@ -212,6 +230,9 @@ Enterprise.propTypes = {
 };*/
 Enterprise.propTypes = {
   classes: PropTypes.object.isRequired,
+  historicValues: PropTypes.shape({}).isRequired,
+  gettingHistoricValues: PropTypes.bool.isRequired,
+  getHistoricValues: PropTypes.func.isRequired,
   enterprise: PropTypes.string.isRequired,
   fetchingEnterpriseInfo: PropTypes.bool.isRequired,
   fetchEnterpriseInfo: PropTypes.func.isRequired,
@@ -221,6 +242,7 @@ Enterprise.propTypes = {
   }),
   enterpriseInfo: PropTypes.shape({}).isRequired,
   modifyAddress: PropTypes.func.isRequired,
+  loginInfo: PropTypes.shape({}).isRequired,
   //team
   activateTeam: PropTypes.func.isRequired,
   desactivateTeam: PropTypes.func.isRequired,

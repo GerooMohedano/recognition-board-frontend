@@ -76,7 +76,7 @@ class SprintSelector extends React.Component {
 
   render() {
     const {
-      classes, sprints, indexPizarra, idEquipo, isUserTeamAdmin,
+      classes, sprints, indexPizarra, idEquipo, isUserTeamAdmin, adminGeneral,
       shiftIndexPizarra, modifySprint, createSprint, deleteSprint, checkSprint, sprintChecked, checkingSprint
     } = this.props;
     const leftColor = indexPizarra === 0 ? '#E0E0E0' : '#649BFF';
@@ -97,6 +97,7 @@ class SprintSelector extends React.Component {
             checkSprint={checkSprint}
             sprintChecked={sprintChecked}
             checkingSprint={checkingSprint}
+            adminGeneral={adminGeneral}
             />
         </div>
         <div className="sprintNavigation">
@@ -157,7 +158,8 @@ SprintSelector.propTypes = {
   isUserTeamAdmin: PropTypes.bool.isRequired,
   checkingSprint: PropTypes.bool.isRequired,
   checkSprint: PropTypes.func.isRequired,
-  sprintChecked: PropTypes.shape({}).isRequired
+  sprintChecked: PropTypes.shape({}).isRequired,
+  adminGeneral: PropTypes.bool.isRequired
 };
 
 export default withStyles(styles)(SprintSelector);

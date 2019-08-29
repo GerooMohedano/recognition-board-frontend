@@ -68,6 +68,7 @@ class TeamMembersList extends Component {
   render() {
     const { openDialogDelete, idToDelete, nameToDelete, addingANewMember, newTeamMember } = this.state;
     const { members, deleteMember, teamLeader, enterpriseMembers, idTeam } = this.props;
+    console.log(members);
     return (
       <div className="cardContainerTeam">
         <Card className="cardForTeam">
@@ -76,14 +77,16 @@ class TeamMembersList extends Component {
               Team Members
             </Typography>
             <List component="nav">
-              {members.map(member => (
+              {members.map(member => {
+                if (member.estado === 'activo' || (member.estado === 'inactivo' && member.idUsuario === teamLeader))
+                return (
                 <ListItem>
                   <ListItemAvatar>
                     <Avatar alt="Remy Sharp" src={CommonProfilePic} />
                   </ListItemAvatar>
                   <ListItemText
                     inset
-                    primary={member.nombre_usuario}
+                    primary={member.estado === 'inactivo' ? `${member.nombre_usuario} (desactivated)` : member.nombre_usuario}
                     secondary={member.idUsuario === teamLeader ? 'team leader' : null}
                   />
                   <Tooltip title="Kick out">
@@ -100,7 +103,7 @@ class TeamMembersList extends Component {
                     </IconButton>
                   </Tooltip>
                 </ListItem>
-              ))}
+              )})}
               {addingANewMember
               && (
                 <ListItem>

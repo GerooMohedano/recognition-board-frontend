@@ -57,9 +57,19 @@ class App extends Component {
               }} />
               <Switch>
                 <Route path="/" exact component={ Welcome } />
-                <Route path="/Perfil/:idUsuario" component={ Perfil } />
+                <Route path="/Perfil/:idUsuario" render={(routeProps) => {
+                  return <Perfil
+                    {...routeProps}
+                    loginInfo={userInfo}
+                  />
+                }} />
                 <Route path="/TeamConfig/:idTeam" component={ TeamConfig } />
-                <Route path="/Enterprise/:idEmpresa" component={ Enterprise } />
+                <Route path="/Enterprise/:idEmpresa" render={(routeProps) => {
+                  return <Enterprise
+                    {...routeProps}
+                    loginInfo={userInfo}
+                  />
+                }} />
                 <Route path="/Team/:idTeam" render={(routeProps) => {
                   return <Team
                     {...routeProps}

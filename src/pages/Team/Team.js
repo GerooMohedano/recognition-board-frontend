@@ -71,7 +71,8 @@ class Team extends Component {
 
   isUserTeamAdmin = () => {
     const { loginInfo, teamInfo } = this.props;
-    return teamInfo.data.usuarios.find(user => user.idUsuario === loginInfo.data.data[0].idUsuario).rol;
+    const userIndex = teamInfo.data.usuarios.findIndex(user => user.idUsuario === loginInfo.data.data[0].idUsuario);
+    return userIndex === -1 ? false : teamInfo.data.usuarios[userIndex].rol;
   }
 
   render() {
@@ -88,7 +89,7 @@ class Team extends Component {
         <div>
           <div className="title">
             <div className="teamName">{teamInfo.data.equipos[0].nombre_equipo}</div>
-            {this.isUserTeamAdmin() &&
+            {(this.isUserTeamAdmin() || loginInfo.data.data[0].adminGeneral) &&
               <NavLink to={`/TeamConfig/${match.params.idTeam}`}>
               <Tooltip title="Edit this team configuration">
                 <IconButton>
@@ -102,8 +103,8 @@ class Team extends Component {
             <div className="chartContainer">
               <ChartPolygon
                 data={teamInfo.data.evaluacion.map(valor => ({
-                  id: valor.idValor, subject: valor.nombre_valor, A: valor.Total
-                }))}
+                  id: valor.idValor, subject: valor.nombre_valor, A: valor.Total })
+                )}
                 width={500}
                 height={300}
               />
@@ -125,10 +126,11 @@ class Team extends Component {
             sprintChecked={sprintChecked}
             checkSprint={checkSprint}
             checkingSprint={checkingSprint}
+            adminGeneral={loginInfo.data.data[0].adminGeneral}
           />
           <TeamTable
             members={teamInfo.data.usuarios}
-            values={teamInfo.data.evaluacion}
+            values={teamInfo.data.valoresEquipo}
             enterpriseValues={teamInfo.data.valoresEmpresa}
             gettingNotes={gettingNotes}
             notes={notes}

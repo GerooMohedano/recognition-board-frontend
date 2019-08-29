@@ -3,7 +3,12 @@ import * as types from './EnterpriseConstants';
 
 const INITIAL_STATE = {
   fetchingEnterpriseInfo: true,
+  gettingHistoricValues: true,
   fetchError: {
+    state: false,
+    message: ''
+  },
+  getHistoricError: {
     state: false,
     message: ''
   },
@@ -12,6 +17,7 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  historicValues: {},
   //team
   desactivateTeamError: {
     state: false,
@@ -97,6 +103,15 @@ const behaviors = {
   },
   [types.FETCH_ENTERPRISE_INFO_FAILURE](state, action) {
     return Object.assign({}, state, { fetchingEnterpriseInfo: false, fetchError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_HISTORIC_VALUES](state) {
+    return Object.assign({}, state, { gettingHistoricValues: true, getHistoricError: { state: false, message: '' } });
+  },
+  [types.GET_HISTORIC_VALUES_SUCCESS](state, action) {
+    return Object.assign({}, state, { historicValues: action.historicValues, gettingHistoricValues: false, getHistoricError: { state: false, message: '' } });
+  },
+  [types.GET_HISTORIC_VALUES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingHistoricValues: false, getHistoricError: { state: true, message: action.payload } });
   },
   ///////////////teams!!
   [types.ACTIVATING_TEAM](state) {

@@ -68,7 +68,7 @@ class Perfil extends React.Component {
   render() {
     const { openHistoricDialog, configuring } = this.state;
     const {
-      fetchingUserInfo, userInfo, gettingHistoricValues, historicValues
+      fetchingUserInfo, userInfo, gettingHistoricValues, historicValues, loginInfo, match
     } = this.props;
     if (fetchingUserInfo || userInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
@@ -84,6 +84,10 @@ class Perfil extends React.Component {
               configuring={configuring}
               name={userInfo.data.usuarios[0].nombre}
               mail={userInfo.data.usuarios[0].mail}
+              canConfigure={
+                loginInfo.data.data[0].adminGeneral
+                || loginInfo.data.data[0].idUsuario == match.params.idUsuario
+              }
               changeInfo={this.changeInfo}
               changeConfiguring={this.changeConfiguring}
             />
@@ -116,6 +120,7 @@ class Perfil extends React.Component {
           />
           <TeamsList
             teams={userInfo.data.equipos}
+            adminGeneral={userInfo.data.usuarios[0].adminGeneral}
           />
         </div>
       );
@@ -135,6 +140,7 @@ Perfil.propTypes = {
   gettingHistoricValues: PropTypes.bool.isRequired,
   historicValues: PropTypes.shape({}).isRequired,
   getHistoricValues: PropTypes.func.isRequired,
+  loginInfo: PropTypes.shape({}).isRequired
 };
 
 export default Perfil;

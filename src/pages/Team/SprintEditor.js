@@ -120,12 +120,12 @@ class SprintEditor extends React.Component {
       newSprintName, newBeginDate, newEndDate,
       editableNewSprintName, editableNewBeginDate, editableNewEndDate
     } = this.state;
-    const { sprintName, isUserTeamAdmin, checkingSprint, sprintChecked } = this.props;
+    const { sprintName, isUserTeamAdmin, checkingSprint, sprintChecked, adminGeneral } = this.props;
     return (
       <div className="sprintToolBar">
         <Tooltip title="Create a new Sprint">
-          <IconButton disabled={!isUserTeamAdmin} onClick={() => this.handleDialogOpen('newDialog')}>
-            {isUserTeamAdmin
+          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialogOpen('newDialog')}>
+            {(isUserTeamAdmin || adminGeneral)
               ? (<CreateIcon style={{ color: 'black' }} />)
               : (<CreateIcon style={{ color: '#E0E0E0' }} />)
             }
@@ -189,8 +189,8 @@ class SprintEditor extends React.Component {
             )}
         </Dialog>
         <Tooltip title="Edit current Sprint">
-          <IconButton disabled={!isUserTeamAdmin} onClick={() => this.handleDialogOpen('editDialog')}>
-            {isUserTeamAdmin
+          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialogOpen('editDialog')}>
+            {(isUserTeamAdmin || adminGeneral)
               ? (<EditIcon style={{ color: 'black' }} />)
               : (<EditIcon style={{ color: '#E0E0E0' }} />)
             }
@@ -253,8 +253,8 @@ class SprintEditor extends React.Component {
         }
         </Dialog>
         <Tooltip title="Delete current Sprint">
-          <IconButton disabled={!isUserTeamAdmin} onClick={() => this.handleDialogOpen('deleteDialog')}>
-            {isUserTeamAdmin
+          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialogOpen('deleteDialog')}>
+            {(isUserTeamAdmin || adminGeneral)
               ? (<DeleteIcon style={{ color: 'black' }} />)
               : (<DeleteIcon style={{ color: '#E0E0E0' }} />)
             }
@@ -347,7 +347,8 @@ SprintEditor.propTypes = {
   isUserTeamAdmin: PropTypes.bool.isRequired,
   checkSprint: PropTypes.func.isRequired,
   checkingSprint: PropTypes.bool.isRequired,
-  sprintChecked: PropTypes.shape({}).isRequired
+  sprintChecked: PropTypes.shape({}).isRequired,
+  adminGeneral: PropTypes.bool.isRequired
 };
 
 export default SprintEditor;

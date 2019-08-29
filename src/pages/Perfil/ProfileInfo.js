@@ -44,7 +44,7 @@ class ProfileInfo extends React.Component {
 
   render() {
     const { newMail } = this.state;
-    const { configuring, changeConfiguring, name } = this.props;
+    const { configuring, changeConfiguring, name, canConfigure } = this.props;
     return (
       <Paper className="infoPaper" elevation={1}>
       {configuring
@@ -64,7 +64,10 @@ class ProfileInfo extends React.Component {
         ) : (
           <div>
             <Tooltip title="Edit your info">
-              <Button onClick={() => changeConfiguring(true)}>
+              <Button
+                onClick={() => changeConfiguring(true)}
+                disabled={!canConfigure}
+              >
                 <Build />
               </Button>
             </Tooltip>
@@ -94,7 +97,8 @@ ProfileInfo.propTypes = {
   mail: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
   changeInfo: PropTypes.func.isRequired,
-  changeConfiguring: PropTypes.func.isRequired
+  changeConfiguring: PropTypes.func.isRequired,
+  canConfigure: PropTypes.bool.isRequired
 };
 
 export default ProfileInfo;
