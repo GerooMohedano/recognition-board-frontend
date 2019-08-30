@@ -99,16 +99,21 @@ class ViewNotes extends React.Component {
     this.setState({ newNotePuntuation: event.target.checked ? -1 : 1 });
   }
 
-  createNewNoteWithContext = () => {
+  async createNewNoteWithContext() {
     const { newNoteMessage, newNotePuntuation } = this.state;
-    const { user, value, indexPizarra, createNote, handleCloseDialog, loginInfo } = this.props;
+    const {
+      user, value, indexPizarra, createNote, handleCloseDialog,
+      loginInfo, checkAwards, idTeam, idEmpresa
+    } = this.props;
     createNote({
       nombre: indexPizarra,
       idAutor: loginInfo.data.data[0].idUsuario,
       idDestinatario: user.id,
       idValor: value.id,
       descripcion: newNoteMessage,
-      puntuacion: newNotePuntuation
+      puntuacion: newNotePuntuation,
+      idEquipo: idTeam,
+      idEmpresa: idEmpresa
     });
     this.setState({ newNoteMessage: '', newNotePuntuation: 1 });
     handleCloseDialog();
@@ -209,6 +214,9 @@ ViewNotes.propTypes = {
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
   notes: PropTypes.shape({}).isRequired,
+  checkAwards: PropTypes.func.isRequired,
+  idTeam: PropTypes.number.isRequired,
+  idEmpresa: PropTypes.number.isRequired,
   loginInfo: PropTypes.shape({}).isRequired
 };
 

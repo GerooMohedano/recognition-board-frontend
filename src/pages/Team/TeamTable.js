@@ -64,12 +64,12 @@ class TeamTable extends React.Component {
             if (persona.estado === 'activo')
             return (
               <TableCell align="right">
-              <Button
-              key={"button" + value.nombre_valor + persona.nombre_usuario}
-              onClick={() => this.handleCreateNoteButton(value, persona)}
-              >
-              <ThumbsUpDown />
-              </Button>
+                <Button
+                key={"button" + value.nombre_valor + persona.nombre_usuario}
+                onClick={() => this.handleCreateNoteButton(value, persona)}
+                >
+                  <ThumbsUpDown />
+                </Button>
               </TableCell>
             )
           })}
@@ -80,16 +80,17 @@ class TeamTable extends React.Component {
       if (values.findIndex(teamValue => teamValue.idValor === value.idValor) === -1) {
         rows.push(<TableRow key={ value.Valor }>
           <TableCell className={classes.firstColumn}>{ value.Valor }</TableCell>
-          {members.map(persona => (
-            <TableCell align="right">
+          {members.map(persona => {
+            if (persona.estado === 'activo')
+            return(<TableCell align="right">
             <Button
             key={"button" + value.Valor + persona.nombre_usuario}
             onClick={() => this.handleCreateNoteButtonEnterprise(value, persona)}
             >
             <ThumbsUpDown />
             </Button>
-            </TableCell>
-          ))}
+            </TableCell>)
+          })}
         </TableRow>);
       }
     });
@@ -125,8 +126,8 @@ class TeamTable extends React.Component {
   render() {
     const { openCreateNote, valueName, userName, userId, valueId } = this.state;
     const {
-      classes, gettingNotes, notes, createNote, deleteNote,
-      indexPizarra, beginDate, endDate, loginInfo
+      classes, gettingNotes, notes, createNote, deleteNote, idTeam,
+      indexPizarra, beginDate, endDate, loginInfo, checkAwards, idEmpresa
     } = this.props;
     const columns = this.createColumns();
     const rows = this.createRows();
@@ -155,6 +156,9 @@ class TeamTable extends React.Component {
           createNote={createNote}
           deleteNote={deleteNote}
           loginInfo={loginInfo}
+          checkAwards={checkAwards}
+          idTeam={idTeam}
+          idEmpresa={idEmpresa}
         />
       </Paper>
     );
@@ -174,6 +178,9 @@ TeamTable.propTypes = {
   getNotes: PropTypes.func.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
+  checkAwards: PropTypes.func.isRequired,
+  idTeam: PropTypes.number.isRequired,
+  idEmpresa: PropTypes.number.isRequired,
   loginInfo: PropTypes.shape({}).isRequired
 };
 

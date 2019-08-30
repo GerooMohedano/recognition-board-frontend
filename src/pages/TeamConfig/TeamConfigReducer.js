@@ -12,6 +12,7 @@ const INITIAL_STATE = {
   addingValue: true,
   addingTeamMember: true,
   kickingTeamMember: true,
+  gettingValuesNotes: true,
   fetchError: {
     state: false,
     message: ''
@@ -52,6 +53,10 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  getValuesNotesError: {
+    state: false,
+    message: ''
+  },
   teamConfigInfo: {},
   teamUpdated: {},
   teamLeaderUpdated: {},
@@ -61,7 +66,8 @@ const INITIAL_STATE = {
   valueUpdated: {},
   valueAdded: {},
   teamMemberAdded: {},
-  teamMemberKicked: {}
+  teamMemberKicked: {},
+  valuesNotes: {}
 };
 
 const behaviors = {
@@ -154,6 +160,15 @@ const behaviors = {
   },
   [types.KICK_TEAM_MEMBER_FAILURE](state, action) {
     return Object.assign({}, state, { kickingTeamMember: false, kickTeamMemberError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_VALUES_NOTES](state) {
+    return Object.assign({}, state, { gettingValuesNotes: true, getValuesNotesError: { state: false, message: '' } });
+  },
+  [types.GET_VALUES_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { valuesNotes: action.valuesNotes, gettingValuesNotes: false, getValuesNotesError: { state: false, message: '' } });
+  },
+  [types.GET_VALUES_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingValuesNotes: false, getValuesNotesError: { state: true, message: action.payload } });
   }
 };
 

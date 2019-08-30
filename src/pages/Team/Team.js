@@ -31,7 +31,7 @@ class Team extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { teamInfo, fetchTeams, match, sprintCreated, sprintModified, note0s, noteCreated } = this.props;
+    const { teamInfo, fetchTeams, match, sprintCreated, sprintModified, note0s, noteCreated, awardsChecked } = this.props;
     const { indexPizarra } = this.state;
     if (teamInfo && teamInfo.data && indexPizarra === -1) {
       this.setState({ indexPizarra: teamInfo.data.pizarras.length - 1 });
@@ -48,8 +48,55 @@ class Team extends Component {
     if (prevProps.sprintModified !== sprintModified && sprintModified && sprintModified.data.status === 'OK') {
       fetchTeams(match.params.idTeam);
     }
-    if (prevProps.noteCreated !== noteCreated && noteCreated && noteCreated.data.status === 'OK') {
-      fetchTeams(match.params.idTeam);
+    if (prevProps.noteCreated !== noteCreated && noteCreated && noteCreated.data.logrosNoGanados && noteCreated.data.logrosNoGanados.length !== 0) {
+      this.checkForNewAwards();
+    }
+  }
+
+  checkForNewAwards = () => {
+    const { noteCreated, winAward } = this.props;
+    const conditionsDone = {};
+    noteCreated.data.logrosNoGanados.forEach((condition) => {
+      if (conditionsDone[condition.idLogro] === undefined) {
+          conditionsDone[condition.idLogro] = true
+      }
+      if (condition.excluyente) {
+        const valueIndex = noteCreated.data.evaluacionExcluyente.findIndex(value => value.idValor === condition.idValor);
+        if (valueIndex !== -1) {
+          if (condition.modificador && condition.puntuacion <= noteCreated.data.evaluacionExcluyente[valueIndex].Total) {
+            conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && true;
+          } else if (!condition.modificador && condition.puntuacion > noteCreated.data.evaluacionExcluyente[valueIndex].Total) {
+            conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && true;
+          } else {
+            conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && false;
+          }
+        } else {
+          conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && false;
+        }
+      } else {
+        const valueIndex = noteCreated.data.evaluacion.findIndex(value => value.idValor === condition.idValor);
+        if (valueIndex !== -1) {
+          if (condition.modificador && condition.puntuacion <= noteCreated.data.evaluacion[valueIndex].Total) {
+            conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && true;
+          } else if (!condition.modificador && condition.puntuacion > noteCreated.data.evaluacion[valueIndex].Total) {
+            conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && true;
+          } else {
+            conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && false;
+          }
+        } else {
+          conditionsDone[condition.idLogro] = conditionsDone[condition.idLogro] && false;
+        }
+      }
+    });
+    console.log(conditionsDone)
+    for (const attr in conditionsDone) {
+      if (conditionsDone[attr]) {
+        winAward({
+          idLogro: parseInt(attr),
+          idUsuario: noteCreated.data.idUsuario,
+          fecha: '2018-10-24T00:00:00.000Z'
+        })
+      }
     }
   }
 
@@ -79,7 +126,7 @@ class Team extends Component {
     const {
       match, teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
       gettingNotes, notes, getNotes, loginInfo, sprintChecked, checkSprint, checkingSprint,
-      createNote, deleteNote, modifySprint, createSprint, deleteSprint
+      createNote, deleteNote, modifySprint, createSprint, deleteSprint, checkAwards
     } = this.props;
     const { indexPizarra } = this.state;
     if (fetchingTeams || teamInfo === undefined || indexPizarra === -1)
@@ -149,6 +196,9 @@ class Team extends Component {
             createNote={createNote}
             deleteNote={deleteNote}
             loginInfo={loginInfo}
+            checkAwards={checkAwards}
+            idTeam={parseInt(this.props.match.params.idTeam)}
+            idEmpresa={teamInfo.data.equipos[0].idEmpresa}
           />
           <HistoricDialog
             open={this.state.openHistoricDialog}
@@ -185,6 +235,8 @@ Team.propTypes = {
   createSprint: PropTypes.func.isRequired,
   deleteSprint: PropTypes.func.isRequired,
   checkSprint: PropTypes.func.isRequired,
+  checkAwards: PropTypes.func.isRequired,
+  winAward: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
@@ -197,7 +249,8 @@ Team.propTypes = {
   sprintChecked: PropTypes.shape({}).isRequired,
   sprintCreated: PropTypes.shape({}).isRequired,
   sprintModified: PropTypes.shape({}).isRequired,
-  noteCreated: PropTypes.shape({}).isRequired
+  noteCreated: PropTypes.shape({}).isRequired,
+  awardsChecked: PropTypes.shape({}).isRequired
 };
 
 export default Team;

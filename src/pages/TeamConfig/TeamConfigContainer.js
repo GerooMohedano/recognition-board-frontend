@@ -3,7 +3,7 @@ import TeamConfig from './TeamConfig';
 import {
   fetchTeamConfig, updateTeamName, updateTeamLeader,
   deleteValue, activateValue, desactivateValue, updateValue, addValue,
-  addTeamMember, kickTeamMember
+  addTeamMember, kickTeamMember, getValuesNotes
 } from './TeamConfigAction';
 
 function mapStateToProps(state) {
@@ -35,6 +35,7 @@ function mapStateToProps(state) {
     activateValueError: state.teamConfig.activateValueError,
     updateValueError: state.teamConfig.updateValueError,
     valueAdded: state.teamConfig.valueAdded,
+    valuesNotes: state.teamConfig.valuesNotes,
     desactivateValueError: state.teamConfig.desactivateValueError,
     addTeamMemberError: state.teamConfig.addTeamMemberError,
     kickTeamMemberError: state.teamConfig.kickTeamMemberError
@@ -44,5 +45,5 @@ function mapStateToProps(state) {
 export default connect(mapStateToProps, {
   fetchTeamConfig, updateTeamName, updateTeamLeader,
   deleteValue, activateValue, desactivateValue, updateValue, addValue,
-  addTeamMember, kickTeamMember
+  addTeamMember, kickTeamMember, getValuesNotes
 })(TeamConfig);

@@ -14,11 +14,13 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
+import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import ActivateIcon from '@material-ui/icons/PowerSettingsNew';
 import CreateIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 
 require('../../commons/Team.css');
 
@@ -30,6 +32,7 @@ class ValuesList extends Component {
       openDialogDelete: false,
       openDialogAdd: false,
       openDialogActivate: false,
+      undeletableValue: false,
       nameToChange: '',
       idToChange: -1,
       idToDelete: -1,
@@ -64,6 +67,9 @@ class ValuesList extends Component {
   }
 
   toggleDeleteDialogState = (valueId, state) => {
+    if (state) {
+      this.props.getValuesNotes({ idValor: valueId });
+    }
     this.setState({ idToDelete: valueId, openDialogDelete: state });
   }
 
@@ -75,10 +81,21 @@ class ValuesList extends Component {
     this.setState({ openDialogAdd: state, nameOfTheNewValue: '' });
   }
 
+  deleteConfirmation = () => {
+    const { idToDelete } = this.state;
+    const { valuesNotes, deleteValue } = this.props;
+    if (valuesNotes === undefined || valuesNotes.data.data.length !== 0) {
+      this.setState({ undeletableValue: true });
+    } else {
+      deleteValue({ idValor: idToDelete });
+      this.toggleDeleteDialogState(-1, false);
+    }
+  }
+
   render() {
     const {
       openDialogEdit, openDialogDelete, openDialogAdd, openDialogActivate,
-      nameToChange, idToDelete, idToActive, nameOfTheNewValue, activateStatus
+      nameToChange, idToDelete, idToActive, nameOfTheNewValue, activateStatus, undeletableValue
     } = this.state;
     const { idTeam, values, deleteValue, addValue, activateValue, desactivateValue } = this.props;
     return (
@@ -207,7 +224,7 @@ class ValuesList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteValue({ idValor: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
+              onClick={() => this.deleteConfirmation()}
               color="secondary"
             >
               Delete
@@ -243,6 +260,30 @@ class ValuesList extends Component {
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          variant="error"
+          open={undeletableValue}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ undeletableValue: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Can't delete a value with notes</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ undeletableValue: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </div>
     );
   }
@@ -255,6 +296,8 @@ ValuesList.propTypes = {
   deleteValue: PropTypes.func.isRequired,
   activateValue: PropTypes.func.isRequired,
   desactivateValue: PropTypes.func.isRequired,
+  getValuesNotes: PropTypes.func.isRequired,
+  valuesNotes: PropTypes.shape({}).isRequired,
   addValue: PropTypes.func.isRequired
 };
 

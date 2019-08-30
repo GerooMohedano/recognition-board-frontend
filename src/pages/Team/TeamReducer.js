@@ -11,6 +11,8 @@ const INITIAL_STATE = {
   creattingSprint: true,
   delettingSprint: true,
   checkingSprint: true,
+  checkingAwards: true,
+  winningAward: true,
   fetchError: {
     state: false,
     message: ''
@@ -47,12 +49,22 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  checkAwardsError: {
+    state: false,
+    message: ''
+  },
+  winAwardError: {
+    state: false,
+    message: ''
+  },
   historicValues: {},
   teamInfo: {},
   notes: {},
   sprintChecked: {},
   sprintCreated: {},
   sprintModified: {},
+  awardsChecked: {},
+  awardsWon: {},
   noteCreated: {}
 };
 
@@ -65,6 +77,24 @@ const behaviors = {
   },
   [types.FETCH_TEAMS_FAILURE](state, action) {
     return Object.assign({}, state, { fetchingTeams: false, fetchError: { state: true, message: action.payload } });
+  },
+  [types.WINNING_AWARD](state) {
+    return Object.assign({}, state, { winningAward: true, winAwardError: { state: false, message: '' } });
+  },
+  [types.WIN_AWARD_SUCCESS](state, action) {
+    return Object.assign({}, state, { awardsWon: action.awardsWon, winningAward: false, winAwardError: { state: false, message: '' } });
+  },
+  [types.WIN_AWARD_FAILURE](state, action) {
+    return Object.assign({}, state, { winningAward: false, winAwardError: { state: true, message: action.payload } });
+  },
+  [types.CHECKING_AWARDS](state) {
+    return Object.assign({}, state, { checkingAwards: true, checkAwardsError: { state: false, message: '' } });
+  },
+  [types.CHECK_AWARDS_SUCCESS](state, action) {
+    return Object.assign({}, state, { awardsChecked: action.awardsChecked, checkingAwards: false, checkAwardsError: { state: false, message: '' } });
+  },
+  [types.CHECK_AWARDS_FAILURE](state, action) {
+    return Object.assign({}, state, { checkingAwards: false, checkAwardsError: { state: true, message: action.payload } });
   },
   [types.GETTING_HISTORIC_VALUES](state) {
     return Object.assign({}, state, { gettingHistoricValues: true, getHistoricError: { state: false, message: '' } });

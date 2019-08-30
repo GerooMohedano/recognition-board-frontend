@@ -301,3 +301,34 @@ export function kickTeamMember(teamMemberToKick) {
       .catch(error => dispatch(kickTeamMemberFailure(error)));
   };
 }
+
+export function gettingValuesNotes() {
+  return {
+    type: types.GETTING_VALUES_NOTES,
+    payload: {}
+  };
+}
+
+export function getValuesNotesSuccess(data) {
+  return {
+    type: types.GET_VALUES_NOTES_SUCCESS,
+    valuesNotes: data
+  };
+}
+
+
+export function getValuesNotesFailure(error) {
+  return {
+    type: types.GET_VALUES_NOTES_FAILURE,
+    payload: error
+  };
+}
+
+export function getValuesNotes(notesRequested) {
+  return function (dispatch) {
+    dispatch(gettingValuesNotes());
+    return request.post(`${baseUrl()}/todasNotasValor`, notesRequested)
+      .then(response => dispatch(getValuesNotesSuccess(response)))
+      .catch(error => dispatch(getValuesNotesFailure(error)));
+  };
+}

@@ -110,7 +110,7 @@ class TeamConfig extends Component {
     const {
       classes, match, changeTeamName, teamConfigInfo, fetchingTeamConfigInfo,
       deleteValue, activateValue, desactivateValue, updateValue, addValue,
-      addTeamMember, kickTeamMember
+      addTeamMember, kickTeamMember, getValuesNotes, valuesNotes
     } = this.props;
     const { newTeamName, configuring } = this.state;
     if (fetchingTeamConfigInfo || teamConfigInfo === undefined)
@@ -157,7 +157,9 @@ class TeamConfig extends Component {
               </div>
               <div className="autocompleteContainer">
                 <Select
-                  value={teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario}
+                  value={
+                    teamConfigInfo.data.usuarios.find(user => user.rol).idUsuario
+                  }
                   onChange={event => this.selectTeamLeader(event.target.value)}
                   className="selectTeamLeader"
                 >
@@ -190,6 +192,8 @@ class TeamConfig extends Component {
               activateValue={activateValue}
               desactivateValue={desactivateValue}
               addValue={addValue}
+              valuesNotes={valuesNotes}
+              getValuesNotes={getValuesNotes}
             />
             <TeamMembersList
               idTeam={match.params.idTeam}
@@ -218,6 +222,7 @@ TeamConfig.propTypes = {
   addTeamMember: PropTypes.func.isRequired,
   kickTeamMember: PropTypes.func.isRequired,
   addValue: PropTypes.func.isRequired,
+  getValuesNotes: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object
@@ -231,6 +236,7 @@ TeamConfig.propTypes = {
   valueAdded: PropTypes.shape({}).isRequired,
   teamMemberAdded: PropTypes.shape({}).isRequired,
   teamMemberKicked: PropTypes.shape({}).isRequired,
+  valuesNotes: PropTypes.shape({}).isRequired,
   teamConfigInfo: PropTypes.shape({}).isRequired
 };
 

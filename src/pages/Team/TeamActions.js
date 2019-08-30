@@ -32,6 +32,36 @@ export function fetchTeams(idTeam) {
   };
 }
 
+export function checkingAwards() {
+  return {
+    type: types.CHECKING_AWARDS,
+    payload: {}
+  };
+}
+
+export function checkAwardsSuccess(data) {
+  return {
+    type: types.CHECK_AWARDS_SUCCESS,
+    awardsChecked: data
+  };
+}
+
+export function checkAwardsFailure(error) {
+  return {
+    type: types.CHECK_AWARDS_FAILURE,
+    payload: error
+  };
+}
+
+export function checkAwards(info) {
+  return function (dispatch) {
+    dispatch(checkingAwards());
+    return request.post(`${baseUrl()}/checkeoLogros`, info)
+      .then(response => dispatch(checkAwardsSuccess(response)))
+      .catch(error => dispatch(checkAwardsFailure(error)));
+  };
+}
+
 export function gettingHistoricValues() {
   return {
     type: types.GETTING_HISTORIC_VALUES,
@@ -277,5 +307,36 @@ export function checkSprint(datesToCheck) {
     return request.post(`${baseUrl()}/consultarPizarraCoincidentes`, datesToCheck)
       .then(response => dispatch(checkSprintSuccess(response)))
       .catch(error => dispatch(checkSprintFailure(error)));
+  };
+}
+
+export function winningAward() {
+  return {
+    type: types.WINNING_AWARD,
+    payload: {}
+  };
+}
+
+export function winAwardSuccess(data) {
+  return {
+    type: types.WIN_AWARD_SUCCESS,
+    awardWon: data
+  };
+}
+
+
+export function winAwardFailure(error) {
+  return {
+    type: types.WIN_AWARD_FAILURE,
+    payload: error
+  };
+}
+
+export function winAward(awardToWin) {
+  return function (dispatch) {
+    dispatch(winningAward());
+    return request.post(`${baseUrl()}/ganarLogro`, awardToWin)
+      .then(response => dispatch(winAwardSuccess(response)))
+      .catch(error => dispatch(winAwardFailure(error)));
   };
 }

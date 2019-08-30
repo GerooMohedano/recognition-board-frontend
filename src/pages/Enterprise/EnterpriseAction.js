@@ -638,7 +638,7 @@ export function modifyEnterprise(newEnterpriseInfo) {
 
       export function getValuesNotes(notesRequested) {
         return function (dispatch) {
-          dispatch(gettingTeamNotes());
+          dispatch(gettingValuesNotes());
           return request.post(`${baseUrl()}/todasNotasValor`, notesRequested)
             .then(response => dispatch(getValuesNotesSuccess(response)))
             .catch(error => dispatch(getValuesNotesFailure(error)));

@@ -88,23 +88,25 @@ class SprintEditor extends React.Component {
 
   saveEditableInfo = () => {
     const { editableNewBeginDate, editableNewEndDate } = this.state;
-    const { checkSprint, sprintId } = this.props;
+    const { checkSprint, sprintId, idEquipo } = this.props;
     this.setState({ editSpinner: true });
     checkSprint({
       idPizarra: sprintId,
       fechaInicio: editableNewBeginDate + TIME_FOR_DATE,
-      fechaFin: editableNewEndDate + TIME_FOR_DATE
+      fechaFin: editableNewEndDate + TIME_FOR_DATE,
+      idEquipo: idEquipo
     });
   }
 
   createNewSprint = () => {
     const { newBeginDate, newEndDate } = this.state;
-    const { checkSprint } = this.props;
+    const { checkSprint, idEquipo } = this.props;
     this.setState({ newSpinner: true });
     checkSprint({
       idPizarra: -1,
       fechaInicio: newBeginDate + TIME_FOR_DATE,
-      fechaFin: newEndDate + TIME_FOR_DATE
+      fechaFin: newEndDate + TIME_FOR_DATE,
+      idEquipo: idEquipo
     });
   }
 
