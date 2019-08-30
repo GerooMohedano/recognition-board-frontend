@@ -16,6 +16,8 @@ import NonPhoto from '../../images/questionMark.png';
 
 require('../../commons/Team.css');
 
+const TIME_FOR_DATE = 'T00:00:00.000Z';
+
 class Team extends Component {
   constructor(props) {
     super(props);
@@ -88,13 +90,16 @@ class Team extends Component {
         }
       }
     });
-    console.log(conditionsDone)
+    const today = new Date();
+    const dd = String(today.getDate()).padStart(2, '0');
+    const mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
     for (const attr in conditionsDone) {
       if (conditionsDone[attr]) {
         winAward({
           idLogro: parseInt(attr),
           idUsuario: noteCreated.data.idUsuario,
-          fecha: '2018-10-24T00:00:00.000Z'
+          fecha: yyyy + '-' + mm + '-' + dd + TIME_FOR_DATE
         })
       }
     }
