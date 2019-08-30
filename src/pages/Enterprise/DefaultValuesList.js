@@ -89,7 +89,7 @@ class DefaultValuesList extends Component {
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
-                      onClick={() => this.toggleEditDialogState(value.idValor, value.nombre_valor, true)}
+                      onClick={() => this.toggleEditDialogState(value.idValor, value.Valor, true)}
                       className="iconListButton"
                     >
                       <EditIcon style={{ color: 'black' }} />

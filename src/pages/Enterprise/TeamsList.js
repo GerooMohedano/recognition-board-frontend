@@ -42,16 +42,19 @@ class TeamsList extends Component {
       idToDelete: -1,
       idToActive: -1,
       newName: '',
-      nameOfTheNewTeam: ''
+      nameOfTheNewTeam: '',
+      photoEdit: 'questionMark.png',
+      photoAdd: 'questionMark.png'
     };
   }
 
-  toggleEditDialogState = (id, name, state) => {
+  toggleEditDialogState = (id, name, image, state) => {
     this.setState({
       openDialogEdit: state,
       nameToChange: name,
       idToChange: id,
-      newName: ''
+      newName: '',
+      photoEdit: image === null ? 'questionMark.png' : image
     });
   }
 
@@ -64,9 +67,9 @@ class TeamsList extends Component {
   }
 
   saveNewTeamName = () => {
-    const { idToChange, newName } = this.state
-    this.props.changeTeamName(idToChange, newName);
-    this.toggleEditDialogState(-1, '', false);
+    const { idToChange, newName, photoEdit } = this.state
+    this.props.updateTeam({ idEquipo: idToChange, nombre: newName, imagen: photoEdit });
+    this.toggleEditDialogState(-1, '', 'questionMark.png', false);
   }
 
   toggleDeleteDialogState = (teamId, state) => {
@@ -77,7 +80,7 @@ class TeamsList extends Component {
   }
 
   toggleAddDialogState = state => {
-    this.setState({ openDialogAdd: state, nameOfTheNewTeam: '' });
+    this.setState({ openDialogAdd: state, nameOfTheNewTeam: '', photoAdd: 'questionMark.png' });
   }
 
   toggleActiveDialogState = (valueId, state, active) => {
@@ -97,11 +100,11 @@ class TeamsList extends Component {
 
   render() {
     const {
-      openDialogEdit, openDialogDelete, openDialogAdd, openDialogActivate,
+      openDialogEdit, openDialogDelete, openDialogAdd, openDialogActivate, photoEdit, photoAdd,
       nameToChange, idToDelete, idToActive, nameOfTheNewTeam, undeletableTeam, activateStatus
     } = this.state;
-    const { changeTeamActive, deleteTeam, addNewTeam, activateTeam, desactivateTeam } = this.props;
-    const {teams} = this.props;
+    const { changeTeamActive, deleteTeam, addNewTeam, activateTeam, desactivateTeam, addTeam } = this.props;
+    const { teams, idEnterprise } = this.props;
     return (
       <div className="cardContainer">
         <Card className="cardForEnterprise">
@@ -113,14 +116,21 @@ class TeamsList extends Component {
               {this.props.teams.map(team => (
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src={TeamCatPic} />
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={
+                        team.imagen === null
+                        ? NonPhoto
+                        : require(`../../images/${team.imagen}`)
+                      }
+                    />
                   </ListItemAvatar>
                   <ListItemText inset primary={team.nombre_equipo} className="memberItemText" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
                       disabled={team.estado === 'inactivo'}
-                      onClick={() => this.toggleEditDialogState(team.idEquipo, team.nombre_equipo, true)}
+                      onClick={() => this.toggleEditDialogState(team.idEquipo, team.nombre_equipo, team.imagen, true)}
                       className="iconListButton"
                     >
                      {
@@ -163,7 +173,7 @@ class TeamsList extends Component {
         </Card>
         <Dialog
           open={openDialogEdit}
-          onClose={() => this.toggleEditDialogState(-1, '', false)}
+          onClose={() => this.toggleEditDialogState(-1, '', 'questionMark.png', false)}
         >
           <DialogTitle id="form-dialog-title">
             <TextField
@@ -175,13 +185,21 @@ class TeamsList extends Component {
           </DialogTitle>
           <DialogContent id="form-dialog-title">
             <div className="teamPhoto">
-              <Avatar alt="Remy Sharp" src={NonPhoto} className="teamAvatar" />
+              <Avatar
+                alt="Remy Sharp"
+                src={
+                  photoEdit === null
+                  ? NonPhoto
+                  : require(`../../images/${photoEdit}`)
+                }
+                className="teamAvatar"
+               />
               <input type="file" />
             </div>
           </DialogContent>
           <DialogActions>
             <Button
-              onClick={() => this.toggleEditDialogState(-1, '', false)}
+              onClick={() => this.toggleEditDialogState(-1, '', 'questionMark.png', false)}
               color="primary"
             >
               Cancel
@@ -209,7 +227,15 @@ class TeamsList extends Component {
               onChange={event => this.changeNameOfNewTeam(event.target.value)}
             />
             <div className="teamPhoto">
-              <Avatar alt="Remy Sharp" src={NonPhoto} className="teamAvatar" />
+              <Avatar
+                alt="Remy Sharp"
+                src={
+                  photoAdd === null
+                  ? NonPhoto
+                  : require(`../../images/${photoAdd}`)
+                }
+                className="teamAvatar"
+              />
               <input type="file" />
             </div>
           </DialogContent>
@@ -221,7 +247,7 @@ class TeamsList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {addNewTeam(nameOfTheNewTeam); this.toggleAddDialogState(false)}}
+              onClick={() => {addTeam({nombre: nameOfTheNewTeam, idEmpresa: idEnterprise, imagen: photoAdd}); this.toggleAddDialogState(false)}}
               color="primary"
               disabled={nameOfTheNewTeam === ''}
             >
@@ -310,6 +336,7 @@ class TeamsList extends Component {
 }
 
 TeamsList.propTypes = {
+  idEnterprise: PropTypes.number.isRequired,
   teams: PropTypes.array.isRequired,
   changeTeamName: PropTypes.func.isRequired,
   //changeTeamActive: PropTypes.func.isRequired,
@@ -318,6 +345,8 @@ TeamsList.propTypes = {
   activateTeam: PropTypes.func.isRequired,
   desactivateTeam: PropTypes.func.isRequired,
   getTeamNotes: PropTypes.func.isRequired,
+  addTeam: PropTypes.func.isRequired,
+  updateTeam: PropTypes.func.isRequired,
   teamNotes: PropTypes.shape({}).isRequired
 };
 

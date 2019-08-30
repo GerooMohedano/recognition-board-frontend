@@ -10,9 +10,9 @@ import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Build from '@material-ui/icons/Build';
 import HistoricChart from '@material-ui/icons/InsertChart';
-import Yella from '../../images/yella.jpg';
 import ChartPolygon from '../../commons/ChartPolygon';
 import HistoricDialog from '../../commons/HistoricDialog';
+import NonPhoto from '../../images/questionMark.png';
 
 require('../../commons/Team.css');
 
@@ -99,7 +99,15 @@ class Team extends Component {
             </NavLink>}
           </div>
           <div className="teamDescription">
-            <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
+            <Avatar
+              alt="Remy Sharp"
+              src={
+                teamInfo.data.equipos[0].imagen === null
+                ? NonPhoto
+                : require(`../../images/${teamInfo.data.equipos[0].imagen}`)
+              }
+              className="teamAvatar"
+            />
             <div className="chartContainer">
               <ChartPolygon
                 data={teamInfo.data.evaluacion.map(valor => ({

@@ -12,6 +12,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import TableChartIcon from '@material-ui/icons/TableChart';
+import NonPhoto from '../../images/questionMark.png';
 import TeamCatPic from '../../images/macri.jpg';
 
 require('./Perfil.css');
@@ -36,7 +37,14 @@ class TeamsList extends Component {
               {teams.map(team => (
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src={TeamCatPic} />
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={
+                        team.imagen === null
+                        ? NonPhoto
+                        : require(`../../images/${team.imagen}`)
+                      }
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     inset

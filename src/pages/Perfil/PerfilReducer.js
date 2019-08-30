@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   fetchingUserInfo: true,
   modifyingMail: true,
   gettingHistoricValues: true,
+  uploadingPhoto: true,
   fetchError: {
     state: false,
     message: ''
@@ -17,8 +18,13 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  uploadPhotoError: {
+    state: false,
+    message: ''
+  },
   userInfo: {},
-  historicValues: {}
+  historicValues: {},
+  photoUploaded: {}
 };
 
 const behaviors = {
@@ -48,6 +54,15 @@ const behaviors = {
   },
   [types.GET_HISTORIC_VALUES_FAILURE](state, action) {
     return Object.assign({}, state, { gettingHistoricValues: false, getHistoricError: { state: true, message: action.payload } });
+  },
+  [types.UPLOADING_PHOTO](state) {
+    return Object.assign({}, state, { uploadingPhoto: true, uploadPhotoError: { state: false, message: '' } });
+  },
+  [types.UPLOAD_PHOTO_SUCCESS](state, action) {
+    return Object.assign({}, state, { photoUploaded: action.photoUploaded, uploadingPhoto: false, uploadPhotoError: { state: false, message: '' } });
+  },
+  [types.UPLOAD_PHOTO_FAILURE](state, action) {
+    return Object.assign({}, state, { uploadingPhoto: false, uploadPhotoError: { state: true, message: action.payload } });
   }
 };
 

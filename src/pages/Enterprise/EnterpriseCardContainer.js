@@ -234,8 +234,9 @@ class EnterpriseCardContainer extends Component {
 
   render() {
     const { teams, enterpriseMembers, defaultValues, values, awards} = this.state;
-    const { activateTeam, desactivateTeam, deleteTeam, getTeamNotes, teamNotes,
+    const { idEnterprise, activateTeam, desactivateTeam, deleteTeam, getTeamNotes, teamNotes,
             activateMember, desactivateMember, deleteMember, getNotes, notes,
+            updateUser, addUser, updateTeam, addTeam,
             deleteDefaultValue, deleteAward, updateValue, addValue, enterpriseId } = this.props;
     return (
       <div className="cardsContainer">
@@ -249,6 +250,9 @@ class EnterpriseCardContainer extends Component {
           addNewTeam={this.addNewTeam}//cambiar
           getTeamNotes={getTeamNotes}
           teamNotes={teamNotes}
+          updateTeam={updateTeam}
+          idEnterprise={idEnterprise}
+          addTeam={addTeam}
         />
         <MembersList
           members={this.props.members}
@@ -259,6 +263,9 @@ class EnterpriseCardContainer extends Component {
           deleteMember={deleteMember}
           getNotes={getNotes}
           notes={notes}
+          updateUser={updateUser}
+          addUser={addUser}
+          idEnterprise={idEnterprise}
          // deleteEnterpriseMember={this.deleteEnterpriseMember}
           addNewEnterpriseMember={this.addNewEnterpriseMember}
         />
@@ -283,6 +290,7 @@ class EnterpriseCardContainer extends Component {
 }
 
 EnterpriseCardContainer.propTypes = {
+  idEnterprise: PropTypes.number.isRequired,
   teams: PropTypes.array.isRequired,
   members: PropTypes.array.isRequired,
   values: PropTypes.array.isRequired,
@@ -298,6 +306,10 @@ EnterpriseCardContainer.propTypes = {
   teamNotes: PropTypes.shape({}).isRequired,
   //members
   activateMember: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  addTeam: PropTypes.func.isRequired,
+  updateTeam: PropTypes.func.isRequired,
+  addUser: PropTypes.func.isRequired,
   desactivateMember: PropTypes.func.isRequired,
   memberActivated: PropTypes.shape({}).isRequired,
   memberDesactivated: PropTypes.shape({}).isRequired,

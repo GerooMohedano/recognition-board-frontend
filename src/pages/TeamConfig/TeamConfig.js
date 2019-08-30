@@ -20,6 +20,7 @@ import EditIcon from '@material-ui/icons/Create';
 import AcceptIcon from '@material-ui/icons/Done';
 import CancelIcon from '@material-ui/icons/Clear';
 import Yella from '../../images/yella.jpg';
+import NonPhoto from '../../images/questionMark.png';
 import ValuesList from './ValuesList';
 import TeamMembersList from './TeamMembersList';
 
@@ -168,7 +169,15 @@ class TeamConfig extends Component {
               </div>
             </div>
             <div className="teamPhoto">
-              <Avatar alt="Remy Sharp" src={Yella} className="teamAvatar" />
+              <Avatar
+                alt="Remy Sharp"
+                src={
+                  teamConfigInfo.data.equipos[0].imagen === null
+                  ? NonPhoto
+                  : require(`../../images/${teamConfigInfo.data.equipos[0].imagen}`)
+                }
+                className="teamAvatar"
+              />
               <input type="file" />
             </div>
           </div>

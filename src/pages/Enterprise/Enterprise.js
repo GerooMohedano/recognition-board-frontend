@@ -5,6 +5,7 @@ import Button from '@material-ui/core/Button';
 import InputBase from '@material-ui/core/InputBase';
 import HistoricChart from '@material-ui/icons/InsertChart';
 import EnterpriseInfo from './EnterpriseInfo';
+import NonPhoto from '../../images/questionMark.png';
 import Bob from '../../images/bob.jpg';
 import HistoricDialog from '../../commons/HistoricDialog';
 import ChartPolygon from '../../commons/ChartPolygon';
@@ -57,10 +58,10 @@ class Enterprise extends Component {
 
   componentDidUpdate(prevProps) {
     const {
-      fetchEnterpriseInfo,
-      teamActivated, teamDesactivated, teamDeleted,
+      fetchEnterpriseInfo, userUpdated, userAdded,
+      teamActivated, teamDesactivated, teamDeleted, teamAdded,
       memberActivated, memberDesactivated, memberDeleted,
-      defaultValueDeleted, awardDeleted, valueUpdated, valueAdded,
+      defaultValueDeleted, awardDeleted, valueUpdated, valueAdded, teamUpdated,
       match
     } = this.props;
     if (prevProps.match !== match) {
@@ -68,6 +69,12 @@ class Enterprise extends Component {
     }
     //teams
     if (prevProps.teamActivated !== teamActivated && teamActivated && teamActivated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.teamAdded !== teamAdded && teamAdded && teamAdded.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.teamUpdated !== teamUpdated && teamUpdated && teamUpdated.data.status === 'OK') {
       fetchEnterpriseInfo(match.params.idEmpresa);
     }
     if (prevProps.teamDesactivated !== teamDesactivated && teamDesactivated && teamDesactivated.data.status === 'OK') {
@@ -78,6 +85,12 @@ class Enterprise extends Component {
     }
     //members
     if (prevProps.memberActivated !== memberActivated && memberActivated && memberActivated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.userUpdated !== userUpdated && userUpdated && userUpdated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.userAdded !== userAdded && userAdded && userAdded.data.status === 'OK') {
       fetchEnterpriseInfo(match.params.idEmpresa);
     }
     if (prevProps.memberDesactivated !== memberDesactivated && memberDesactivated && memberDesactivated.data.status === 'OK') {
@@ -143,8 +156,8 @@ class Enterprise extends Component {
     const {
       newName, configuring, openHistoricDialog, enterpriseInfoState, teams
     } = this.state;
-    const { fetchingEnterpriseInfo, enterpriseInfo, loginInfo,
-      historicValues, gettingHistoricValues,
+    const { fetchingEnterpriseInfo, enterpriseInfo, loginInfo, updateTeam,
+      historicValues, gettingHistoricValues, updateUser, addUser, addTeam,
       deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
       deleteMember, activateMember, desactivateMember, getNotes, notes,
       deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue } = this.props;
@@ -154,12 +167,17 @@ class Enterprise extends Component {
     else
       return (
         <div>
-          <div className="title">
-            <div className="entrepriseName"> IM IN Enterprise {newName}</div>
-          </div>
           <div className="enterpriseDescription">
             <div className="teamPhoto">
-              <Avatar alt="Remy Sharp" src={Bob} className="enterpriseAvatar" />
+              <Avatar
+                alt="Remy Sharp"
+                src={
+                  enterpriseInfo.data.empresas[0].logo === null
+                  ? NonPhoto
+                  : require(`../../images/${enterpriseInfo.data.empresas[0].logo}`)
+                }
+                className="enterpriseAvatar"
+              />
               {configuring && (<input type="file" />)}
             </div>
             <EnterpriseInfo
@@ -192,18 +210,23 @@ class Enterprise extends Component {
             members={enterpriseInfo.data.usuarios}
             values={enterpriseInfo.data.valores}
             awards={enterpriseInfo.data.logros}
+            idEnterprise={this.props.match.params.idEmpresa}
             //teams
             activateTeam={activateTeam}
             desactivateTeam={desactivateTeam}
             deleteTeam={deleteTeam}
             getTeamNotes={getTeamNotes}
             teamNotes={teamNotes}
+            updateTeam={updateTeam}
+            addTeam={addTeam}
             //member
             activateMember={activateMember}
             desactivateMember={desactivateMember}
             deleteMember={deleteMember}
             getNotes={getNotes}
             notes={notes}
+            updateUser={updateUser}
+            addUser={addUser}
             //defaultValues
             deleteDefaultValue={deleteDefaultValue}
             updateValue={updateValue}
@@ -251,6 +274,12 @@ Enterprise.propTypes = {
   getTeamNotes: PropTypes.func.isRequired,
   teamNotes: PropTypes.shape({}).isRequired,
   //members
+  updatingUser: PropTypes.bool.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  userUpdated: PropTypes.shape({}).isRequired,
+  addingValue: PropTypes.bool.isRequired,
+  addUser: PropTypes.func.isRequired,
+  userAdded: PropTypes.shape({}).isRequired,
   activateMember: PropTypes.func.isRequired,
   desactivateMember: PropTypes.func.isRequired,
   deleteMember: PropTypes.func.isRequired,
@@ -268,5 +297,9 @@ Enterprise.propTypes = {
   //enterprise modify
   modifyingEnterprise: PropTypes.bool.isRequired,
   modifyEnterprise: PropTypes.func.isRequired,
+  updateTeam: PropTypes.func.isRequired,
+  teamUpdated: PropTypes.shape({}).isRequired,
+  addTeam: PropTypes.func.isRequired,
+  teamAdded: PropTypes.shape({}).isRequired
 };
 export default Enterprise;

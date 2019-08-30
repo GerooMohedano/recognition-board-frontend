@@ -33,6 +33,37 @@ export function fetchUserInfo(idUsuario) {
   };
 }
 
+export function uploadingPhoto() {
+  return {
+    type: types.UPLOADING_PHOTO,
+    payload: {}
+  };
+}
+
+export function uploadPhotoSuccess(data) {
+  return {
+    type: types.UPLOAD_PHOTO_SUCCESS,
+    photoUploaded: data
+  };
+}
+
+
+export function uploadPhotoFailure(error) {
+  return {
+    type: types.UPLOAD_PHOTO_FAILURE,
+    payload: error
+  };
+}
+
+export function uploadPhoto(file) {
+  return function (dispatch) {
+    dispatch(uploadingPhoto());
+    return request.formDataPost(`${baseUrl()}/uploadFile`)
+      .then(response => dispatch(uploadPhotoSuccess(response)))
+      .catch(error => dispatch(uploadPhotoFailure(error)));
+  };
+}
+
 export function modifyingMail() {
   return {
     type: types.MODIFYING_MAIL,

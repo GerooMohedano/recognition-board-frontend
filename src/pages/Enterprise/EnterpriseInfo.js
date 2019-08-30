@@ -66,7 +66,7 @@ class EnterpriseInfo extends React.Component {
     const { newName, newAddress, newTelephone, openDialogDelete } = this.state;
     const { configuring, name, address, telephone, modifyEnterprise, changeConfiguring, canConfigure } = this.props;
     return (
-      <Paper className="infoPaper" elevation={1}>
+      <Paper className="infoPaper" elevation={3}>
       {configuring
         ? (
           <div>

@@ -11,6 +11,8 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
+import Snackbar from '@material-ui/core/Snackbar';
+import IconButton from '@material-ui/core/IconButton';
 import Button from '@material-ui/core/Button';
 import Avatar from '@material-ui/core/Avatar';
 import ExpansionPanel from '@material-ui/core/ExpansionPanel';
@@ -19,7 +21,9 @@ import ExpansionPanelDetails from '@material-ui/core/ExpansionPanelDetails';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HistoricChart from '@material-ui/icons/InsertChart';
+import CloseIcon from '@material-ui/icons/Close';
 import Gero from '../../images/gero.jpg';
+import NonPhoto from '../../images/questionMark.png';
 import ChartPolygon from '../../commons/ChartPolygon';
 import HistoricDialog from '../../commons/HistoricDialog';
 import ProfileInfo from './ProfileInfo';
@@ -34,7 +38,9 @@ class Perfil extends React.Component {
     this.state = {
       openHistoricDialog: false,
       configuring: false,
+      errorUploading: false
     };
+    this.fileInput = React.createRef();
   }
 
   componentDidMount() {
@@ -65,20 +71,75 @@ class Perfil extends React.Component {
     this.props.getHistoricValues({ idUsuario: this.props.match.params.idUsuario, idValor: value })
   }
 
+  async handleSubmit(event) {
+    event.preventDefault();
+    console.log(this.fileInput.current.files[0]);
+    try {
+          const formData = new FormData();
+          formData.append('file', this.fileInput.current.files[0]);
+          await this.props.uploadPhoto(formData);
+      } catch (e) {
+        console.log(e);
+        this.setState({ errorUploading: true });
+      }
+  }
+
+  // async handleSubmit(event) {
+  //   event.preventDefault();
+  //   try {
+  //     await this.sendRequest(this.fileInput.current.files[0]);
+  //   } catch (e) {
+  //     console.log(e);
+  //     this.setState({ errorUploading: true });
+  //   }
+  // }
+
+  sendRequest(file) {
+    return new Promise((resolve, reject) => {
+      // const req = new XMLHttpRequest();
+      const formData = new FormData();
+      formData.append("file", file, file.name);
+      this.props.uploadPhoto(formData);
+      // req.open("POST", "http://localhost:3001/uploadFile");
+      // req.send(formData);
+    })
+  }
+
   render() {
-    const { openHistoricDialog, configuring } = this.state;
+    const { openHistoricDialog, configuring, errorUploading } = this.state;
     const {
       fetchingUserInfo, userInfo, gettingHistoricValues, historicValues, loginInfo, match
     } = this.props;
     if (fetchingUserInfo || userInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
+      console.log(userInfo.data.usuarios[0]);
       return (
         <div>
           <div className="profileDescription">
             <div className="profilePhoto">
-              <Avatar alt="Remy Sharp" src={Gero} className="profileAvatar" />
-              {configuring && (<input type="file" />)}
+              <Avatar
+                src={
+                  userInfo.data.usuarios[0].fotoPerfil === null
+                  ? NonPhoto
+                  : require(`../../images/${userInfo.data.usuarios[0].fotoPerfil}`)
+                }
+                alt="Remy Sharp"
+                className="profileAvatar"
+              />
+              {configuring && (
+                <form onSubmit={event => this.handleSubmit(event)}>
+                  <label>
+                    Upload a photo:
+                    <input
+                      type="file"
+                      accept="image/*"
+                      ref={this.fileInput}
+                    />
+                  </label>
+                  <button type="submit">Submit</button>
+                </form>
+              )}
             </div>
             <ProfileInfo
               configuring={configuring}
@@ -122,6 +183,30 @@ class Perfil extends React.Component {
             teams={userInfo.data.equipos}
             adminGeneral={userInfo.data.usuarios[0].adminGeneral}
           />
+          <Snackbar
+            anchorOrigin={{
+              vertical: 'top',
+              horizontal: 'center',
+            }}
+            variant="error"
+            open={errorUploading}
+            autoHideDuration={6000}
+            onClose={() => this.setState({ errorUploading: false})}
+            ContentProps={{
+              'aria-describedby': 'message-id',
+            }}
+            message={<span id="message-id">ERROR UPLOADING!</span>}
+            action={[
+              <IconButton
+                key="close"
+                aria-label="Close"
+                color="secondary"
+                onClick={() => this.setState({ errorUploading: false})}
+              >
+                <CloseIcon />
+              </IconButton>
+            ]}
+          />
         </div>
       );
   }
@@ -130,7 +215,10 @@ class Perfil extends React.Component {
 Perfil.propTypes = {
   classes: PropTypes.object.isRequired,
   fetchingUserInfo: PropTypes.bool.isRequired,
+  uploadingPhoto: PropTypes.bool.isRequired,
+  photoUploaded: PropTypes.shape({}).isRequired,
   fetchUserInfo: PropTypes.func.isRequired,
+  uploadPhoto: PropTypes.func.isRequired,
   fetchError: PropTypes.shape({
     state: PropTypes.bool.isRequired,
     message: PropTypes.object

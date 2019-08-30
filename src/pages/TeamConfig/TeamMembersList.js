@@ -21,6 +21,7 @@ import CreateIcon from '@material-ui/icons/Add';
 import ConfirmIcon from '@material-ui/icons/Done';
 import CancelIcon from '@material-ui/icons/Clear';
 import CommonProfilePic from '../../images/profilepic.jpg';
+import NonPhoto from '../../images/questionMark.png';
 import Autocomplete from '../../commons/CustomAutocomplete';
 
 require('../../commons/Team.css');
@@ -82,7 +83,14 @@ class TeamMembersList extends Component {
                 return (
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src={CommonProfilePic} />
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={
+                        member.fotoPerfil === null
+                        ? NonPhoto
+                        : require(`../../images/${member.fotoPerfil}`)
+                      }
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     inset

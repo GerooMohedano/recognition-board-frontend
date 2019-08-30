@@ -372,6 +372,125 @@ export function modifyEnterprise(newEnterpriseInfo) {
         };
       }
 
+      export function updatingTeam() {
+        return {
+          type: types.UPDATING_TEAM,
+          payload: {}
+        };
+      }
+
+      export function updateTeamSuccess(data) {
+        return {
+          type: types.UPDATE_TEAM_SUCCESS,
+          teamUpdated: data
+        };
+      }
+
+      export function updateTeamFailure(error) {
+        return {
+          type: types.UPDATE_TEAM_FAILURE,
+          payload: error
+        };
+      }
+
+      export function updateTeam(teamToUpdate) {
+        return function (dispatch) {
+          dispatch(updatingTeam());
+          return request.post(`${baseUrl()}/modificarEquipo`, teamToUpdate)
+            .then(response => dispatch(updateTeamSuccess(response)))
+            .catch(error => dispatch(updateTeamFailure(error)));
+        };
+      }
+
+      export function updatingUser() {
+        return {
+          type: types.UPDATING_USER,
+          payload: {}
+        };
+      }
+
+      export function updateUserSuccess(data) {
+        return {
+          type: types.UPDATE_USER_SUCCESS,
+          userUpdated: data
+        };
+      }
+
+      export function updateUserFailure(error) {
+        return {
+          type: types.UPDATE_USER_FAILURE,
+          payload: error
+        };
+      }
+
+      export function updateUser(userToUpdate) {
+        return function (dispatch) {
+          dispatch(updatingUser());
+          return request.post(`${baseUrl()}/modificarUsuario`, userToUpdate)
+            .then(response => dispatch(updateUserSuccess(response)))
+            .catch(error => dispatch(updateUserFailure(error)));
+        };
+      }
+
+      export function addingUser() {
+        return {
+          type: types.ADDING_USER,
+          payload: {}
+        };
+      }
+
+      export function addUserSuccess(data) {
+        return {
+          type: types.ADD_USER_SUCCESS,
+          userAdded: data
+        };
+      }
+
+      export function addUserFailure(error) {
+        return {
+          type: types.ADD_USER_FAILURE,
+          payload: error
+        };
+      }
+
+      export function addUser(userToAdd) {
+        return function (dispatch) {
+          dispatch(addingUser());
+          return request.post(`${baseUrl()}/altaUsuario`, userToAdd)
+            .then(response => dispatch(addUserSuccess(response)))
+            .catch(error => dispatch(addUserFailure(error)));
+        };
+      }
+
+      export function addingTeam() {
+        return {
+          type: types.ADDING_TEAM,
+          payload: {}
+        };
+      }
+
+      export function addTeamSuccess(data) {
+        return {
+          type: types.ADD_TEAM_SUCCESS,
+          teamAdded: data
+        };
+      }
+
+      export function addTeamFailure(error) {
+        return {
+          type: types.ADD_TEAM_FAILURE,
+          payload: error
+        };
+      }
+
+      export function addTeam(teamToAdd) {
+        return function (dispatch) {
+          dispatch(addingTeam());
+          return request.post(`${baseUrl()}/altaEquipo`, teamToAdd)
+            .then(response => dispatch(addTeamSuccess(response)))
+            .catch(error => dispatch(addTeamFailure(error)));
+        };
+      }
 
         export function addingValue() {
           return {

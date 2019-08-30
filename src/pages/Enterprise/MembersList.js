@@ -44,10 +44,12 @@ class MembersList extends Component {
       idToDelete: -1,
       idToActive: -1,
       activateStatus: '',
-      newTeamMember: { userName: '', firstName: '',
-        lastName: '', mail: '', rol: 0, active: true },
-      updatedData: { id: -1, userName: '', firstName: '',
-        lastName: '', mail: '', rol: 0 }
+      newTeamMember: { userName: '',
+        mail: '', rol: false, active: true },
+      updatedData: { id: -1, userName: '',
+        mail: '', rol: false },
+      photoAdd: 'questionMark.png',
+      photoEdit: 'questionMark.png'
     };
   }
 
@@ -65,23 +67,23 @@ class MembersList extends Component {
   openEditDialogState = member => {
     this.setState({
       openDialogEdit: true,
-      updatedData: { id: member.id, userName: member.userName, firstName: member.firstName,
-        lastName: member.lastName, mail: member.mail, rol: member.rol }
+      updatedData: { id: member.idUsuario, userName: member.nombre_usuario,
+        mail: member.mail, rol: member.rol }
     });
   }
 
   closeEditDialogState = () => {
     this.setState({
       openDialogEdit: false,
-      updatedData: { id: -1, userName: '', firstName: '',
-        lastName: '', mail: '', rol: 0 }
+      updatedData: { id: -1, userName: '',
+        mail: '', rol: false }, photoEdit: 'questionMark.png'
     });
   }
 
   toggleAddMember = value => {
     this.setState({ openDialogAdd: value,
-      newTeamMember: { id: -1, userName: '', firstName: '',
-        lastName: '', mail: '', rol: 0, active: true } })
+      newTeamMember: { id: -1, userName: '',
+        mail: '', rol: false, active: true }, photoAdd: 'questionMark.png' })
   }
 
   toggleActiveDialogState = (valueId, state, active) => {
@@ -89,20 +91,22 @@ class MembersList extends Component {
   }
 
   confirmAddMember = () => {
-    const { newTeamMember } = this.state;
-    this.props.addNewEnterpriseMember(newTeamMember.userName, newTeamMember.firstName,
-      newTeamMember.lastName, newTeamMember.mail, newTeamMember.rol);
-    this.setState({ newTeamMember: { userName: '', firstName: '',
-      lastName: '', mail: '', rol: 0, active: true } });
+    const { newTeamMember, photoAdd } = this.state;
+    const { addUser, idEnterprise } = this.props;
+    addUser({ nombre: newTeamMember.userName, mail: newTeamMember.mail,
+      fotoPerfil: photoAdd, idEmpresa: idEnterprise, rol: newTeamMember.rol });
+    this.setState({ newTeamMember: { userName: '',
+      mail: '', rol: false, active: true }, photoAdd: 'questionMark.png' });
   }
 
   confirmUpdateMember = () => {
-    const { updatedData } = this.state;
-    this.props.updateEnterpriseMember(updatedData.id, updatedData.userName,
-      updatedData.firstName, updatedData.lastName, updatedData.mail, updatedData.rol);
+    const { updatedData, photoEdit } = this.state;
+    const { updateUser, idEnterprise } = this.props;
+    updateUser({ idUsuario: updatedData.id, nombre: updatedData.userName,
+      mail: updatedData.mail, fotoPerfil: photoEdit, rol: updatedData.rol, idEmpresa: idEnterprise });
     this.setState({
-      updatedData: { id: -1, userName: '', firstName: '',
-        lastName: '', mail: '', rol: 0 }
+      updatedData: { id: -1, userName: '',
+        mail: '', rol: false }, photoEdit: 'questionMark.png'
     });
   }
 
@@ -123,7 +127,7 @@ class MembersList extends Component {
 
   render() {
     const {
-      openDialogDelete, openDialogAdd, openDialogEdit, openDialogActivate,
+      openDialogDelete, openDialogAdd, openDialogEdit, openDialogActivate, photoAdd, photoEdit,
       idToDelete, idToActive, nameToDelete, newTeamMember, updatedData, undeletableMember, activateStatus
     } = this.state;
     const {
@@ -142,12 +146,19 @@ class MembersList extends Component {
               {this.props.members.map(member => (
                 <ListItem>
                   <ListItemAvatar>
-                    <Avatar alt="Remy Sharp" src={CommonProfilePic} />
+                    <Avatar
+                      alt="Remy Sharp"
+                      src={
+                        member.fotoPerfil === null
+                        ? NonPhoto
+                        : require(`../../images/${member.fotoPerfil}`)
+                      }
+                    />
                   </ListItemAvatar>
                   <ListItemText
                     inset
                     primary={member.nombre_usuario}
-                    secondary={member.rol === 1 ? 'admin' : null}
+                    secondary={member.rol? 'admin' : null}
                     className="memberItemText"
                   />
                   <Tooltip title="Edit member">
@@ -174,11 +185,13 @@ class MembersList extends Component {
                   <Tooltip title="Kick out">
                     <IconButton
                       aria-label="Delete"
-                      disabled={member.rol === 1}
+                      disabled={member.rol}
                       onClick={() => this.toggleDeleteDialogState(member.idUsuario, member.nombre_usuario, true)}
                       className="iconListButton"
                     >
-                      <DeleteIcon style={{ color: 'black' }} />
+                      {member.rol
+                        ? (<DeleteIcon style={{ color: '#E0E0E0' }} />)
+                        : (<DeleteIcon style={{ color: 'black' }} />)}
                     </IconButton>
                   </Tooltip>
                 </ListItem>
@@ -228,7 +241,15 @@ class MembersList extends Component {
           </DialogTitle>
           <DialogContent>
             <div className="teamPhoto">
-              <Avatar alt="Remy Sharp" src={NonPhoto} className="teamAvatar" />
+              <Avatar
+                alt="Remy Sharp"
+                src={
+                  photoAdd === null
+                  ? NonPhoto
+                  : require(`../../images/${photoAdd}`)
+                }
+                className="teamAvatar"
+              />
               <input type="file" />
             </div>
             <TextField
@@ -236,18 +257,6 @@ class MembersList extends Component {
               placeholder="User name"
               defaultValue={newTeamMember.userName}
               onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'userName')}
-            />
-            <TextField
-              className="fieldInputOnDialog"
-              placeholder="First name"
-              defaultValue={newTeamMember.firstName}
-              onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'firstName')}
-            />
-            <TextField
-              className="fieldInputOnDialog"
-              placeholder="Last name"
-              defaultValue={newTeamMember.lastName}
-              onChange={event => this.updateMemberInfo(event.target.value, 'newTeamMember', 'lastName')}
             />
             <TextField
               className="fieldInputOnDialog"
@@ -261,7 +270,7 @@ class MembersList extends Component {
               </Typography>
               <Checkbox
                 checked={newTeamMember.rol}
-                onChange={() => this.updateMemberInfo(newTeamMember.rol === 1 ? 0 : 1, 'newTeamMember', 'rol')}
+                onChange={() => this.updateMemberInfo(newTeamMember.rol ? false : true, 'newTeamMember', 'rol')}
               />
             </div>
           </DialogContent>
@@ -290,7 +299,15 @@ class MembersList extends Component {
           </DialogTitle>
           <DialogContent>
             <div className="teamPhoto">
-              <Avatar alt="Remy Sharp" src={NonPhoto} className="teamAvatar" />
+              <Avatar
+                alt="Remy Sharp"
+                src={
+                  photoEdit === null
+                  ? NonPhoto
+                  : require(`../../images/${photoEdit}`)
+                }
+                className="teamAvatar"
+              />
               <input type="file" />
             </div>
             <TextField
@@ -298,18 +315,6 @@ class MembersList extends Component {
               placeholder="User name"
               defaultValue={updatedData.userName}
               onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'userName')}
-            />
-            <TextField
-              className="fieldInputOnDialog"
-              placeholder="First name"
-              defaultValue={updatedData.firstName}
-              onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'firstName')}
-            />
-            <TextField
-              className="fieldInputOnDialog"
-              placeholder="Last name"
-              defaultValue={updatedData.lastName}
-              onChange={event => this.updateMemberInfo(event.target.value, 'updatedData', 'lastName')}
             />
             <TextField
               className="fieldInputOnDialog"
@@ -322,8 +327,8 @@ class MembersList extends Component {
                 Is this user enterprise administrator?
               </Typography>
               <Checkbox
-                checked={updatedData.rol === 1}
-                onChange={() => this.updateMemberInfo(updatedData.rol === 1 ? 0 : 1, 'updatedData', 'rol')}
+                checked={updatedData.rol}
+                onChange={() => this.updateMemberInfo(updatedData.rol ? false : true, 'updatedData', 'rol')}
               />
             </div>
           </DialogContent>
@@ -402,6 +407,7 @@ class MembersList extends Component {
 }
 
 MembersList.propTypes = {
+  idEnterprise: PropTypes.number.isRequired,
   members: PropTypes.array.isRequired,
   updateEnterpriseMember: PropTypes.func.isRequired,
   changeEnterpriseMemberActive: PropTypes.func.isRequired,
@@ -412,6 +418,8 @@ MembersList.propTypes = {
   notes: PropTypes.shape({}).isRequired,
   deleteMember: PropTypes.func.isRequired,
   activateMember: PropTypes.func.isRequired,
+  updateUser: PropTypes.func.isRequired,
+  addUser: PropTypes.func.isRequired,
   desactivateMember: PropTypes.func.isRequired
 };
 

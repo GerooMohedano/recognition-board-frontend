@@ -14,6 +14,7 @@ import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchIcon from '@material-ui/icons/Search';
 import CommonProfilePic from '../images/profilepic.jpg';
+import NonPhoto from '../images/questionMark.png';
 import TeamCatPic from '../images/macri.jpg';
 
 require('./AppLayout.css');
@@ -126,7 +127,14 @@ class SearchBar extends React.Component {
                     <NavLink to={`/Perfil/${person.idUsuario}`} className="linkPerfil">
                       <ListItem button onClick={() => this.updateSearch('')}>
                         <ListItemAvatar>
-                          <Avatar alt="Remy Sharp" src={CommonProfilePic} />
+                          <Avatar
+                            alt="Remy Sharp"
+                            src={
+                              person.fotoPerfil === null
+                              ? NonPhoto
+                              : require(`../images/${person.fotoPerfil}`)
+                            }
+                          />
                         </ListItemAvatar>
                         <ListItemText
                           inset
@@ -154,7 +162,14 @@ class SearchBar extends React.Component {
                     <NavLink to={`/Team/${team.idEquipo}`} className="linkPerfil">
                       <ListItem button onClick={() => this.updateSearch('')}>
                         <ListItemAvatar>
-                          <Avatar alt="Remy Sharp" src={TeamCatPic} />
+                          <Avatar
+                            alt="Remy Sharp"
+                            src={
+                              team.imagen === null
+                              ? NonPhoto
+                              : require(`../images/${team.imagen}`)
+                            }
+                          />
                         </ListItemAvatar>
                         <ListItemText
                           inset

@@ -4,7 +4,22 @@ import * as types from './EnterpriseConstants';
 const INITIAL_STATE = {
   fetchingEnterpriseInfo: true,
   gettingHistoricValues: true,
+  updatingUser: true,
+  addingUser: true,
+  updatingTeam: true,
   fetchError: {
+    state: false,
+    message: ''
+  },
+  updateTeamError: {
+    state: false,
+    message: ''
+  },
+  updateUserError: {
+    state: false,
+    message: ''
+  },
+  addUserError: {
     state: false,
     message: ''
   },
@@ -17,6 +32,9 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  userUpdated: {},
+  teamUpdated: {},
+  userAdded: {},
   historicValues: {},
   //team
   desactivateTeamError: {
@@ -91,6 +109,12 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  teamAdded: {},
+  addingTeam: true,
+  addTeamError: {
+    state: false,
+    message: ''
+  }
 };
 
 
@@ -103,6 +127,43 @@ const behaviors = {
   },
   [types.FETCH_ENTERPRISE_INFO_FAILURE](state, action) {
     return Object.assign({}, state, { fetchingEnterpriseInfo: false, fetchError: { state: true, message: action.payload } });
+  },
+  [types.UPDATING_USER](state) {
+    return Object.assign({}, state, { updatingUser: true, updateUserError: { state: false, message: '' } });
+  },
+  [types.UPDATE_USER_SUCCESS](state, action) {
+    return Object.assign({}, state, { userUpdated: action.userUpdated, updatingUser: false, updateUserError: { state: false, message: '' } });
+  },
+  [types.UPDATE_USER_FAILURE](state, action) {
+    return Object.assign({}, state, { updatingUser: false, updateUserError: { state: true, message: action.payload } });
+  },
+  [types.UPDATING_TEAM](state) {
+    return Object.assign({}, state, { updatingTeam: true, updateTeamError: { state: false, message: '' } });
+  },
+  [types.UPDATE_TEAM_SUCCESS](state, action) {
+    return Object.assign({}, state, { teamUpdated: action.teamUpdated, updatingTeam: false, updateTeamError: { state: false, message: '' } });
+  },
+  [types.UPDATE_TEAM_FAILURE](state, action) {
+    return Object.assign({}, state, { updatingTeam: false, updateTeamError: { state: true, message: action.payload } });
+  },
+  [types.ADDING_USER](state) {
+    return Object.assign({}, state, { addingUser: true, addUserError: { state: false, message: '' } });
+  },
+  [types.ADD_USER_SUCCESS](state, action) {
+    return Object.assign({}, state, { userAdded: action.userAdded, addingUser: false, addUserError: { state: false, message: '' } });
+  },
+  [types.ADD_USER_FAILURE](state, action) {
+    return Object.assign({}, state, { addingUser: false, addUserError: { state: true, message: action.payload } });
+  },
+
+  [types.ADDING_TEAM](state) {
+    return Object.assign({}, state, { addingTeam: true, addTeamError: { state: false, message: '' } });
+  },
+  [types.ADD_TEAM_SUCCESS](state, action) {
+    return Object.assign({}, state, { teamAdded: action.teamAdded, addingTeam: false, addTeamError: { state: false, message: '' } });
+  },
+  [types.ADD_TEAM_FAILURE](state, action) {
+    return Object.assign({}, state, { addingTeam: false, addTeamError: { state: true, message: action.payload } });
   },
   [types.GETTING_HISTORIC_VALUES](state) {
     return Object.assign({}, state, { gettingHistoricValues: true, getHistoricError: { state: false, message: '' } });
