@@ -114,7 +114,13 @@ const INITIAL_STATE = {
   addTeamError: {
     state: false,
     message: ''
-  }
+  },
+  getValuesNotesError: {
+    state: false,
+    message: ''
+  },
+  valuesNotes: {},
+  gettingValuesNotes: true
 };
 
 
@@ -210,6 +216,15 @@ const behaviors = {
   },
   [types.GET_TEAM_NOTES_FAILURE](state, action) {
     return Object.assign({}, state, { gettingTeamNotes: false, getTeamNotesError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_VALUES_NOTES](state) {
+    return Object.assign({}, state, { gettingValuesNotes: true, getValuesNotesError: { state: false, message: '' } });
+  },
+  [types.GET_VALUES_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { valuesNotes: action.valuesNotes, gettingValuesNotes: false, getValuesNotesError: { state: false, message: '' } });
+  },
+  [types.GET_VALUES_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingValuesNotes: false, getValuesNotesError: { state: true, message: action.payload } });
   },
   ///////////////members!!
   [types.ACTIVATING_MEMBER](state) {

@@ -4,12 +4,14 @@ import { fetchEnterpriseInfo, modifyAddress,
         deleteTeam, activateTeam, desactivateTeam, getTeamNotes,
         deleteMember, activateMember, desactivateMember, getNotes,
         deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue,
-        getHistoricValues, updateUser, addUser, updateTeam, addTeam
+        getHistoricValues, updateUser, addUser, updateTeam, addTeam, getValuesNotes
        } from './EnterpriseAction';
 
 function mapStateToProps(state) {
   return {
     fetchingEnterpriseInfo: state.enterprise.fetchingEnterpriseInfo,
+    gettingValuesNotes: state.enterprise.gettingValuesNotes,
+    valuesNotes: state.enterprise.valuesNotes,
     updatingUser: state.enterprise.updatingUser,
     enterpriseInfo: state.enterprise.enterpriseInfo,
     fetchError: state.enterprise.fetchError,
@@ -73,5 +75,5 @@ export default connect(mapStateToProps, {
   activateMember, desactivateMember, deleteMember, getNotes,
   deleteDefaultValue, getHistoricValues,
   deleteAward, modifyEnterprise, updateValue, addValue,
-  updateUser, addUser, updateTeam, addTeam
+  updateUser, addUser, updateTeam, addTeam, getValuesNotes
 })(Enterprise);

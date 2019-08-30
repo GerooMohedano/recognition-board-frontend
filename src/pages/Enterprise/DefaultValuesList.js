@@ -14,10 +14,12 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import IconButton from '@material-ui/core/IconButton';
 import TextField from '@material-ui/core/TextField';
+import Snackbar from '@material-ui/core/Snackbar';
 import Button from '@material-ui/core/Button';
 import EditIcon from '@material-ui/icons/Create';
 import CreateIcon from '@material-ui/icons/Add';
 import DeleteIcon from '@material-ui/icons/Delete';
+import CloseIcon from '@material-ui/icons/Close';
 //import { deleteDefaultValue } from './EnterpriseAction';
 
 require('../../commons/Team.css');
@@ -29,6 +31,7 @@ class DefaultValuesList extends Component {
       openDialogEdit: false,
       openDialogDelete: false,
       openDialogAdd: false,
+      undeletableValue: false,
       nameToChange: '',
       idToChange: -1,
       idToDelete: -1,
@@ -61,6 +64,9 @@ class DefaultValuesList extends Component {
   }
 
   toggleDeleteDialogState = (valueId, state) => {
+    if (state) {
+      this.props.getValuesNotes({ idValor: valueId });
+    }
     this.setState({ idToDelete: valueId, openDialogDelete: state });
   }
 
@@ -68,10 +74,21 @@ class DefaultValuesList extends Component {
     this.setState({ openDialogAdd: state, nameOfTheNewValue: '' });
   }
 
+  confirmDeleteValue = () => {
+    const { idToDelete } = this.state;
+    const { valuesNotes, deleteDefaultValue } = this.props;
+    if (valuesNotes === undefined || valuesNotes.data.data.length !== 0) {
+      this.setState({ undeletableValue: true });
+    } else {
+      deleteDefaultValue({ idValor: idToDelete });
+      this.toggleDeleteDialogState(-1, false);
+    }
+  }
+
   render() {
     const {
       openDialogEdit, openDialogDelete, openDialogAdd,
-      nameToChange, idToDelete, nameOfTheNewValue
+      nameToChange, idToDelete, nameOfTheNewValue, undeletableValue
     } = this.state;
     const { values, deleteDefaultValue, addValue, enterpriseId } = this.props;
     console.log("ID EMPRESA PARA DEFAULT VALUES: ", enterpriseId);
@@ -192,13 +209,37 @@ class DefaultValuesList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {deleteDefaultValue({ idValor: idToDelete }); this.toggleDeleteDialogState(-1, false)}}
+              onClick={() => this.confirmDeleteValue()}
               color="secondary"
             >
               Delete
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          variant="error"
+          open={undeletableValue}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ undeletableValue: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Can't delete a value with notes</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ undeletableValue: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </div>
     );
   }
@@ -211,7 +252,10 @@ DefaultValuesList.propTypes = {
   //deleteValue: PropTypes.func.isRequired,
   addNewValue: PropTypes.func.isRequired,
   deleteDefaultValue:PropTypes.func.isRequired,
-  enterpriseId: PropTypes.number.isRequired
+  enterpriseId: PropTypes.number.isRequired,
+  gettingValuesNotes: PropTypes.bool.isRequired,
+  getValuesNotes: PropTypes.func.isRequired,
+  valuesNotes: PropTypes.shape({}).isRequired
 };
 
 export default DefaultValuesList;

@@ -160,7 +160,9 @@ class Enterprise extends Component {
       historicValues, gettingHistoricValues, updateUser, addUser, addTeam,
       deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
       deleteMember, activateMember, desactivateMember, getNotes, notes,
-      deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue } = this.props;
+      deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue,
+      gettingValuesNotes, getValuesNotes, valuesNotes
+     } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
@@ -232,6 +234,9 @@ class Enterprise extends Component {
             updateValue={updateValue}
             addValue={addValue}
             enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
+            gettingValuesNotes={gettingValuesNotes}
+            getValuesNotes={getValuesNotes}
+            valuesNotes={valuesNotes}
             //awards
             deleteAward={deleteAward}
           />)}
@@ -300,6 +305,9 @@ Enterprise.propTypes = {
   updateTeam: PropTypes.func.isRequired,
   teamUpdated: PropTypes.shape({}).isRequired,
   addTeam: PropTypes.func.isRequired,
-  teamAdded: PropTypes.shape({}).isRequired
+  teamAdded: PropTypes.shape({}).isRequired,
+  gettingValuesNotes: PropTypes.bool.isRequired,
+  getValuesNotes: PropTypes.func.isRequired,
+  valuesNotes: PropTypes.shape({}).isRequired
 };
 export default Enterprise;
