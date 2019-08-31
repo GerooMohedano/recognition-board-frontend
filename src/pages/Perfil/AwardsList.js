@@ -22,7 +22,8 @@ class AwardsList extends Component {
   }
 
   convertDate = isoDate => {
-    const date = new Date(isoDate);
+    const wrongDate = new Date(isoDate);
+    const date = new Date(wrongDate.getTime() + Math.abs(wrongDate.getTimezoneOffset()*60000));
     return date.toDateString();
   }
 

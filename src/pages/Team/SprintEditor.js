@@ -82,6 +82,19 @@ class SprintEditor extends React.Component {
     this.setState({ [dialogDefinition]: true });
   }
 
+  handleDialog = (value, dialog) => this.setState({
+    [dialog]: value, newSprintName: '', newBeginDate: '', newEndDate: ''
+  });
+
+  handleEditDialog = value => this.setState({
+    editDialog: value,
+    editableNewSprintName: value ? this.props.sprintName : '',
+    editableNewBeginDate: value ? this.props.beginDate.split('T')[0] : '',
+    editableNewEndDate: value ?this.props.endDate.split('T')[0] : ''
+  });
+
+  handleDeleteDialogOpen = value => this.setState({ deleteDialog: value });
+
   updateSprintInfo = (field, value) => {
     this.setState({ [field]: value });
   }
@@ -126,7 +139,7 @@ class SprintEditor extends React.Component {
     return (
       <div className="sprintToolBar">
         <Tooltip title="Create a new Sprint">
-          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialogOpen('newDialog')}>
+          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialog(true, 'newDialog')}>
             {(isUserTeamAdmin || adminGeneral)
               ? (<CreateIcon style={{ color: 'black' }} />)
               : (<CreateIcon style={{ color: '#E0E0E0' }} />)
@@ -135,7 +148,7 @@ class SprintEditor extends React.Component {
         </Tooltip>
         <Dialog
           open={newDialog}
-          onClose={() => this.hanldleDialogClose('newDialog')}
+          onClose={() => this.handleDialog(false, 'newDialog')}
         >
           <DialogTitle id="form-dialog-title">
             <InputBase
@@ -177,7 +190,7 @@ class SprintEditor extends React.Component {
                   </div>
                 </DialogContent>
                 <DialogActions>
-                  <Button onClick={() => this.hanldleDialogClose('newDialog')} color="primary">
+                  <Button onClick={() => this.handleDialog(false, 'newDialog')} color="primary">
                     Cancel
                   </Button>
                   <Button
@@ -191,7 +204,7 @@ class SprintEditor extends React.Component {
             )}
         </Dialog>
         <Tooltip title="Edit current Sprint">
-          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialogOpen('editDialog')}>
+          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleEditDialog(true)}>
             {(isUserTeamAdmin || adminGeneral)
               ? (<EditIcon style={{ color: 'black' }} />)
               : (<EditIcon style={{ color: '#E0E0E0' }} />)
@@ -200,7 +213,7 @@ class SprintEditor extends React.Component {
         </Tooltip>
         <Dialog
           open={editDialog}
-          onClose={() => this.hanldleDialogClose('editDialog')}
+          onClose={() => this.handleEditDialog(false)}
         >
           <DialogTitle id="form-dialog-title">
             <InputBase
@@ -241,7 +254,7 @@ class SprintEditor extends React.Component {
               </div>
             </DialogContent>
             <DialogActions>
-              <Button onClick={() => this.hanldleDialogClose('editDialog')} color="primary">
+              <Button onClick={() => this.handleEditDialog(false)} color="primary">
                 Cancel
               </Button>
               <Button
@@ -255,7 +268,7 @@ class SprintEditor extends React.Component {
         }
         </Dialog>
         <Tooltip title="Delete current Sprint">
-          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialogOpen('deleteDialog')}>
+          <IconButton disabled={!isUserTeamAdmin && !adminGeneral} onClick={() => this.handleDialog(true, 'deleteDialog')}>
             {(isUserTeamAdmin || adminGeneral)
               ? (<DeleteIcon style={{ color: 'black' }} />)
               : (<DeleteIcon style={{ color: '#E0E0E0' }} />)
@@ -264,7 +277,7 @@ class SprintEditor extends React.Component {
         </Tooltip>
         <Dialog
           open={deleteDialog}
-          onClose={() => this.hanldleDialogClose('deleteDialog')}
+          onClose={() => this.handleDialog(false, 'deleteDialog')}
         >
           <DialogTitle id="form-dialog-title">
             {sprintName}
@@ -273,7 +286,7 @@ class SprintEditor extends React.Component {
             Are you sure you want to delete this Sprint?
           </DialogContent>
           <DialogActions>
-            <Button onClick={() => this.hanldleDialogClose('deleteDialog')} color="primary">
+            <Button onClick={() => this.handleDialog(false, 'deleteDialog')} color="primary">
               Cancel
             </Button>
             <Button
