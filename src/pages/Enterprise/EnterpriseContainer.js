@@ -4,7 +4,8 @@ import { fetchEnterpriseInfo, modifyAddress,
         deleteTeam, activateTeam, desactivateTeam, getTeamNotes,
         deleteMember, activateMember, desactivateMember, getNotes,
         deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue,
-        getHistoricValues, updateUser, addUser, updateTeam, addTeam, getValuesNotes
+        getHistoricValues, updateUser, addUser, updateTeam, addTeam, getValuesNotes, 
+        getConditions, updateAward, addAward, addCondition, deleteCondition
        } from './EnterpriseAction';
 
 function mapStateToProps(state) {
@@ -63,6 +64,25 @@ function mapStateToProps(state) {
     awardDeleted: state.enterprise.awardDeleted,
     deleteAwardError: state.enterprise.deleteAwardError,
     valueUpdated: state.enterprise.valueUpdated,
+    gettingConditions: state.enterprise.gettingConditions,
+    getConditionsError: state.enterprise.getConditionsError,
+    conditions: state.enterprise.conditions,
+
+    updatingAward: state.enterprise.updatingAward,
+    awardUpdated: state.enterprise.awardUpdated,
+    updateAwardError: state.enterprise.updateAwardError,
+
+    awardAdded: state.enterprise.awardAdded,
+    addingAward: state.enterprise.addingAward,
+    addAwardError: state.enterprise.addAwardError,
+
+    
+    conditionAdded: state.enterprise.conditionAdded,
+    addingCondition: state.enterprise.addingCondition,
+    addConditionError: state.enterprise.addConditionError,
+
+    conditionDeleted: state.enterprise.conditionDeleted,
+    deleteConditionError: state.enterprise.deleteConditionError,
     //Enterprise modify
     modifyingSprint: state.enterprise.modifyingSprint,
     modifySprintError: state.enterprise.modifySprintError,
@@ -75,5 +95,6 @@ export default connect(mapStateToProps, {
   activateMember, desactivateMember, deleteMember, getNotes,
   deleteDefaultValue, getHistoricValues,
   deleteAward, modifyEnterprise, updateValue, addValue,
-  updateUser, addUser, updateTeam, addTeam, getValuesNotes
+  updateUser, addUser, updateTeam, addTeam, getValuesNotes, 
+   getConditions, updateAward, addAward, addCondition, deleteCondition
 })(Enterprise);

@@ -61,7 +61,7 @@ class Enterprise extends Component {
       fetchEnterpriseInfo, userUpdated, userAdded,
       teamActivated, teamDesactivated, teamDeleted, teamAdded,
       memberActivated, memberDesactivated, memberDeleted,
-      defaultValueDeleted, awardDeleted, valueUpdated, valueAdded, teamUpdated,
+      defaultValueDeleted, awardDeleted, valueUpdated, valueAdded, teamUpdated, awardAdded, awardUpdated, getConditions, gettingConditions, conditions, updateAward, addAward, addCondition, deleteCondition,
       match
     } = this.props;
     if (prevProps.match !== match) {
@@ -113,6 +113,12 @@ class Enterprise extends Component {
     if (prevProps.awardDeleted !== awardDeleted && awardDeleted && awardDeleted.data.status === 'OK') {
       fetchEnterpriseInfo(match.params.idEmpresa);
     }
+    if (prevProps.awardAdded !== awardAdded && awardAdded && awardAdded.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
+    if (prevProps.awardUpdated !== awardUpdated && awardUpdated && awardUpdated.data.status === 'OK') {
+      fetchEnterpriseInfo(match.params.idEmpresa);
+    }
   }
   changeConfiguring = value => {
     this.setState({ configuring: value});
@@ -161,7 +167,8 @@ class Enterprise extends Component {
       deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
       deleteMember, activateMember, desactivateMember, getNotes, notes,
       deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue,
-      gettingValuesNotes, getValuesNotes, valuesNotes
+      gettingValuesNotes, getValuesNotes, valuesNotes,
+      getConditions, gettingConditions, conditions, updateAward, addAward, addCondition, deleteCondition
      } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
@@ -239,6 +246,13 @@ class Enterprise extends Component {
             valuesNotes={valuesNotes}
             //awards
             deleteAward={deleteAward}
+            getConditions={getConditions}
+            conditions={conditions}
+            gettingConditions={gettingConditions}
+            updateAward={updateAward}
+            addAward={addAward}
+            addCondition={addCondition}
+            deleteCondition={deleteCondition}
           />)}
           <HistoricDialog
             open={openHistoricDialog}
@@ -299,6 +313,13 @@ Enterprise.propTypes = {
   //awards
   deleteAward: PropTypes.func.isRequired,
   awardDeleted: PropTypes.shape({}).isRequired,
+  getConditions: PropTypes.func.isRequired,
+  gettingConditions: PropTypes.bool.isRequired,
+  conditions: PropTypes.shape({}).isRequired,
+  updateAward: PropTypes.func.isRequired,
+  addAward: PropTypes.func.isRequired,
+  addCondition: PropTypes.func.isRequired,
+  deleteCondition: PropTypes.func.isRequired,
   //enterprise modify
   modifyingEnterprise: PropTypes.bool.isRequired,
   modifyEnterprise: PropTypes.func.isRequired,

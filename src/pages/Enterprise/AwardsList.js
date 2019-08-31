@@ -31,10 +31,13 @@ import CancelIcon from '@material-ui/icons/Clear';
 
 require('./Enterprise.css');
 
+
 class AwardsList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      myAward:  {},
+      idLogro : 0,
       openDialogDelete: false,
       openDialogAdd: false,
       openDialogEdit: false,
@@ -42,9 +45,27 @@ class AwardsList extends Component {
       idToDelete: -1,
       newAwardData: { name : '', description : '', conditions: [] },
       updatedAwardData: { id: -1, name : '', description : '', conditions: [] },
-      conditionToAdd: { value: -1, score: 0, biggerThan: 0, otherTeamsOnly: 0 }
+      conditionToAdd: { idValor: -1, puntuacion: 0, modificador: false, excluyente: 0}
     };
   }
+/*
+  componentDidMount(){
+    const { getConditions, match } = this.props;
+    getConditions(this.state.idLogro);
+  }
+
+  componentDidUpdate(prevProps) {
+    const {
+      getConditions, conditionAdded,
+      match
+    } = this.props;
+    console.log(prevProps ,conditionAdded )
+    if (prevProps.conditionAdded !== conditionAdded && conditionAdded && conditionAdded.data.status === 'OK') {
+      getConditions(this.state.idLogro);
+    }
+  }
+*/
+
 
   toggleDeleteDialogState = (awardId, name, state) => {
     this.setState({
@@ -54,24 +75,27 @@ class AwardsList extends Component {
     });
   }
 
-  openEditDialog = award => {
+  openEditDialog = award => {                                
     const editableConditions = [];
-    award.conditions.forEach(condition => editableConditions.push(
-      { value: condition.value, score: condition.score,
-        biggerThan: condition.biggerThan, otherTeamsOnly: condition.otherTeamsOnly }
-    ));
+    this.state.myAward = award;
+    this.state.idLogro =  award.idLogro;
+    this.props.getConditions({idLogro : award.idLogro});
+    /*this.conditions.data.forEach(condition => editableConditions.push(
+      { value: condition.value, puntuacion: condition.puntuacion,
+        modificador: condition.modificador, excluyente: condition.excluyente }
+    ));*/
     this.setState({
       openDialogEdit: true,
-      updatedAwardData: { id: award.id, name : award.name, description : award.description, conditions: editableConditions },
-      conditionToAdd: { value: -1, score: 0, biggerThan: 0, otherTeamsOnly: 0 }
+      updatedAwardData: { id: award.id, name : award.nombre_logro, description : award.descripcion},//, conditions: editableConditions },
+      conditionToAdd: { idValor: -1, puntuacion: 0, modificador: false, excluyente: 0}
     });
   }
 
   closeEditDialog = () => {
     this.setState({
       openDialogEdit: false,
-      updatedAwardData: { id: -1, name : '', description : '', conditions: [] },
-      conditionToAdd: { value: -1, score: 0, biggerThan: 0, otherTeamsOnly: 0 }
+      updatedAwardData: { id: -1, name : '', description : ''},
+      conditionToAdd: { idValor: -1, puntuacion: 0, modificador: false, excluyente: 0 }
     });
   }
 
@@ -79,7 +103,7 @@ class AwardsList extends Component {
     this.setState({
       openDialogAdd: value,
       newAwardData: { id: -1, name : '', description : '', conditions: [] },
-      conditionToAdd: { value: -1, score: 0, biggerThan: 0, otherTeamsOnly: 0 }
+      conditionToAdd: { idValor: -1, puntuacion: 0, modificador: false, excluyente: 0 }
     });
   }
 
@@ -97,32 +121,79 @@ class AwardsList extends Component {
   }
 
   updateAwardInfo = (value, stateAtr, subStateAtr) => {
+    console.log("-----",value, stateAtr, subStateAtr)
     this.setState(state => ({ [stateAtr]: { ...state[stateAtr], [subStateAtr]: value } }));
+    
   }
 
   getValueName = id => {
-    const index = this.props.values.findIndex(value => value.id === id);
+    const index = this.props.values.findIndex(value => value.idValor === id);
     if (index === -1) return 'Valor no encontrado';
-    else return this.props.values[index].name;
+    else return this.props.values[index].Valor;
   }
 
-  addCondition = stateAtr => {
+  updateConditionsAfterDelete(idCondicion) {
+    console.log("updateConditionsAfterDelete" , this.props.conditions, idCondicion);
+    var newConditions = [];
+    for(var i = 0; i < this.props.conditions.data.data.length; i ++) {
+      if(this.props.conditions.data.data[i].idCondicion != idCondicion) newConditions.push(this.props.conditions.data.data[i])
+    }
+    this.props.conditions.data.data = newConditions;
+    console.log(this.props.conditions.data.data)
+    this.closeEditDialog();
+    this.openEditDialog(this.state.myAward);
+    //this.props.conditions
+  }
+
+  /*addCondition = stateAtr => {
     this.setState(state => ({ [stateAtr]: { ...state[stateAtr], conditions: [ ...state[stateAtr].conditions, state.conditionToAdd] },
-      conditionToAdd: { value: -1, score: 0, biggerThan: 0, otherTeamsOnly: 0 } }));
-  }
+      conditionToAdd: { idValor: -1, puntuacion: 0, modificador: false, excluyente: 0} }));
+  }*/
 
-  deleteCondition = (index, stateAtr) => {
+  /*deleteCondition = (index, stateAtr) => {
     const newConditions = this.state[stateAtr].conditions;
     newConditions.splice(index, 1);
     this.setState(state => ({ [stateAtr]: {...state[stateAtr], conditions: newConditions }}))
-  }
+  }*/
+  ListConditions = () => {
+    const { conditions, gettingConditions } = this.props;
+    if (conditions !== undefined && conditions.data !== undefined && !gettingConditions){
+      console.log("CONDITIONSSS",conditions.data.data);
+      return conditions.data.data.map((condition, conditionIndex) => (
+        <ListItem>
+          <ListItemText
+            inset
+            primary={`${this.getValueName(condition.idValor)} ${condition.modificador == true ?
+              'is bigger than' : 'is smaller than'} ${condition.puntuacion} ${condition.excluyente == true ?
+              '(only counts votes from another team)' : ''}`}
+          />
+          <Tooltip title="Delete condition">
+            <IconButton
+              aria-label="Delete"
+              onClick={
+                 () => {
+                   this.props.deleteCondition({ idLogro: this.state.idLogro, idCondicion: condition.idCondicion}); 
+                   this.closeEditDialog();
+                   /*this.updateConditionsAfterDelete(condition.idCondicion);
+                   this.openEditDialog(this.state.myAward);*/
+                  }
+              }
+            >
+              <DeleteIcon />
+            </IconButton>
+          </Tooltip>
+        </ListItem>
+      ))
+      }
 
+  }
   render() {
     const {
       openDialogDelete, openDialogAdd, openDialogEdit,
       idToDelete, nameToDelete, newAwardData, updatedAwardData, conditionToAdd
     } = this.state;
-    const { values, awards, updateAward, deleteAward, addNewAward } = this.props;
+    const { values, awards, updateAward, deleteAward, addNewAward,
+            conditions, gettingConditions, getConditions, addAward, enterpriseId, addCondition, deleteCondition } = this.props;
     return (
       <div className="cardContainer">
         <Card className="cardForEnterprise">
@@ -213,54 +284,16 @@ class AwardsList extends Component {
               defaultValue={newAwardData.description}
               onChange={event => this.updateAwardInfo(event.target.value, 'newAwardData', 'description')}
             />
-            <Typography style={{ marginTop: '15px' }} gutterBottom variant="h5" component="h2">
-              Conditions
-            </Typography>
             <List component="nav">
               <ListItem>
-                <FormControl className="valueSelector">
-                  <InputLabel>Value</InputLabel>
-                  <Select
-                    value={conditionToAdd}
-                    onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'value')}
-                    className="valueSelector"
-                  >
-                    <MenuItem value={-1}><em>None</em></MenuItem>
-                    {values.map(oneValue => (<MenuItem value={oneValue.id}>{oneValue.name}</MenuItem>))}
-                  </Select>
-                </FormControl>
-                <InputLabel>Bigger Than</InputLabel>
-                <Checkbox
-                  checked={conditionToAdd.biggerThan}
-                  onChange={() => this.updateAwardInfo(conditionToAdd.biggerThan === 1 ? 0 : 1, 'conditionToAdd', 'biggerThan')}
-                />
-                <TextField
-                  label="Score"
-                  defaultValue={conditionToAdd.score}
-                  onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'score')}
-                  type="number"
-                />
-                <InputLabel>Only counts votes from other teams</InputLabel>
-                <Checkbox
-                  checked={conditionToAdd.otherTeamsOnly}
-                  onChange={() => this.updateAwardInfo(conditionToAdd.otherTeamsOnly === 1 ? 0 : 1, 'conditionToAdd', 'otherTeamsOnly')}
-                />
-                <Tooltip title="Add this condition">
-                  <IconButton
-                    aria-label="Delete"
-                    onClick={() => this.addCondition('newAwardData')}
-                    disabled={conditionToAdd.value === -1}
-                  >
-                    <CreateIcon />
-                  </IconButton>
-                </Tooltip>
+               
               </ListItem>
               {newAwardData.conditions.map((condition, conditionIndex) => (
                 <ListItem>
                   <ListItemText
                     inset
-                    primary={`${this.getValueName(condition.value)} ${condition.biggerThan === 1 ?
-                      'is bigget than' : 'is smaller than'} ${condition.score} ${condition.otherTeamsOnly === 1 ?
+                    primary={`${this.getValueName(condition.value)} ${condition.modificador === true ?
+                      'is bigget than' : 'is smaller than'} ${condition.puntuacion} ${condition.excluyente === 1 ?
                       '(only counts votes from another team)' : ''}`}
                   />
                   <Tooltip title="Delete condition">
@@ -283,7 +316,7 @@ class AwardsList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {this.confirmAddAward(); this.toggleAddDialogState(false)}}
+              onClick={() => addAward({ nombre: newAwardData.name, descripcion: newAwardData.description, idEmpresa: enterpriseId })}
               color="primary"
               disabled={newAwardData.name === ''}
             >
@@ -319,59 +352,49 @@ class AwardsList extends Component {
                 <FormControl className="valueSelector">
                   <InputLabel>Value</InputLabel>
                   <Select
-                    value={conditionToAdd}
-                    onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'value')}
+                    value={conditionToAdd.idValor}
+                    onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'idValor')}
                     className="valueSelector"
                   >
                     <MenuItem value={-1}><em>None</em></MenuItem>
-                    {values.map(oneValue => (<MenuItem value={oneValue.id}>{oneValue.name}</MenuItem>))}
+                    {values.map(oneValue => (<MenuItem value={oneValue.idValor}>{oneValue.Valor}</MenuItem>))}
                   </Select>
                 </FormControl>
                 <InputLabel>Bigger Than</InputLabel>
                 <Checkbox
-                  checked={conditionToAdd.biggerThan}
-                  onChange={() => this.updateAwardInfo(conditionToAdd.biggerThan === 1 ? 0 : 1, 'conditionToAdd', 'biggerThan')}
+                  checked={conditionToAdd.modificador}
+                  onChange={() => this.updateAwardInfo(conditionToAdd.modificador === true ? false : true, 'conditionToAdd', 'modificador')}
                 />
                 <TextField
                   label="Score"
                   placeholder="Score"
-                  defaultValue={conditionToAdd.score}
-                  onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'score')}
+                  defaultValue={conditionToAdd.puntuacion}
+                  onChange={event => this.updateAwardInfo(event.target.value, 'conditionToAdd', 'puntuacion')}
                   type="number"
                 />
                 <InputLabel>Only counts votes from other teams</InputLabel>
                 <Checkbox
-                  checked={conditionToAdd.otherTeamsOnly}
-                  onChange={() => this.updateAwardInfo(conditionToAdd.otherTeamsOnly === 1 ? 0 : 1, 'conditionToAdd', 'otherTeamsOnly')}
+                  checked={conditionToAdd.excluyente}
+                  onChange={() => this.updateAwardInfo(conditionToAdd.excluyente === 1 ? 0 : 1, 'conditionToAdd', 'excluyente')}
                 />
                 <Tooltip title="Add this condition">
                   <IconButton
                     aria-label="Delete"
-                    onClick={() => this.addCondition('updatedAwardData')}
+                  //  onClick={() => this.addCondition('updatedAwardData')}
+                    onClick={
+                      () =>{
+                        this.props.addCondition({ idLogro: this.state.idLogro, idCondicion : 0 , idValor: conditionToAdd.idValor , puntuacion : conditionToAdd.puntuacion, modificador : conditionToAdd.modificador, excluyente: conditionToAdd.excluyente });
+                        this.closeEditDialog();  
+                      }      
+                    }
                     disabled={conditionToAdd.value === -1}
+                    th
                   >
                     <CreateIcon />
                   </IconButton>
                 </Tooltip>
               </ListItem>
-              {updatedAwardData.conditions.map((condition, conditionIndex) => (
-                <ListItem>
-                  <ListItemText
-                    inset
-                    primary={`${this.getValueName(condition.value)} ${condition.biggerThan === 1 ?
-                      'is bigget than' : 'is smaller than'} ${condition.score} ${condition.otherTeamsOnly === 1 ?
-                      '(only counts votes from another team)' : ''}`}
-                  />
-                  <Tooltip title="Delete condition">
-                    <IconButton
-                      aria-label="Delete"
-                      onClick={() => this.deleteCondition(conditionIndex, 'updatedAwardData')}
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  </Tooltip>
-                </ListItem>
-              ))}
+                {this.ListConditions()}
             </List>
           </DialogContent>
           <DialogActions>
@@ -382,7 +405,9 @@ class AwardsList extends Component {
               Cancel
             </Button>
             <Button
-              onClick={() => {this.confirmUpdateAward(); this.closeEditDialog()}}
+              onClick={() => {
+                this.props.updateAward({ idLogro: this.state.idLogro, nombre: updatedAwardData.name, descripcion: updatedAwardData.description}); 
+                this.closeEditDialog()}}
               color="primary"
               disabled={updatedAwardData.name === ''}
             >
@@ -400,7 +425,15 @@ AwardsList.propTypes = {
   awards: PropTypes.array.isRequired,
   updateAward: PropTypes.func.isRequired,
   addNewAward: PropTypes.func.isRequired,
-  deleteAward: PropTypes.func.isRequired
+  deleteAward: PropTypes.func.isRequired,
+  gettingConditions: PropTypes.bool.isRequired,
+  conditions: PropTypes.shape({}).isRequired,
+  getConditions: PropTypes.func.isRequired,
+  enterpriseId: PropTypes.number.isRequired,//para crear el logro
+  addAward: PropTypes.func.isRequired,
+  addCondition: PropTypes.func.isRequired,
+  updateAward: PropTypes.func.isRequired,
+  deleteCondition:  PropTypes.func.isRequired
 };
 
 export default AwardsList;

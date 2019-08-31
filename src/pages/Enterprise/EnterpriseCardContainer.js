@@ -237,7 +237,8 @@ class EnterpriseCardContainer extends Component {
     const { idEnterprise, activateTeam, desactivateTeam, deleteTeam, getTeamNotes, teamNotes,
             activateMember, desactivateMember, deleteMember, getNotes, notes,
             updateUser, addUser, updateTeam, addTeam, gettingValuesNotes, getValuesNotes, valuesNotes,
-            deleteDefaultValue, deleteAward, updateValue, addValue, enterpriseId } = this.props;
+            deleteDefaultValue, deleteAward, updateValue, addValue, enterpriseId,
+            getConditions, conditions, gettingConditions, updateAward, addAward, addCondition, deleteCondition  } = this.props;
     return (
       <div className="cardsContainer">
         <TeamsList
@@ -281,11 +282,18 @@ class EnterpriseCardContainer extends Component {
           valuesNotes={valuesNotes}
         />
         <AwardsList
-          values={values}
+          values={this.props.values}
           awards={this.props.awards}
-          updateAward={this.updateAward}
           deleteAward={deleteAward}
           addNewAward={this.addNewAward}
+          getConditions={getConditions}
+          gettingConditions={gettingConditions}
+          conditions={conditions}
+          updateAward={updateAward}
+          enterpriseId={enterpriseId} //para crear el logro
+          addAward={addAward}
+          addCondition={addCondition}
+          deleteCondition={deleteCondition}
         />
       </div>
     );
@@ -329,9 +337,13 @@ EnterpriseCardContainer.propTypes = {
   //award
   deleteAward: PropTypes.func.isRequired,
   awardDeleted: PropTypes.shape({}).isRequired,
-  gettingValuesNotes: PropTypes.bool.isRequired,
-  getValuesNotes: PropTypes.func.isRequired,
-  valuesNotes: PropTypes.shape({}).isRequired
+  getConditions: PropTypes.func.isRequired,
+  gettingConditions: PropTypes.bool.isRequired,
+  conditions: PropTypes.shape({}).isRequired,
+  updateAward: PropTypes.func.isRequired,
+  addAward: PropTypes.func.isRequired,
+  addCondition: PropTypes.func.isRequired,
+  deleteCondition: PropTypes.func.isRequired
 };
 
 export default EnterpriseCardContainer;

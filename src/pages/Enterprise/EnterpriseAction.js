@@ -551,7 +551,164 @@ export function modifyEnterprise(newEnterpriseInfo) {
             .catch(error => dispatch(deleteAwardFailure(error)));
         };
       }
+      
+            
+      export function gettingConditions() {
+        return {
+          type: types.GETTING_CONDITIONS,
+          payload: {}
+        };
+      }
 
+      export function getConditionsSuccess(data) {
+        return {
+          type: types.GET_CONDITIONS_SUCCESS,
+          conditions: data
+        };
+      }
+
+
+      export function getConditionsFailure(error) {
+        return {
+          type: types.GET_CONDITIONS_FAILURE,
+          payload: error
+        };
+      }
+
+      export function getConditions(conditionsRequested) {
+        return function (dispatch) {
+          dispatch(gettingConditions());
+          return request.post(`${baseUrl()}/condiciones`, conditionsRequested)
+            .then(response => dispatch(getConditionsSuccess(response)))
+            .catch(error => dispatch(getConditionsFailure(error)));
+        };
+      }
+
+      //update de logro
+      
+      export function updatingAward() {
+        return {
+          type: types.UPDATING_VALUE,
+          payload: {}
+        };
+      }
+
+      export function updateAwardSuccess(data) {
+        return {
+          type: types.UPDATE_AWARD_SUCCESS,
+          awardUpdated: data
+        };
+      }
+
+      export function updateAwardFailure(error) {
+        return {
+          type: types.UPDATE_AWARD_FAILURE,
+          payload: error
+        };
+      }
+
+      export function updateAward(awardToUpdate) {
+        console.log("envia a la bd",awardToUpdate);
+        return function (dispatch) {
+          dispatch(updatingAward());
+          return request.post(`${baseUrl()}/modificarLogro`, awardToUpdate)
+            .then(response => dispatch(updateAwardSuccess(response)))
+            .catch(error => dispatch(updateAwardFailure(error)));
+        };
+      }
+      //agregar un logro nuevo --> sin condiciones.
+
+      
+      export function addingAward() {
+        return {
+          type: types.ADDING_AWARD,
+          payload: {}
+        };
+      }
+
+      export function addAwardSuccess(data) {
+        return {
+          type: types.ADD_AWARD_SUCCESS,
+          awardAdded: data
+        };
+      }
+
+      export function addAwardFailure(error) {
+        return {
+          type: types.ADD_AWARD_FAILURE,
+          payload: error
+        };
+      }
+
+      export function addAward(awardToAdd) {
+        return function (dispatch) {
+          dispatch(addingAward());
+          return request.post(`${baseUrl()}/altaLogro`, awardToAdd)
+            .then(response => dispatch(addAwardSuccess(response)))
+            .catch(error => dispatch(addAwardFailure(error)));
+        };
+      }
+      //agregar condiciones
+      export function addingCondition() {
+        return {
+          type: types.ADDING_CONDITION,
+          payload: {}
+        };
+      }
+
+      export function addConditionSuccess(data) {
+        return {
+          type: types.ADD_CONDITION_SUCCESS,
+          conditionAdded: data
+        };
+      }
+
+      export function addConditionFailure(error) {
+        return {
+          type: types.ADD_CONDITION_FAILURE,
+          payload: error
+        };
+      }
+
+      export function addCondition(conditionToAdd) {
+        return function (dispatch) {
+          dispatch(addingCondition());
+          return request.post(`${baseUrl()}/agregarCondicion`, conditionToAdd)
+            .then(response => dispatch(addConditionSuccess(response)))
+            .catch(error => dispatch(addConditionFailure(error)));
+        };
+      }
+      //borrar condicion
+      export function delettingCondition() {
+        return {
+          type: types.DELETTING_CONDITION,
+          payload: {}
+        };
+      }
+
+      export function deleteConditionSuccess(data) {
+        return {
+          type: types.DELETE_CONDITION_SUCCESS,
+          conditionDeleted: data
+        };
+      }
+
+      export function deleteConditionFailure(error) {
+        return {
+          type: types.DELETE_CONDITION_FAILURE,
+          payload: error
+        };
+      }
+
+      export function deleteCondition(conditionToDelete) {
+        return function (dispatch) {
+          dispatch(delettingCondition());
+          return request.post(`${baseUrl()}/borrarLogroCondicion`, conditionToDelete)
+            .then(response => dispatch(deleteConditionSuccess(response)))
+            .catch(error => dispatch(deleteConditionFailure(error)));
+        };
+      }
+//notas
       export function gettingNotes() {
         return {
           type: types.GETTING_NOTES,

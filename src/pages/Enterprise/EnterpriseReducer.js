@@ -120,7 +120,37 @@ const INITIAL_STATE = {
     message: ''
   },
   valuesNotes: {},
-  gettingValuesNotes: true
+  gettingValuesNotes: true,
+  gettingConditions: true,
+  getConditionsError: {
+    state: false,
+    message: ''
+  },
+  conditions: {},
+  delettingAward: true,
+  deleteAwardError: {
+    state: false,
+    message: ''
+  },
+  awardDeleted: {},
+  updatingAward: true,
+  updateAwardError: {
+    state: false,
+    message: ''
+  },
+  awardUpdated: {},
+  addingAward: true,
+  awardAdded: {},
+  addAwardError: {
+    state: false,
+    message: ''
+  },
+  delettingCondition: true,
+  deleteConditionError: {
+    state: false,
+    message: ''
+  },
+  conditionDeleted: {},
 };
 
 
@@ -300,6 +330,51 @@ const behaviors = {
   },
   [types.DELETE_AWARD_FAILURE](state, action) {
     return Object.assign({}, state, { delettingAward: false, deleteAwardError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_CONDITIONS](state) {
+    return Object.assign({}, state, { gettingConditions: true, getConditionsError: { state: false, message: '' } });
+  },
+  [types.GET_CONDITIONS_SUCCESS](state, action) {
+    return Object.assign({}, state, { conditions: action.conditions, gettingConditions: false, getConditionsError: { state: false, message: '' } });
+  },
+  [types.GET_CONDITIONS_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingConditions: false, getConditionsError: { state: true, message: action.payload } });
+  },
+  [types.UPDATING_AWARD](state) {
+    return Object.assign({}, state, { updatingAward: true, updateAwardError: { state: false, message: '' } });
+  },
+  [types.UPDATE_AWARD_SUCCESS](state, action) {
+    return Object.assign({}, state, { awardUpdated: action.awardUpdated, updatingAward: false, updateAwardError: { state: false, message: '' } });
+  },
+  [types.UPDATE_AWARD_FAILURE](state, action) {
+    return Object.assign({}, state, { updatingAward: false, updateAwardError: { state: true, message: action.payload } });
+  },
+  [types.ADDING_AWARD](state) {
+    return Object.assign({}, state, { addingAward: true, addAwardError: { state: false, message: '' } });
+  },
+  [types.ADD_AWARD_SUCCESS](state, action) {
+    return Object.assign({}, state, { awardAdded: action.awardAdded, addingAward: false, addAwardError: { state: false, message: '' } });
+  },
+  [types.ADD_AWARD_FAILURE](state, action) {
+    return Object.assign({}, state, { addingAward: false, addAwardError: { state: true, message: action.payload } });
+  },
+  [types.ADDING_CONDITION](state) {
+    return Object.assign({}, state, { addingCondition: true, addConditionError: { state: false, message: '' } });
+  },
+  [types.ADD_CONDITION_SUCCESS](state, action) {
+    return Object.assign({}, state, { conditionAdded: action.conditionAdded, addingCondition: false, addConditionError: { state: false, message: '' } });
+  },
+  [types.ADD_CONDITION_FAILURE](state, action) {
+    return Object.assign({}, state, { addingCondition: false, addConditionError: { state: true, message: action.payload } });
+  },
+  [types.DELETTING_CONDITION](state) {
+    return Object.assign({}, state, { delettingCondition: true, deleteConditionError: { state: false, message: '' } });
+  },
+  [types.DELETE_CONDITION_SUCCESS](state, action) {
+    return Object.assign({}, state, { conditionDeleted: action.conditionDeleted, delettingCondition: false, deleteConditionError: { state: false, message: '' } });
+  },
+  [types.DELETE_CONDITION_FAILURE](state, action) {
+    return Object.assign({}, state, { delettingCondition: false, deleteConditionError: { state: true, message: action.payload } });
   },
   /////////////EnterpriseModify
   [types.MODIFYING_ENTERPRISE](state) {
