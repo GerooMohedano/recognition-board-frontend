@@ -284,7 +284,7 @@ class MembersList extends Component {
             <Button
               onClick={() => {this.confirmAddMember(); this.toggleAddMember(false)}}
               color="primary"
-              disabled={newTeamMember.userName === ''}
+              disabled={newTeamMember.userName === '' || newTeamMember.mail}
             >
               Add
             </Button>
