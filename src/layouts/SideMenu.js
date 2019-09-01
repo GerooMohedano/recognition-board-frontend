@@ -28,7 +28,9 @@ const styles = {
     width: 'auto',
   },
   sideBar: {
-    backgroundColor: '#659BFF'
+    backgroundColor: '#659BFF',
+    overflow: 'auto',
+    height: '100%'
   }
 };
 
@@ -153,15 +155,15 @@ class SideMenu extends React.Component {
           onClose={() => this.toggleDrawer('left', false)}
           onOpen={() => this.openDrawer()}
         >
-          <div
-            className={classes.sideBar}
-            tabIndex={0}
-            role="button"
-            onClick={() => this.toggleDrawer('left', false)}
-            onKeyDown={() => this.toggleDrawer('left', false)}
-          >
-            { sideList }
-          </div>
+            <div
+              tabIndex={0}
+              className={classes.sideBar}
+              role="button"
+              onClick={() => this.toggleDrawer('left', false)}
+              onKeyDown={() => this.toggleDrawer('left', false)}
+            >
+              { sideList }
+            </div>
         </SwipeableDrawer>
         <Dialog
           open={enterpriseDialogState}
