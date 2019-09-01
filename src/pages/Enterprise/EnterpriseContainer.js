@@ -1,17 +1,21 @@
 import { connect } from 'react-redux';
 import Enterprise from './Enterprise';
-import { fetchEnterpriseInfo, modifyAddress,
+import { fetchEnterpriseInfo, modifyAddress, getEnterpriseNotes,
         deleteTeam, activateTeam, desactivateTeam, getTeamNotes,
         deleteMember, activateMember, desactivateMember, getNotes,
         deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue,
-        getHistoricValues, updateUser, addUser, updateTeam, addTeam, getValuesNotes, 
-        getConditions, updateAward, addAward, addCondition, deleteCondition
+        getHistoricValues, updateUser, addUser, updateTeam, addTeam, getValuesNotes,
+        getConditions, updateAward, addAward, addCondition, deleteCondition, deleteEnterprise
        } from './EnterpriseAction';
 
 function mapStateToProps(state) {
   return {
     fetchingEnterpriseInfo: state.enterprise.fetchingEnterpriseInfo,
     gettingValuesNotes: state.enterprise.gettingValuesNotes,
+    gettingEnterpriseNotes: state.enterprise.gettingEnterpriseNotes,
+    getEnterpriseNotesError: state.enterprise.getEnterpriseNotesError,
+    enterpriseNotes: state.enterprise.enterpriseNotes,
+    enterpriseDeleted: state.enterprise.enterpriseDeleted,
     valuesNotes: state.enterprise.valuesNotes,
     updatingUser: state.enterprise.updatingUser,
     enterpriseInfo: state.enterprise.enterpriseInfo,
@@ -76,7 +80,7 @@ function mapStateToProps(state) {
     addingAward: state.enterprise.addingAward,
     addAwardError: state.enterprise.addAwardError,
 
-    
+
     conditionAdded: state.enterprise.conditionAdded,
     addingCondition: state.enterprise.addingCondition,
     addConditionError: state.enterprise.addConditionError,
@@ -90,11 +94,11 @@ function mapStateToProps(state) {
 }
 
 export default connect(mapStateToProps, {
-  fetchEnterpriseInfo, modifyAddress,
+  fetchEnterpriseInfo, modifyAddress, getEnterpriseNotes,
   activateTeam, desactivateTeam, deleteTeam, getTeamNotes,
   activateMember, desactivateMember, deleteMember, getNotes,
-  deleteDefaultValue, getHistoricValues,
+  deleteDefaultValue, getHistoricValues, deleteEnterprise,
   deleteAward, modifyEnterprise, updateValue, addValue,
-  updateUser, addUser, updateTeam, addTeam, getValuesNotes, 
+  updateUser, addUser, updateTeam, addTeam, getValuesNotes,
    getConditions, updateAward, addAward, addCondition, deleteCondition
 })(Enterprise);

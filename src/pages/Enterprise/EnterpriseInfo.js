@@ -7,7 +7,10 @@ import Tooltip from '@material-ui/core/Tooltip';
 import Button from '@material-ui/core/Button';
 import Dialog from '@material-ui/core/Dialog';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import IconButton from '@material-ui/core/IconButton';
 import DialogActions from '@material-ui/core/DialogActions';
+import Snackbar from '@material-ui/core/Snackbar';
+import CloseIcon from '@material-ui/icons/Close';
 import Build from '@material-ui/icons/Build';
 import Accept from '@material-ui/icons/Done';
 import Cancel from '@material-ui/icons/Clear';
@@ -24,7 +27,8 @@ class EnterpriseInfo extends React.Component {
       newName: this.props.name,
       newAddress: this.props.address,
       newTelephone: this.props.telephone,
-      openDialogDelete: false
+      openDialogDelete: false,
+      undeletableEnterprise: false
     }
   }
 
@@ -59,11 +63,25 @@ class EnterpriseInfo extends React.Component {
   }
 
   toggleDeleteEnterpriseDialog = value => {
+    const { getEnterpriseNotes, enterpriseId } = this.props;
+    if (value) {
+      getEnterpriseNotes({ idEmpresa: enterpriseId });
+    }
     this.setState({ openDialogDelete: value });
   }
 
+  deleteConfirmation = () => {
+    const { enterpriseNotes, deleteEnterprise, enterpriseId } = this.props;
+    if (enterpriseNotes === undefined || enterpriseNotes.data.data.length !== 0) {
+      this.setState({ undeletableEnterprise: true });
+    } else {
+      deleteEnterprise({ idEmpresa: enterpriseId });
+      this.toggleDeleteEnterpriseDialog(false);
+    }
+  }
+
   render() {
-    const { newName, newAddress, newTelephone, openDialogDelete } = this.state;
+    const { newName, newAddress, newTelephone, openDialogDelete, undeletableEnterprise } = this.state;
     const { configuring, name, address, telephone, modifyEnterprise, changeConfiguring, canConfigure } = this.props;
     return (
       <Paper className="infoPaper" elevation={3}>
@@ -145,13 +163,37 @@ class EnterpriseInfo extends React.Component {
               Cancel
             </Button>
             <Button
-              onClick={() => this.toggleDeleteEnterpriseDialog(false)}
+              onClick={() => this.deleteConfirmation()}
               color="secondary"
             >
               Delete
             </Button>
           </DialogActions>
         </Dialog>
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          variant="error"
+          open={undeletableEnterprise}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ undeletableEnterprise: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Can't delete an enterprise with notes</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ undeletableEnterprise: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </Paper>
     );
   }
@@ -166,6 +208,9 @@ EnterpriseInfo.propTypes = {
   changeConfiguring: PropTypes.func.isRequired,
   modifyEnterprise: PropTypes.func.isRequired,
   enterpriseId: PropTypes.number.isRequired,
+  enterpriseNotes: PropTypes.shape({}).isRequired,
+  getEnterpriseNotes: PropTypes.func.isRequired,
+  deleteEnterprise: PropTypes.func.isRequired,
   canConfigure: PropTypes.bool.isRequired
 };
 

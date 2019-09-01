@@ -133,7 +133,8 @@ class ViewNotes extends React.Component {
         onClose={() => {handleCloseDialog(); this.decreateNewBlankNote()}}
       >
         <DialogTitle id="form-dialog-title">{value.name + ' - ' + user.name}</DialogTitle>
-        {Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)
+        {Date.now() < new Date((new Date(beginDate)).getTime() + Math.abs((new Date(beginDate).getTimezoneOffset()*60000)))
+          || Date.now() > new Date((new Date(endDate)).getTime() + Math.abs((new Date(endDate).getTimezoneOffset()*60000)))
           && <DialogTitle id="form-dialog-subtitle">This Sprint is already over</DialogTitle>}
         <DialogContent className="notesContainer">
           {this.createCardsWithNotes()}

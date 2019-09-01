@@ -32,6 +32,11 @@ const data = [
   }
 ];
 
+const style404 = {
+  fontSize: 72,
+  fontWeight: 'bold'
+};
+
 class Enterprise extends Component {
   constructor(props) {
     super(props);
@@ -44,6 +49,7 @@ class Enterprise extends Component {
         city: 'SMT',
         telephone: '4214431'
       },
+      deletedMessage: false
       /*teams: [
         { id: 1, name: 'Octopus', active: true },
         { id: 2, name: 'Elephants', active: true }
@@ -60,12 +66,16 @@ class Enterprise extends Component {
     const {
       fetchEnterpriseInfo, userUpdated, userAdded,
       teamActivated, teamDesactivated, teamDeleted, teamAdded,
-      memberActivated, memberDesactivated, memberDeleted,
+      memberActivated, memberDesactivated, memberDeleted, enterpriseDeleted,
       defaultValueDeleted, awardDeleted, valueUpdated, valueAdded, teamUpdated, awardAdded, awardUpdated, getConditions, gettingConditions, conditions, updateAward, addAward, addCondition, deleteCondition,
       match
     } = this.props;
     if (prevProps.match !== match) {
       fetchEnterpriseInfo(match.params.idEmpresa);
+      this.setState({ deletedMessage: false });
+    }
+    if (prevProps.enterpriseDeleted !== enterpriseDeleted && enterpriseDeleted && enterpriseDeleted.data.status === 'OK') {
+      this.setState({ deletedMessage: true });
     }
     //teams
     if (prevProps.teamActivated !== teamActivated && teamActivated && teamActivated.data.status === 'OK') {
@@ -160,19 +170,33 @@ class Enterprise extends Component {
 
   render() {
     const {
-      newName, configuring, openHistoricDialog, enterpriseInfoState, teams
+      newName, configuring, openHistoricDialog, enterpriseInfoState, deletedMessage
     } = this.state;
     const { fetchingEnterpriseInfo, enterpriseInfo, loginInfo, updateTeam,
       historicValues, gettingHistoricValues, updateUser, addUser, addTeam,
       deleteTeam, activateTeam, desactivateTeam, getTeamNotes, teamNotes,
-      deleteMember, activateMember, desactivateMember, getNotes, notes,
+      deleteMember, activateMember, desactivateMember, getNotes, notes, deleteEnterprise,
       deleteDefaultValue, deleteAward, modifyEnterprise, updateValue, addValue,
-      gettingValuesNotes, getValuesNotes, valuesNotes,
+      gettingValuesNotes, getValuesNotes, valuesNotes, getEnterpriseNotes, enterpriseNotes,
       getConditions, gettingConditions, conditions, updateAward, addAward, addCondition, deleteCondition
      } = this.props;
     console.log("ESTO TRAE EMPRESA: ", enterpriseInfo);
     if(fetchingEnterpriseInfo || enterpriseInfo === undefined)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
+    else if (deletedMessage)
+      return (
+        <div style={{ textAlign:'center' }}>
+          <h1 style={style404}>Enterprise deleted</h1>
+          <img
+            alt="error"
+            src={
+              enterpriseInfo.data.empresas[0].logo === null
+              ? NonPhoto
+              : require(`../../images/${enterpriseInfo.data.empresas[0].logo}`)
+            }
+          />
+        </div>
+      )
     else
       return (
         <div>
@@ -200,6 +224,9 @@ class Enterprise extends Component {
               modifyEnterprise={modifyEnterprise}
               enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
               canConfigure={loginInfo.data.data[0].adminGeneral || this.isEnterpriseAdmin()}
+              getEnterpriseNotes={getEnterpriseNotes}
+              enterpriseNotes={enterpriseNotes}
+              deleteEnterprise={deleteEnterprise}
             />
             <div className="chartContainer">
               <ChartPolygon data={enterpriseInfo.data.evaluacion.map(valor => ({
@@ -272,6 +299,11 @@ Enterprise.propTypes = {
 };*/
 Enterprise.propTypes = {
   classes: PropTypes.object.isRequired,
+  gettingEnterpriseNotes: PropTypes.bool.isRequired,
+  getEnterpriseNotes: PropTypes.func.isRequired,
+  enterpriseNotes: PropTypes.shape({}).isRequired,
+  deleteEnterprise: PropTypes.func.isRequired,
+  enterpriseDeleted: PropTypes.shape({}).isRequired,
   historicValues: PropTypes.shape({}).isRequired,
   gettingHistoricValues: PropTypes.bool.isRequired,
   getHistoricValues: PropTypes.func.isRequired,

@@ -551,8 +551,8 @@ export function modifyEnterprise(newEnterpriseInfo) {
             .catch(error => dispatch(deleteAwardFailure(error)));
         };
       }
-      
-            
+
+
       export function gettingConditions() {
         return {
           type: types.GETTING_CONDITIONS,
@@ -585,7 +585,7 @@ export function modifyEnterprise(newEnterpriseInfo) {
       }
 
       //update de logro
-      
+
       export function updatingAward() {
         return {
           type: types.UPDATING_VALUE,
@@ -618,7 +618,7 @@ export function modifyEnterprise(newEnterpriseInfo) {
       }
       //agregar un logro nuevo --> sin condiciones.
 
-      
+
       export function addingAward() {
         return {
           type: types.ADDING_AWARD,
@@ -768,6 +768,68 @@ export function modifyEnterprise(newEnterpriseInfo) {
           return request.post(`${baseUrl()}/todasNotasEquipo`, notesRequested)
             .then(response => dispatch(getTeamNotesSuccess(response)))
             .catch(error => dispatch(getTeamNotesFailure(error)));
+        };
+      }
+
+      export function gettingEnterpriseNotes() {
+        return {
+          type: types.GETTING_ENTERPRISE_NOTES,
+          payload: {}
+        };
+      }
+
+      export function getEnterpriseNotesSuccess(data) {
+        return {
+          type: types.GET_ENTERPRISE_NOTES_SUCCESS,
+          enterpriseNotes: data
+        };
+      }
+
+
+      export function getEnterpriseNotesFailure(error) {
+        return {
+          type: types.GET_ENTERPRISE_NOTES_FAILURE,
+          payload: error
+        };
+      }
+
+      export function getEnterpriseNotes(notesRequested) {
+        return function (dispatch) {
+          dispatch(gettingEnterpriseNotes());
+          return request.post(`${baseUrl()}/todasNotasEmpresa`, notesRequested)
+            .then(response => dispatch(getEnterpriseNotesSuccess(response)))
+            .catch(error => dispatch(getEnterpriseNotesFailure(error)));
+        };
+      }
+
+      export function delettingEnterprise() {
+        return {
+          type: types.DELETTING_ENTERPRISE,
+          payload: {}
+        };
+      }
+
+      export function deleteEnterpriseSuccess(data) {
+        return {
+          type: types.DELETE_ENTERPRISE_SUCCESS,
+          enterpriseDeleted: data
+        };
+      }
+
+
+      export function deleteEnterpriseFailure(error) {
+        return {
+          type: types.DELETE_ENTERPRISE_FAILURE,
+          payload: error
+        };
+      }
+
+      export function deleteEnterprise(enterpriseToDelete) {
+        return function (dispatch) {
+          dispatch(delettingEnterprise());
+          return request.post(`${baseUrl()}/borrarEmpresa`, enterpriseToDelete)
+            .then(response => dispatch(deleteEnterpriseSuccess(response)))
+            .catch(error => dispatch(deleteEnterpriseFailure(error)));
         };
       }
 

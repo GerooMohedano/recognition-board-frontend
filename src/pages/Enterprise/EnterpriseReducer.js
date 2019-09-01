@@ -4,6 +4,8 @@ import * as types from './EnterpriseConstants';
 const INITIAL_STATE = {
   fetchingEnterpriseInfo: true,
   gettingHistoricValues: true,
+  gettingEnterpriseNotes: true,
+  delettingEnterprise: true,
   updatingUser: true,
   addingUser: true,
   updatingTeam: true,
@@ -32,10 +34,20 @@ const INITIAL_STATE = {
     state: false,
     message: ''
   },
+  getEnterpriseNotesError: {
+    state: false,
+    message: ''
+  },
+  deleteEnterpriseError: {
+    state: false,
+    message: ''
+  },
   userUpdated: {},
   teamUpdated: {},
   userAdded: {},
   historicValues: {},
+  enterpriseNotes: {},
+  enterpriseDeleted: {},
   //team
   desactivateTeamError: {
     state: false,
@@ -163,6 +175,24 @@ const behaviors = {
   },
   [types.FETCH_ENTERPRISE_INFO_FAILURE](state, action) {
     return Object.assign({}, state, { fetchingEnterpriseInfo: false, fetchError: { state: true, message: action.payload } });
+  },
+  [types.GETTING_ENTERPRISE_NOTES](state) {
+    return Object.assign({}, state, { gettingEnterpriseNotes: true, getEnterpriseNotesError: { state: false, message: '' } });
+  },
+  [types.GET_ENTERPRISE_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { enterpriseNotes: action.enterpriseNotes, gettingEnterpriseNotes: false, getEnterpriseNotesError: { state: false, message: '' } });
+  },
+  [types.GET_ENTERPRISE_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingEnterpriseNotes: false, getEnterpriseNotesError: { state: true, message: action.payload } });
+  },
+  [types.DELETTING_ENTERPRISE](state) {
+    return Object.assign({}, state, { delettingEnterprise: true, deleteEnterpriseError: { state: false, message: '' } });
+  },
+  [types.DELETE_ENTERPRISE_SUCCESS](state, action) {
+    return Object.assign({}, state, { enterpriseDeleted: action.enterpriseDeleted, delettingEnterprise: false, deleteEnterpriseError: { state: false, message: '' } });
+  },
+  [types.DELETE_ENTERPRISE_FAILURE](state, action) {
+    return Object.assign({}, state, { delettingEnterprise: false, deleteEnterpriseError: { state: true, message: action.payload } });
   },
   [types.UPDATING_USER](state) {
     return Object.assign({}, state, { updatingUser: true, updateUserError: { state: false, message: '' } });

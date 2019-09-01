@@ -30,6 +30,7 @@ class SprintEditor extends React.Component {
       editDialog: false,
       editSpinner: false,
       editSnackbar: false,
+      dateSnackbar: false,
       deleteDialog: false,
       newSprintName: '',
       newBeginDate: '',
@@ -90,7 +91,7 @@ class SprintEditor extends React.Component {
     editDialog: value,
     editableNewSprintName: value ? this.props.sprintName : '',
     editableNewBeginDate: value ? this.props.beginDate.split('T')[0] : '',
-    editableNewEndDate: value ?this.props.endDate.split('T')[0] : ''
+    editableNewEndDate: value ? this.props.endDate.split('T')[0] : ''
   });
 
   handleDeleteDialogOpen = value => this.setState({ deleteDialog: value });
@@ -103,24 +104,32 @@ class SprintEditor extends React.Component {
     const { editableNewBeginDate, editableNewEndDate } = this.state;
     const { checkSprint, sprintId, idEquipo } = this.props;
     this.setState({ editSpinner: true });
-    checkSprint({
-      idPizarra: sprintId,
-      fechaInicio: editableNewBeginDate + TIME_FOR_DATE,
-      fechaFin: editableNewEndDate + TIME_FOR_DATE,
-      idEquipo: idEquipo
-    });
+    if (new Date(editableNewBeginDate) > new Date(editableNewEndDate)) {
+      this.setState({ dateSnackbar: true, editSpinner: false });
+    } else {
+      checkSprint({
+        idPizarra: sprintId,
+        fechaInicio: editableNewBeginDate + TIME_FOR_DATE,
+        fechaFin: editableNewEndDate + TIME_FOR_DATE,
+        idEquipo: idEquipo
+      });
+    }
   }
 
   createNewSprint = () => {
     const { newBeginDate, newEndDate } = this.state;
     const { checkSprint, idEquipo } = this.props;
     this.setState({ newSpinner: true });
-    checkSprint({
-      idPizarra: -1,
-      fechaInicio: newBeginDate + TIME_FOR_DATE,
-      fechaFin: newEndDate + TIME_FOR_DATE,
-      idEquipo: idEquipo
-    });
+    if (new Date(newBeginDate) > new Date(newEndDate)) {
+      this.setState({ dateSnackbar: true, newSpinner: false });
+    } else {
+      checkSprint({
+        idPizarra: -1,
+        fechaInicio: newBeginDate + TIME_FOR_DATE,
+        fechaFin: newEndDate + TIME_FOR_DATE,
+        idEquipo: idEquipo
+      });
+    }
   }
 
   deleteSprintSelected = () => {
@@ -131,7 +140,7 @@ class SprintEditor extends React.Component {
   render() {
     const {
       newDialog, editDialog, deleteDialog,
-      newSpinner, newSnackbar, editSpinner, editSnackbar,
+      newSpinner, newSnackbar, editSpinner, editSnackbar, dateSnackbar,
       newSprintName, newBeginDate, newEndDate,
       editableNewSprintName, editableNewBeginDate, editableNewEndDate
     } = this.state;
@@ -196,6 +205,11 @@ class SprintEditor extends React.Component {
                   <Button
                     onClick={() => this.createNewSprint()}
                     color="primary"
+                    disabled={
+                      newSprintName === ''
+                      || newBeginDate === ''
+                      || newEndDate === ''
+                    }
                   >
                     Create
                   </Button>
@@ -260,6 +274,11 @@ class SprintEditor extends React.Component {
               <Button
                 onClick={() => this.saveEditableInfo()}
                 color="primary"
+                disabled={
+                  editableNewSprintName === ''
+                  || editableNewBeginDate === ''
+                  || editableNewEndDate === ''
+                }
               >
                 Save
               </Button>
@@ -340,6 +359,30 @@ class SprintEditor extends React.Component {
               aria-label="Close"
               color="secondary"
               onClick={() => this.setState({ editSnackbar: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          variant="error"
+          open={dateSnackbar}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ dateSnackbar: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">The begin date should be before the end date</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ dateSnackbar: false})}
             >
               <CloseIcon />
             </IconButton>

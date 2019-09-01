@@ -28,8 +28,7 @@ const styles = {
     width: 'auto',
   },
   sideBar: {
-    backgroundColor: '#659BFF',
-    height: '100%'
+    backgroundColor: '#659BFF'
   }
 };
 
@@ -187,6 +186,7 @@ class SideMenu extends React.Component {
             <div>
               <TextField
                 label="Telephone"
+                type="number"
                 defaultValue={newEnterprise.telephone}
                 onChange={event => this.updateNewEnterpriseInfo(event.target.value, 'telephone')}
               />
