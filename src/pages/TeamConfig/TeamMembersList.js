@@ -16,7 +16,7 @@ import DialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import InputBase from '@material-ui/core/InputBase';
 import Button from '@material-ui/core/Button';
-import DeleteIcon from '@material-ui/icons/Delete';
+import DeleteIcon from '@material-ui/icons/DirectionsWalk';
 import CreateIcon from '@material-ui/icons/Add';
 import ConfirmIcon from '@material-ui/icons/Done';
 import CancelIcon from '@material-ui/icons/Clear';

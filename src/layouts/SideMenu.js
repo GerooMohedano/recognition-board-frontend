@@ -73,17 +73,25 @@ class SideMenu extends React.Component {
       const sideMenuSubList = [];
       userInfo.data.equipos.forEach((equipo) => {
         if (empresa.idEmpresa === equipo.idEmpresa) {
-          sideMenuSubList.push(
-            <NavLink
-              className="commonLink"
-              key={`NavLink${equipo.nombre_equipo}`}
-              to={`/Team/${equipo.idEquipo}`}
-            >
-              <ListItem key={`ListItem${equipo.nombre_equipo}`} button disabled={equipo.estado === 'inactivo'}>
+          if (equipo.estado === 'inactivo') {
+            sideMenuSubList.push(
+              <ListItem key={`ListItem${equipo.nombre_equipo}`} button disabled>
                 <ListItemText key={`ListItemText${equipo.nombre_equipo}`} primary={equipo.nombre_equipo} className="textOfListSideMenu" />
               </ListItem>
-            </NavLink>
-          );
+            );
+          } else {
+            sideMenuSubList.push(
+              <NavLink
+                className="commonLink"
+                key={`NavLink${equipo.nombre_equipo}`}
+                to={`/Team/${equipo.idEquipo}`}
+              >
+                <ListItem key={`ListItem${equipo.nombre_equipo}`} button>
+                  <ListItemText key={`ListItemText${equipo.nombre_equipo}`} primary={equipo.nombre_equipo} className="textOfListSideMenu" />
+                </ListItem>
+              </NavLink>
+            );
+          }
         }
       });
       sideMenuList.push(

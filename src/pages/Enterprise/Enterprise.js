@@ -223,6 +223,7 @@ class Enterprise extends Component {
               changeConfiguring={this.changeConfiguring}
               modifyEnterprise={modifyEnterprise}
               enterpriseId={enterpriseInfo.data.empresas[0].idEmpresa}
+              adminGeneral={loginInfo.data.data[0].adminGeneral}
               canConfigure={loginInfo.data.data[0].adminGeneral || this.isEnterpriseAdmin()}
               getEnterpriseNotes={getEnterpriseNotes}
               enterpriseNotes={enterpriseNotes}

@@ -32,6 +32,7 @@ class SprintEditor extends React.Component {
       editSnackbar: false,
       dateSnackbar: false,
       deleteDialog: false,
+      cannotDeleteSnackbar: false,
       newSprintName: '',
       newBeginDate: '',
       newEndDate: '',
@@ -83,9 +84,15 @@ class SprintEditor extends React.Component {
     this.setState({ [dialogDefinition]: true });
   }
 
-  handleDialog = (value, dialog) => this.setState({
-    [dialog]: value, newSprintName: '', newBeginDate: '', newEndDate: ''
-  });
+  handleDialog = (value, dialog) => {
+    const { getSprintNotes, sprintId } = this.props;
+    if (value && dialog === 'deleteDialog') {
+      getSprintNotes({ idPizarra: sprintId });
+    }
+    this.setState({
+      [dialog]: value, newSprintName: '', newBeginDate: '', newEndDate: ''
+    });
+  }
 
   handleEditDialog = value => this.setState({
     editDialog: value,
@@ -133,15 +140,19 @@ class SprintEditor extends React.Component {
   }
 
   deleteSprintSelected = () => {
-    const { deleteSprint, sprintId } = this.props;
-    deleteSprint({ idPizarra: sprintId });
+    const { deleteSprint, sprintId, sprintNotes } = this.props;
+    if (sprintNotes === undefined || sprintNotes.data.data.length !== 0) {
+      this.setState({ cannotDeleteSnackbar: true });
+    } else {
+      deleteSprint({ idPizarra: sprintId });
+    }
   }
 
   render() {
     const {
       newDialog, editDialog, deleteDialog,
       newSpinner, newSnackbar, editSpinner, editSnackbar, dateSnackbar,
-      newSprintName, newBeginDate, newEndDate,
+      newSprintName, newBeginDate, newEndDate, cannotDeleteSnackbar,
       editableNewSprintName, editableNewBeginDate, editableNewEndDate
     } = this.state;
     const { sprintName, isUserTeamAdmin, checkingSprint, sprintChecked, adminGeneral } = this.props;
@@ -388,6 +399,30 @@ class SprintEditor extends React.Component {
             </IconButton>
           ]}
         />
+        <Snackbar
+          anchorOrigin={{
+            vertical: 'top',
+            horizontal: 'center',
+          }}
+          variant="error"
+          open={cannotDeleteSnackbar}
+          autoHideDuration={6000}
+          onClose={() => this.setState({ cannotDeleteSnackbar: false})}
+          ContentProps={{
+            'aria-describedby': 'message-id',
+          }}
+          message={<span id="message-id">Cannot delete sprint with notes!</span>}
+          action={[
+            <IconButton
+              key="close"
+              aria-label="Close"
+              color="secondary"
+              onClick={() => this.setState({ cannotDeleteSnackbar: false})}
+            >
+              <CloseIcon />
+            </IconButton>
+          ]}
+        />
       </div>
     );
   }
@@ -406,6 +441,8 @@ SprintEditor.propTypes = {
   checkSprint: PropTypes.func.isRequired,
   checkingSprint: PropTypes.bool.isRequired,
   sprintChecked: PropTypes.shape({}).isRequired,
+  getSprintNotes: PropTypes.func.isRequired,
+  sprintNotes: PropTypes.shape({}).isRequired,
   adminGeneral: PropTypes.bool.isRequired
 };
 

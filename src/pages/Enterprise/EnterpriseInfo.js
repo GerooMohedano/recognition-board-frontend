@@ -82,7 +82,7 @@ class EnterpriseInfo extends React.Component {
 
   render() {
     const { newName, newAddress, newTelephone, openDialogDelete, undeletableEnterprise } = this.state;
-    const { configuring, name, address, telephone, modifyEnterprise, changeConfiguring, canConfigure } = this.props;
+    const { configuring, name, address, telephone, modifyEnterprise, changeConfiguring, canConfigure, adminGeneral } = this.props;
     return (
       <Paper className="infoPaper" elevation={3}>
       {configuring
@@ -107,7 +107,7 @@ class EnterpriseInfo extends React.Component {
               </Button>
             </Tooltip>
             <Tooltip title="Delete this enterprise">
-              <Button disabled={!canConfigure} onClick={() => this.toggleDeleteEnterpriseDialog(true)}>
+              <Button disabled={!adminGeneral} onClick={() => this.toggleDeleteEnterpriseDialog(true)}>
                 <Delete />
               </Button>
             </Tooltip>
@@ -211,7 +211,8 @@ EnterpriseInfo.propTypes = {
   enterpriseNotes: PropTypes.shape({}).isRequired,
   getEnterpriseNotes: PropTypes.func.isRequired,
   deleteEnterprise: PropTypes.func.isRequired,
-  canConfigure: PropTypes.bool.isRequired
+  canConfigure: PropTypes.bool.isRequired,
+  adminGeneral: PropTypes.bool.isRequired
 };
 
 export default EnterpriseInfo;

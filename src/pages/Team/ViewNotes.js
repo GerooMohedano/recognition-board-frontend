@@ -123,7 +123,7 @@ class ViewNotes extends React.Component {
   render() {
     const {
       classes, value, user, openCreateNote, handleCloseDialog,
-      notes, gettingNotes, beginDate, endDate
+      notes, gettingNotes, beginDate, endDate, loginInfo
     } = this.props;
     const { creatingNote, newNoteMessage, newNotePuntuation } = this.state;
     return (
@@ -136,6 +136,8 @@ class ViewNotes extends React.Component {
         {Date.now() < new Date((new Date(beginDate)).getTime() + Math.abs((new Date(beginDate).getTimezoneOffset()*60000)))
           || Date.now() > new Date((new Date(endDate)).getTime() + Math.abs((new Date(endDate).getTimezoneOffset()*60000)))
           && <DialogTitle id="form-dialog-subtitle">This Sprint is already over</DialogTitle>}
+        {user.activeStatus !== 'activo'
+          && <DialogTitle id="form-dialog-subtitle">You are not active!</DialogTitle>}
         <DialogContent className="notesContainer">
           {this.createCardsWithNotes()}
           {(creatingNote)
@@ -184,10 +186,10 @@ class ViewNotes extends React.Component {
               <CardActionArea
                 className="addNewCard"
                 onClick={() => this.createNewBlankNote()}
-                disabled={Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)}
+                disabled={Date.now() < new Date(beginDate) || Date.now() > new Date(endDate) || user.activeStatus !== 'activo'}
               >
                 {
-                  Date.now() < new Date(beginDate) || Date.now() > new Date(endDate)
+                  Date.now() < new Date(beginDate) || Date.now() > new Date(endDate) || user.activeStatus !== 'activo'
                   ? (
                     <AddCircleOutline style={{ color: '#E0E0E0' }} />
                   )

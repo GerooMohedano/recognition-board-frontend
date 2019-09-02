@@ -38,6 +38,7 @@ class TeamTable extends React.Component {
       valueName: '',
       userName: '',
       userId: -1,
+      activeStatus: '',
       valueId: -1
     };
   }
@@ -83,12 +84,12 @@ class TeamTable extends React.Component {
           {members.map(persona => {
             if (persona.estado === 'activo')
             return(<TableCell align="right">
-            <Button
-            key={"button" + value.Valor + persona.nombre_usuario}
-            onClick={() => this.handleCreateNoteButtonEnterprise(value, persona)}
-            >
-            <ThumbsUpDown />
-            </Button>
+              <Button
+                key={"button" + value.Valor + persona.nombre_usuario}
+                onClick={() => this.handleCreateNoteButtonEnterprise(value, persona)}
+              >
+                <ThumbsUpDown />
+              </Button>
             </TableCell>)
           })}
         </TableRow>);
@@ -104,6 +105,7 @@ class TeamTable extends React.Component {
       valueName: value.nombre_valor,
       userName: persona.nombre_usuario,
       userId: persona.idUsuario,
+      activeStatus: persona.estado,
       valueId: value.idValor
     });
     this.props.getNotes({ idUsuario: persona.idUsuario, idValor: value.idValor, idPizarra: indexPizarra });
@@ -116,6 +118,7 @@ class TeamTable extends React.Component {
       valueName: value.Valor,
       userName: persona.nombre_usuario,
       userId: persona.idUsuario,
+      activeStatus: persona.estado,
       valueId: value.idValor
     });
     this.props.getNotes({ idUsuario: persona.idUsuario, idValor: value.idValor, idPizarra: indexPizarra });
@@ -124,7 +127,7 @@ class TeamTable extends React.Component {
   handleCloseDialog = () => this.setState({ openCreateNote: false });
 
   render() {
-    const { openCreateNote, valueName, userName, userId, valueId } = this.state;
+    const { openCreateNote, valueName, userName, userId, valueId, activeStatus } = this.state;
     const {
       classes, gettingNotes, notes, createNote, deleteNote, idTeam,
       indexPizarra, beginDate, endDate, loginInfo, checkAwards, idEmpresa
@@ -145,7 +148,7 @@ class TeamTable extends React.Component {
         </Table>
         <ViewNotes
           value={{ id: valueId, name: valueName }}
-          user={{ id: userId, name: userName }}
+          user={{ id: userId, name: userName, activeStatus: activeStatus }}
           openCreateNote={openCreateNote}
           handleCloseDialog={this.handleCloseDialog}
           gettingNotes={gettingNotes}

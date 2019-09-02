@@ -33,9 +33,12 @@ class Team extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { teamInfo, fetchTeams, match, sprintCreated, sprintModified, note0s, noteCreated, awardsChecked } = this.props;
+    const {
+      teamInfo, fetchTeams, match, sprintCreated, sprintModified,
+      notes, noteCreated, awardsChecked, sprintDeleted
+    } = this.props;
     const { indexPizarra } = this.state;
-    if (teamInfo && teamInfo.data && indexPizarra === -1) {
+    if (teamInfo && teamInfo.data && (indexPizarra === -1 || indexPizarra >= teamInfo.data.pizarras.length)) {
       this.setState({ indexPizarra: teamInfo.data.pizarras.length - 1 });
     }
     if (prevProps.match !== match) {
@@ -45,6 +48,9 @@ class Team extends Component {
       fetchTeams(match.params.idTeam);
     }
     if (prevProps.sprintCreated !== sprintCreated && sprintCreated && sprintCreated.data.status === 'OK') {
+      fetchTeams(match.params.idTeam);
+    }
+    if (prevProps.sprintDeleted !== sprintDeleted && sprintDeleted && sprintDeleted.data.status === 'OK') {
       fetchTeams(match.params.idTeam);
     }
     if (prevProps.sprintModified !== sprintModified && sprintModified && sprintModified.data.status === 'OK') {
@@ -129,12 +135,12 @@ class Team extends Component {
 
   render() {
     const {
-      match, teamInfo, fetchingTeams, historicValues, gettingHistoricValues,
+      match, teamInfo, fetchingTeams, historicValues, gettingHistoricValues, sprintNotes,
       gettingNotes, notes, getNotes, loginInfo, sprintChecked, checkSprint, checkingSprint,
-      createNote, deleteNote, modifySprint, createSprint, deleteSprint, checkAwards
+      createNote, deleteNote, modifySprint, createSprint, deleteSprint, checkAwards, getSprintNotes
     } = this.props;
     const { indexPizarra } = this.state;
-    if (fetchingTeams || teamInfo === undefined || indexPizarra === -1)
+    if (fetchingTeams || teamInfo === undefined || indexPizarra === -1 || indexPizarra >= teamInfo.data.pizarras.length)
       return (<div className="circularProgressContainer"><CircularProgress className="circularProgress" /></div>);
     else
       return (
@@ -187,6 +193,8 @@ class Team extends Component {
             checkSprint={checkSprint}
             checkingSprint={checkingSprint}
             adminGeneral={loginInfo.data.data[0].adminGeneral}
+            getSprintNotes={getSprintNotes}
+            sprintNotes={sprintNotes}
           />
           <TeamTable
             members={teamInfo.data.usuarios}
@@ -234,6 +242,7 @@ Team.propTypes = {
   fetchTeams: PropTypes.func.isRequired,
   getHistoricValues: PropTypes.func.isRequired,
   getNotes: PropTypes.func.isRequired,
+  getSprintNotes: PropTypes.func.isRequired,
   createNote: PropTypes.func.isRequired,
   deleteNote: PropTypes.func.isRequired,
   modifySprint: PropTypes.func.isRequired,
@@ -249,6 +258,8 @@ Team.propTypes = {
   historicValues: PropTypes.shape({}).isRequired,
   teamInfo: PropTypes.shape({}).isRequired,
   notes: PropTypes.shape({}).isRequired,
+  sprintNotes: PropTypes.shape({}).isRequired,
+  sprintDeleted: PropTypes.shape({}).isRequired,
   loginInfo: PropTypes.shape({}).isRequired,
   checkingSprint: PropTypes.bool.isRequired,
   sprintChecked: PropTypes.shape({}).isRequired,

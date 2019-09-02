@@ -5,6 +5,7 @@ const INITIAL_STATE = {
   fetchingTeams: true,
   gettingHistoricValues: true,
   gettingNotes: true,
+  gettingSprintNotes: true,
   creattingNote: true,
   delettingNote: true,
   modifyingSprint: true,
@@ -22,6 +23,10 @@ const INITIAL_STATE = {
     message: ''
   },
   getNotesError: {
+    state: false,
+    message: ''
+  },
+  getSprintNotesError: {
     state: false,
     message: ''
   },
@@ -60,6 +65,8 @@ const INITIAL_STATE = {
   historicValues: {},
   teamInfo: {},
   notes: {},
+  sprintNotes: {},
+  sprintDeleted: {},
   sprintChecked: {},
   sprintCreated: {},
   sprintModified: {},
@@ -114,6 +121,15 @@ const behaviors = {
   [types.GET_NOTES_FAILURE](state, action) {
     return Object.assign({}, state, { gettingNotes: false, getNotesError: { state: true, message: action.payload } });
   },
+  [types.GETTING_SPRINT_NOTES](state) {
+    return Object.assign({}, state, { gettingSprintNotes: true, getSprintNotesError: { state: false, message: '' } });
+  },
+  [types.GET_SPRINT_NOTES_SUCCESS](state, action) {
+    return Object.assign({}, state, { sprintNotes: action.sprintNotes, gettingSprintNotes: false, getSprintNotesError: { state: false, message: '' } });
+  },
+  [types.GET_SPRINT_NOTES_FAILURE](state, action) {
+    return Object.assign({}, state, { gettingSprintNotes: false, getSprintNotesError: { state: true, message: action.payload } });
+  },
   [types.CREATING_NOTE](state) {
     return Object.assign({}, state, { creattingNote: true, createNoteError: { state: false, message: '' } });
   },
@@ -154,7 +170,7 @@ const behaviors = {
     return Object.assign({}, state, { delettingSprint: true, deleteSprintError: { state: false, message: '' } });
   },
   [types.DELETE_SPRINT_SUCCESS](state, action) {
-    return Object.assign({}, state, { delettingSprint: false, deleteSprintError: { state: false, message: '' } });
+    return Object.assign({}, state, { sprintDeleted: action.sprintDeleted, delettingSprint: false, deleteSprintError: { state: false, message: '' } });
   },
   [types.DELETE_SPRINT_FAILURE](state, action) {
     return Object.assign({}, state, { delettingSprint: false, deleteSprintError: { state: true, message: action.payload } });

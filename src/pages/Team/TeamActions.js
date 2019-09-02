@@ -124,6 +124,37 @@ export function getNotes(notesRequested) {
   };
 }
 
+export function gettingSprintNotes() {
+  return {
+    type: types.GETTING_SPRINT_NOTES,
+    payload: {}
+  };
+}
+
+export function getSprintNotesSuccess(data) {
+  return {
+    type: types.GET_SPRINT_NOTES_SUCCESS,
+    sprintNotes: data
+  };
+}
+
+
+export function getSprintNotesFailure(error) {
+  return {
+    type: types.GET_SPRINT_NOTES_FAILURE,
+    payload: error
+  };
+}
+
+export function getSprintNotes(notesRequested) {
+  return function (dispatch) {
+    dispatch(gettingSprintNotes());
+    return request.post(`${baseUrl()}/consultarNotasPizarra`, notesRequested)
+      .then(response => dispatch(getSprintNotesSuccess(response)))
+      .catch(error => dispatch(getSprintNotesFailure(error)));
+  };
+}
+
 export function creattingNote() {
   return {
     type: types.CREATING_NOTE,
