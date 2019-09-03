@@ -1,16 +1,22 @@
 import React from 'react';
 import Onboard from './onboard.png';
-
+import { normalize } from 'path';
+require('./welcome.css');
 const Welcome = () => {
-
+/*
   const style404 = {
-    fontSize: 72,
-    fontWeight: 'bold'
-  };
+    fontSize: 50,
+    fontWeight: 'normal',
+    color: fccbff,
+    fontStyle: normal,
+    fontFamily: sans-serif
+  };*/
 
   return (
     <div style={{ textAlign:'center' }}>
-      <h1 style={style404}>Welcome to</h1>
+      <div className="style404">
+        Welcome to
+        </div>
       <img alt="error" src={Onboard} />
     </div>
   );
