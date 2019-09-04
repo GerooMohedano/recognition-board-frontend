@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
@@ -82,18 +81,9 @@ class TeamMembersList extends Component {
                 if (member.estado === 'activo' || (member.estado === 'inactivo' && member.idUsuario === teamLeader))
                 return (
                 <ListItem>
-                  <ListItemAvatar>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={
-                        member.fotoPerfil === null
-                        ? NonPhoto
-                        : require(`../../images/${member.fotoPerfil}`)
-                      }
-                    />
-                  </ListItemAvatar>
                   <ListItemText
                     inset
+                    className="textOfList"
                     primary={member.estado === 'inactivo' ? `${member.nombre_usuario} (desactivated)` : member.nombre_usuario}
                     secondary={member.idUsuario === teamLeader ? 'team leader' : null}
                   />

@@ -23,6 +23,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import HistoricChart from '@material-ui/icons/InsertChart';
 import CloseIcon from '@material-ui/icons/Close';
 import Gero from '../../images/gero.jpg';
+import ProfilePhoto from '../../images/profile.JPG';
 import NonPhoto from '../../images/questionMark.png';
 import ChartPolygon from '../../commons/ChartPolygon';
 import HistoricDialog from '../../commons/HistoricDialog';
@@ -120,26 +121,11 @@ class Perfil extends React.Component {
             <div className="profilePhoto">
               <Avatar
                 src={
-                  userInfo.data.usuarios[0].fotoPerfil === null
-                  ? NonPhoto
-                  : require(`../../images/${userInfo.data.usuarios[0].fotoPerfil}`)
+                  ProfilePhoto
                 }
                 alt="Remy Sharp"
                 className="profileAvatar"
               />
-              {configuring && (
-                <form onSubmit={event => this.handleSubmit(event)}>
-                  <label>
-                    Upload a photo:
-                    <input
-                      type="file"
-                      accept="image/*"
-                      ref={this.fileInput}
-                    />
-                  </label>
-                  <button type="submit">Submit</button>
-                </form>
-              )}
             </div>
             <ProfileInfo
               configuring={configuring}

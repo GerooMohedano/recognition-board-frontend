@@ -9,7 +9,6 @@ import Paper from '@material-ui/core/Paper';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import SearchIcon from '@material-ui/icons/Search';
@@ -126,16 +125,6 @@ class SearchBar extends React.Component {
                     return (
                     <NavLink to={`/Perfil/${person.idUsuario}`} className="linkPerfil">
                       <ListItem button onClick={() => this.updateSearch('')}>
-                        <ListItemAvatar>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={
-                              person.fotoPerfil === null
-                              ? NonPhoto
-                              : require(`../images/${person.fotoPerfil}`)
-                            }
-                          />
-                        </ListItemAvatar>
                         <ListItemText
                           inset
                           primary={`${person.nombre_usuario} (${person.mail})`}
@@ -161,16 +150,6 @@ class SearchBar extends React.Component {
                   .includes(searchedString) && (adminGeneral || team.estado === 'activo'))).map(team => (
                     <NavLink to={`/Team/${team.idEquipo}`} className="linkPerfil">
                       <ListItem button onClick={() => this.updateSearch('')}>
-                        <ListItemAvatar>
-                          <Avatar
-                            alt="Remy Sharp"
-                            src={
-                              team.imagen === null
-                              ? NonPhoto
-                              : require(`../images/${team.imagen}`)
-                            }
-                          />
-                        </ListItemAvatar>
                         <ListItemText
                           inset
                           primary={team.nombre_equipo}

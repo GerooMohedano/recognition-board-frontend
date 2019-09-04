@@ -7,6 +7,7 @@ import HistoricChart from '@material-ui/icons/InsertChart';
 import EnterpriseInfo from './EnterpriseInfo';
 import NonPhoto from '../../images/questionMark.png';
 import Bob from '../../images/bob.jpg';
+import EnterprisePhoto from '../../images/enterprise.png'
 import HistoricDialog from '../../commons/HistoricDialog';
 import ChartPolygon from '../../commons/ChartPolygon';
 import EnterpriseCardContainer from './EnterpriseCardContainer';
@@ -190,9 +191,7 @@ class Enterprise extends Component {
           <img
             alt="error"
             src={
-              enterpriseInfo.data.empresas[0].logo === null
-              ? NonPhoto
-              : require(`../../images/${enterpriseInfo.data.empresas[0].logo}`)
+              EnterprisePhoto
             }
           />
         </div>
@@ -205,13 +204,10 @@ class Enterprise extends Component {
               <Avatar
                 alt="Remy Sharp"
                 src={
-                  enterpriseInfo.data.empresas[0].logo === null
-                  ? NonPhoto
-                  : require(`../../images/${enterpriseInfo.data.empresas[0].logo}`)
+                  EnterprisePhoto
                 }
                 className="enterpriseAvatar"
               />
-              {configuring && (<input type="file" />)}
             </div>
             <EnterpriseInfo
               configuring={configuring}

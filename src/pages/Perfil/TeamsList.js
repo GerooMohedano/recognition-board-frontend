@@ -9,7 +9,6 @@ import IconButton from '@material-ui/core/IconButton';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import TableChartIcon from '@material-ui/icons/TableChart';
 import NonPhoto from '../../images/questionMark.png';
@@ -36,20 +35,10 @@ class TeamsList extends Component {
             <List component="nav">
               {teams.map(team => (
                 <ListItem>
-                  <ListItemAvatar>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={
-                        team.imagen === null
-                        ? NonPhoto
-                        : require(`../../images/${team.imagen}`)
-                      }
-                    />
-                  </ListItemAvatar>
                   <ListItemText
                     inset
                     primary={team.nombre_equipo}
-                    className="memberItemText"
+                    className="textOfList"
                   />
                   {(team.estado === 'inactivo' && !adminGeneral)
                     ? (<IconButton

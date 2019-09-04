@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
@@ -75,7 +74,7 @@ class AwardsList extends Component {
     });
   }
 
-  openEditDialog = award => {                                
+  openEditDialog = award => {
     const editableConditions = [];
     this.state.myAward = award;
     this.state.idLogro =  award.idLogro;
@@ -123,7 +122,7 @@ class AwardsList extends Component {
   updateAwardInfo = (value, stateAtr, subStateAtr) => {
     console.log("-----",value, stateAtr, subStateAtr)
     this.setState(state => ({ [stateAtr]: { ...state[stateAtr], [subStateAtr]: value } }));
-    
+
   }
 
   getValueName = id => {
@@ -172,7 +171,7 @@ class AwardsList extends Component {
               aria-label="Delete"
               onClick={
                  () => {
-                   this.props.deleteCondition({ idLogro: this.state.idLogro, idCondicion: condition.idCondicion}); 
+                   this.props.deleteCondition({ idLogro: this.state.idLogro, idCondicion: condition.idCondicion});
                    this.closeEditDialog();
                    /*this.updateConditionsAfterDelete(condition.idCondicion);
                    this.openEditDialog(this.state.myAward);*/
@@ -286,7 +285,7 @@ class AwardsList extends Component {
             />
             <List component="nav">
               <ListItem>
-               
+
               </ListItem>
               {newAwardData.conditions.map((condition, conditionIndex) => (
                 <ListItem>
@@ -384,8 +383,8 @@ class AwardsList extends Component {
                     onClick={
                       () =>{
                         this.props.addCondition({ idLogro: this.state.idLogro, idCondicion : 0 , idValor: conditionToAdd.idValor , puntuacion : conditionToAdd.puntuacion, modificador : conditionToAdd.modificador, excluyente: conditionToAdd.excluyente });
-                        this.closeEditDialog();  
-                      }      
+                        this.closeEditDialog();
+                      }
                     }
                     disabled={conditionToAdd.value === -1}
                     th
@@ -406,7 +405,7 @@ class AwardsList extends Component {
             </Button>
             <Button
               onClick={() => {
-                this.props.updateAward({ idLogro: this.state.idLogro, nombre: updatedAwardData.name, descripcion: updatedAwardData.description}); 
+                this.props.updateAward({ idLogro: this.state.idLogro, nombre: updatedAwardData.name, descripcion: updatedAwardData.description});
                 this.closeEditDialog()}}
               color="primary"
               disabled={updatedAwardData.name === ''}

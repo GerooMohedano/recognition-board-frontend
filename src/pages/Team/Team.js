@@ -12,6 +12,7 @@ import Build from '@material-ui/icons/Build';
 import HistoricChart from '@material-ui/icons/InsertChart';
 import ChartPolygon from '../../commons/ChartPolygon';
 import HistoricDialog from '../../commons/HistoricDialog';
+import TeamPhoto from '../../images/team.png';
 import NonPhoto from '../../images/questionMark.png';
 
 require('../../commons/Team.css');
@@ -160,9 +161,7 @@ class Team extends Component {
             <Avatar
               alt="Remy Sharp"
               src={
-                teamInfo.data.equipos[0].imagen === null
-                ? NonPhoto
-                : require(`../../images/${teamInfo.data.equipos[0].imagen}`)
+                TeamPhoto
               }
               className="teamAvatar"
             />

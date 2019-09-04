@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
@@ -115,17 +114,7 @@ class TeamsList extends Component {
             <List component="nav">
               {this.props.teams.map(team => (
                 <ListItem>
-                  <ListItemAvatar>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={
-                        team.imagen === null
-                        ? NonPhoto
-                        : require(`../../images/${team.imagen}`)
-                      }
-                    />
-                  </ListItemAvatar>
-                  <ListItemText inset primary={team.nombre_equipo} className="memberItemText" />
+                  <ListItemText inset primary={team.nombre_equipo} className="textOfList" />
                   <Tooltip title="Edit">
                     <IconButton
                       aria-label="Delete"
@@ -183,20 +172,6 @@ class TeamsList extends Component {
               onChange={event => this.changeNewTeamName(event.target.value)}
             />
           </DialogTitle>
-          <DialogContent id="form-dialog-title">
-            <div className="teamPhoto">
-              <Avatar
-                alt="Remy Sharp"
-                src={
-                  photoEdit === null
-                  ? NonPhoto
-                  : require(`../../images/${photoEdit}`)
-                }
-                className="teamAvatar"
-               />
-              <input type="file" />
-            </div>
-          </DialogContent>
           <DialogActions>
             <Button
               onClick={() => this.toggleEditDialogState(-1, '', 'questionMark.png', false)}
@@ -226,18 +201,6 @@ class TeamsList extends Component {
               defaultValue={nameOfTheNewTeam}
               onChange={event => this.changeNameOfNewTeam(event.target.value)}
             />
-            <div className="teamPhoto">
-              <Avatar
-                alt="Remy Sharp"
-                src={
-                  photoAdd === null
-                  ? NonPhoto
-                  : require(`../../images/${photoAdd}`)
-                }
-                className="teamAvatar"
-              />
-              <input type="file" />
-            </div>
           </DialogContent>
           <DialogActions>
             <Button

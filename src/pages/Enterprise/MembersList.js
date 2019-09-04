@@ -7,7 +7,6 @@ import Typography from '@material-ui/core/Typography';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import ListItemAvatar from '@material-ui/core/ListItemAvatar';
 import Avatar from '@material-ui/core/Avatar';
 import Tooltip from '@material-ui/core/Tooltip';
 import Dialog from '@material-ui/core/Dialog';
@@ -145,21 +144,11 @@ class MembersList extends Component {
             <List component="nav">
               {this.props.members.map(member => (
                 <ListItem>
-                  <ListItemAvatar>
-                    <Avatar
-                      alt="Remy Sharp"
-                      src={
-                        member.fotoPerfil === null
-                        ? NonPhoto
-                        : require(`../../images/${member.fotoPerfil}`)
-                      }
-                    />
-                  </ListItemAvatar>
                   <ListItemText
                     inset
                     primary={member.nombre_usuario}
                     secondary={member.rol? 'admin' : null}
-                    className="memberItemText"
+                    className="textOfList"
                   />
                   <Tooltip title="Edit member">
                     <IconButton
@@ -240,18 +229,6 @@ class MembersList extends Component {
             Please enter the information for the new member
           </DialogTitle>
           <DialogContent>
-            <div className="teamPhoto">
-              <Avatar
-                alt="Remy Sharp"
-                src={
-                  photoAdd === null
-                  ? NonPhoto
-                  : require(`../../images/${photoAdd}`)
-                }
-                className="teamAvatar"
-              />
-              <input type="file" />
-            </div>
             <TextField
               className="fieldInputOnDialog"
               placeholder="User name"
@@ -298,18 +275,6 @@ class MembersList extends Component {
             Update the information of this member
           </DialogTitle>
           <DialogContent>
-            <div className="teamPhoto">
-              <Avatar
-                alt="Remy Sharp"
-                src={
-                  photoEdit === null
-                  ? NonPhoto
-                  : require(`../../images/${photoEdit}`)
-                }
-                className="teamAvatar"
-              />
-              <input type="file" />
-            </div>
             <TextField
               className="fieldInputOnDialog"
               placeholder="User name"
